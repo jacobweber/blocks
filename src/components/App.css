@@ -1,5 +1,8 @@
-.root {
+.root-app {
 }
-.buttons {
+.root-app .buttons {
+	display: flex;
+}
+.root-app .layout {
 	display: flex;
 }

@@ -4,12 +4,13 @@ import { useStore } from '../stores/MainStore';
 
 import './App.css';
 import { Board } from './Board';
+import { NextBlock } from './NextBlock';
 
 const App = observer(() => {
 	const mainStore = useStore();
 
 	return (
-		<div className="root" onKeyDown={e => mainStore.keyDown(e)} onKeyUp={e => mainStore.keyUp(e)}>
+		<div className="root-app" onKeyDown={e => mainStore.keyDown(e)} onKeyUp={e => mainStore.keyUp(e)}>
 			<div className='buttons'>
 				<button onClick={() => mainStore.randomize()}>Randomize</button>
 				<button onClick={() => mainStore.newGame()}>Start</button>
@@ -21,7 +22,10 @@ const App = observer(() => {
 				<button onClick={() => mainStore.down()}>Down</button>
 				<button onClick={() => mainStore.drop()}>Drop</button>
 			</div>
-			<Board />
+			<div className='layout'>
+				<Board />
+				<NextBlock />
+			</div>
 		</div>
 	);
 });

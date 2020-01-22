@@ -19,7 +19,7 @@ const Board = observer(() => {
 	}
 
 	return (
-		<div className="root">
+		<div className="root-board">
 			<svg
 				version="1.1"
 				baseProfile="full"

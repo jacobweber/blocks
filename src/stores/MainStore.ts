@@ -1,4 +1,4 @@
-import { decorate, observable, action, runInAction } from 'mobx';
+import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 
 const numClearRowsBonus = 4;
@@ -43,7 +43,7 @@ const square: BlockDef = {
 	]
 };
 const are: BlockDef = {
-	desc: 'el',
+	desc: 'are',
 	color: 'khaki',
 	size: 3,
 	rotations: [
@@ -54,7 +54,7 @@ const are: BlockDef = {
 	]
 };
 const ell: BlockDef = {
-	desc: 'el',
+	desc: 'ell',
 	color: 'burlywood',
 	size: 3,
 	rotations: [
@@ -131,6 +131,11 @@ class MainStore {
 		this.newGame();
 	}
 
+	get nextBlockDef(): BlockDef | null {
+		if (this.nextBlockTypes.length === 0) return null;
+		return this.getBlockDef(this.nextBlockTypes[this.nextBlockTypes.length - 1]);
+	}
+
 	getRandomBlockType(): BlockType {
 		return Math.floor(Math.random() * blockDefs.size);
 	}
@@ -143,7 +148,7 @@ class MainStore {
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
-		this.nextBlockTypes = [];
+		this.nextBlockTypes = [ this.getRandomBlockType() ];
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
@@ -230,9 +235,13 @@ class MainStore {
 	newBlock(): void {
 		let type;
 		if (this.nextBlockTypes.length > 0) {
-			type = this.nextBlockTypes.pop()!;
+			type = this.nextBlockTypes[this.nextBlockTypes.length - 1];
+			this.nextBlockTypes = this.nextBlockTypes.slice(0, -1);
 		} else {
 			type = this.getRandomBlockType();
+		}
+		if (this.nextBlockTypes.length === 0) {
+			this.nextBlockTypes = [ this.getRandomBlockType() ];
 		}
 		const rotation = 0;
 		const extent = this.getBlockDef(type).rotations[rotation].extent;
@@ -271,7 +280,6 @@ class MainStore {
 	async clearRowsBonus(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
 		this.frozenBlocks = [];
-		this.nextBlockTypes = [];
 		const hasBonus = rows.length === numClearRowsBonus;
 		const numFlashes = hasBonus ? 4 : 1;
 		return new Promise((resolve, reject) => {
@@ -401,7 +409,7 @@ class MainStore {
 	undo() {
 		if (this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
-			this.nextBlockTypes.push(this.positionedBlock.type);
+			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
 		const unfrozenBlock = this.frozenBlocks.pop();
 		if (!unfrozenBlock) return;
@@ -440,6 +448,8 @@ decorate(MainStore, {
 	height: observable,
 	pointSize: observable,
 	positionedBlock: observable,
+	nextBlockDef: computed,
+	nextBlockTypes: observable.ref,
 	filledPoints: observable,
 	newGame: action,
 	randomize: action,
