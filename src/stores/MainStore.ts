@@ -94,8 +94,17 @@ const tee: BlockDef = {
 	]
 };
 
-const blockDefs: Array<BlockDef> = [ line, square, are, ell, ess, zee, tee ];
-enum BlockType { Line, Square, Are, Ell, Ess, Zee, Tee } // must be same order as blockDefs
+enum BlockType { Line, Square, Are, Ell, Ess, Zee, Tee }
+
+const blockDefs = new Map<BlockType, BlockDef>([
+	[BlockType.Line, line],
+	[BlockType.Square, square],
+	[BlockType.Are, are],
+	[BlockType.Ell, ell],
+	[BlockType.Ess, ess],
+	[BlockType.Zee, zee],
+	[BlockType.Tee, tee]
+]);
 
 export interface PositionedBlock {
 	type: BlockType;
@@ -123,11 +132,11 @@ class MainStore {
 	}
 
 	getRandomBlockType(): BlockType {
-		return Math.floor(Math.random() * blockDefs.length);
+		return Math.floor(Math.random() * blockDefs.size);
 	}
 
 	getBlockDef(type: BlockType): BlockDef {
-		return blockDefs[type];
+		return blockDefs.get(type)!;
 	}
 
 	clear(): void {
