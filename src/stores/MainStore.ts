@@ -7,14 +7,15 @@ type PointXY = [number, number];
 type ExtentLTRB = [ number, number, number, number ];
 type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
-enum KeyActions { Left, Right, Down, Drop, RotateCCW, RotateCW }
+enum KeyActions { Left, Right, Down, Drop, RotateCCW, RotateCW, Undo }
 const keyMap: { [key: string]: KeyActions } = {
 	'ArrowLeft': KeyActions.Left,
 	'ArrowRight': KeyActions.Right,
 	'ArrowDown': KeyActions.Drop,
 	'ArrowUp': KeyActions.Down,
 	'z': KeyActions.RotateCCW,
-	'x': KeyActions.RotateCW
+	'x': KeyActions.RotateCW,
+	'z+Meta': KeyActions.Undo
 };
 
 export interface BlockType {
@@ -111,7 +112,8 @@ class MainStore {
 	pointSize: number = 30;
 
 	positionedBlock: PositionedBlock | null = null;
-	filledPoints: Array<Array<FilledPoint>> = []; // [y][x]
+	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
+	frozenBlocks: Array<PositionedBlock> = [];
 
 	constructor() {
 		this.clear();
@@ -125,6 +127,7 @@ class MainStore {
 	clear(): void {
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
+		this.frozenBlocks = [];
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
@@ -170,6 +173,13 @@ class MainStore {
 		});
 	}
 
+	markPositionUnfilled(block: PositionedBlock): void {
+		const points = this.getPoints(block);
+		points.forEach(point => {
+			this.filledPoints[point[1]][point[0]] = null;
+		});
+	}
+
 	getRandomPosition(type: BlockType): PositionedBlock | null {
 		let tries = 20;
 		const rotation = Math.floor(Math.random() * type.rotations.length);
@@ -199,7 +209,7 @@ class MainStore {
 		}
 	}
 
-	newPiece(): void {
+	newBlock(): void {
 		const type = this.getRandomBlockType();
 		const rotation = 0;
 		const extent = type.rotations[rotation].extent;
@@ -244,7 +254,9 @@ class MainStore {
 			const flash = action(() => {
 				const color = count % 2 === 0 ? 'black' : 'gray';
 				for (let row = 0; row < rows.length; row++) {
-					this.filledPoints[rows[row]].forEach(point => point.color = color);
+					this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
+						color: color
+					}));
 				}
 				count++;
 			});
@@ -270,15 +282,16 @@ class MainStore {
 		}
 	}
 
-	async pieceDown(): Promise<void> {
+	async freezeBlock(): Promise<void> {
 		if (!this.positionedBlock) return;
+		this.frozenBlocks.push(this.positionedBlock);
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
 		this.positionedBlock = null;
 		await this.clearRowsBonus(clearedRows);
 		runInAction(() => {
 			this.clearRows(clearedRows);
-			this.newPiece();
+			this.newBlock();
 		});
 	}
 
@@ -339,7 +352,7 @@ class MainStore {
 		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
 		} else {
-			await this.pieceDown();
+			await this.freezeBlock();
 		}
 	}
 
@@ -357,12 +370,31 @@ class MainStore {
 				done = true;
 			}
 		}
-		await this.pieceDown();
+		await this.freezeBlock();
 	}
 
-	keyPressed(e: React.KeyboardEvent) {
-		const action = keyMap[e.key];
+	undo() {
+		if (this.frozenBlocks.length === 0) return;
+		this.positionedBlock = null;
+		const unfrozenBlock = this.frozenBlocks.pop();
+		if (!unfrozenBlock) return;
+		this.markPositionUnfilled(unfrozenBlock);
+		const nextBlock = {
+			...unfrozenBlock,
+			y: unfrozenBlock.type.size === 2 ? 0 : -1
+		};
+		this.positionedBlock = nextBlock;
+	}
+
+	keyDown(e: React.KeyboardEvent) {
+		const keyStr = e.key
+			+ (e.shiftKey ? '+Shift' : '')
+			+ (e.ctrlKey ? '+Ctrl' : '')
+			+ (e.altKey ? '+Alt' : '')
+			+ (e.metaKey ? '+Meta' : '');
+		const action = keyMap[keyStr];
 		switch (+action) {
+			case KeyActions.Undo: this.undo(); break;
 			case KeyActions.Left: this.left(); break;
 			case KeyActions.Right: this.right(); break;
 			case KeyActions.Down: this.down(); break;
@@ -370,6 +402,9 @@ class MainStore {
 			case KeyActions.RotateCCW: this.rotateCCW(); break;
 			case KeyActions.RotateCW: this.rotateCW(); break;
 		}
+	}
+
+	keyUp(e: React.KeyboardEvent) {
 	}
 }
 
@@ -381,9 +416,10 @@ decorate(MainStore, {
 	filledPoints: observable,
 	clear: action,
 	randomize: action,
-	newPiece: action,
-	pieceDown: action,
+	newBlock: action,
+	freezeBlock: action,
 	clearRows: action,
+	undo: action,
 	rotateCW: action,
 	rotateCCW: action,
 	left: action,

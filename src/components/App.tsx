@@ -9,11 +9,11 @@ const App = observer(() => {
 	const mainStore = useStore();
 
 	return (
-		<div className="root" onKeyDown={e => mainStore.keyPressed(e)}>
+		<div className="root" onKeyDown={e => mainStore.keyDown(e)} onKeyUp={e => mainStore.keyUp(e)}>
 			<div className='buttons'>
 				<button onClick={() => mainStore.randomize()}>Randomize</button>
 				<button onClick={() => mainStore.clear()}>Clear</button>
-				<button onClick={() => mainStore.newPiece()}>Piece</button>
+				<button onClick={() => mainStore.newBlock()}>New</button>
 				<button onClick={() => mainStore.rotateCCW()}>CCW</button>
 				<button onClick={() => mainStore.rotateCW()}>CW</button>
 				<button onClick={() => mainStore.left()}>Left</button>
