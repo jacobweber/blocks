@@ -116,6 +116,7 @@ class MainStore {
 	positionedBlock: PositionedBlock | null = null;
 	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
 	frozenBlocks: Array<PositionedBlock> = [];
+	nextBlockTypes: Array<BlockType> = [];
 
 	constructor() {
 		this.clear();
@@ -133,6 +134,7 @@ class MainStore {
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
+		this.nextBlockTypes = [];
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
@@ -217,7 +219,12 @@ class MainStore {
 	}
 
 	newBlock(): void {
-		const type = this.getRandomBlockType();
+		let type;
+		if (this.nextBlockTypes.length > 0) {
+			type = this.nextBlockTypes.pop()!;
+		} else {
+			type = this.getRandomBlockType();
+		}
 		const rotation = 0;
 		const extent = this.getBlockDef(type).rotations[rotation].extent;
 		const blockWidth = extent[2] - extent[0] + 1;
@@ -255,6 +262,7 @@ class MainStore {
 	async clearRowsBonus(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
 		this.frozenBlocks = [];
+		this.nextBlockTypes = [];
 		const hasBonus = rows.length === numClearRowsBonus;
 		const numFlashes = hasBonus ? 4 : 1;
 		return new Promise((resolve, reject) => {
@@ -383,7 +391,9 @@ class MainStore {
 
 	undo() {
 		if (this.frozenBlocks.length === 0) return;
-		this.positionedBlock = null;
+		if (this.positionedBlock) {
+			this.nextBlockTypes.push(this.positionedBlock.type);
+		}
 		const unfrozenBlock = this.frozenBlocks.pop();
 		if (!unfrozenBlock) return;
 		this.markPositionUnfilled(unfrozenBlock);
