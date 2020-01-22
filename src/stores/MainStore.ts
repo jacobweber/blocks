@@ -337,7 +337,7 @@ class MainStore {
 			rotation: nextRotation
 		}
 		if (this.positionFree(nextBlock)) {
-			this.positionedBlock.rotation = nextRotation
+			this.positionedBlock = nextBlock;
 		}
 	}
 
@@ -447,7 +447,7 @@ decorate(MainStore, {
 	width: observable,
 	height: observable,
 	pointSize: observable,
-	positionedBlock: observable,
+	positionedBlock: observable.ref,
 	nextBlockDef: computed,
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
