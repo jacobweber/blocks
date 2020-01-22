@@ -254,6 +254,7 @@ class MainStore {
 
 	async clearRowsBonus(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
+		this.frozenBlocks = [];
 		const hasBonus = rows.length === numClearRowsBonus;
 		const numFlashes = hasBonus ? 4 : 1;
 		return new Promise((resolve, reject) => {
