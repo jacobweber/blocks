@@ -128,7 +128,7 @@ class MainStore {
 	nextBlockTypes: Array<BlockType> = [];
 
 	constructor() {
-		this.clear();
+		this.newGame();
 	}
 
 	getRandomBlockType(): BlockType {
@@ -139,7 +139,7 @@ class MainStore {
 		return blockDefs.get(type)!;
 	}
 
-	clear(): void {
+	newGame(): void {
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
@@ -217,7 +217,7 @@ class MainStore {
 	}
 
 	randomize(numBlocks: number = 20): void {
-		this.clear();
+		this.newGame();
 		for (let i = 0; i < numBlocks; i++) {
 			const type = this.getRandomBlockType();
 			const positioned = this.getRandomPosition(type);
@@ -243,7 +243,7 @@ class MainStore {
 		if (this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
 		} else {
-			this.clear();
+			this.newGame();
 		}
 	}
 
@@ -441,7 +441,7 @@ decorate(MainStore, {
 	pointSize: observable,
 	positionedBlock: observable,
 	filledPoints: observable,
-	clear: action,
+	newGame: action,
 	randomize: action,
 	newBlock: action,
 	freezeBlock: action,
