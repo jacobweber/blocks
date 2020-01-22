@@ -18,14 +18,14 @@ const keyMap: { [key: string]: KeyActions } = {
 	'z+Meta': KeyActions.Undo
 };
 
-export interface BlockType {
+export interface BlockDef {
 	desc: string;
 	color: string;
 	size: number;
 	rotations: Array<Rotation>; // index is rotation number
 }
 
-const line: BlockType = {
+const line: BlockDef = {
 	desc: 'line',
 	color: 'greenyellow',
 	size: 4,
@@ -34,7 +34,7 @@ const line: BlockType = {
 		{ points: [[2,0], [2,1], [2,2], [2,3]], extent: [2,0,2,3] }
 	]
 };
-const square: BlockType = {
+const square: BlockDef = {
 	desc: 'square',
 	color: 'lightcoral',
 	size: 2,
@@ -42,7 +42,7 @@ const square: BlockType = {
 		{ points: [[0,0], [1,0], [0,1], [1,1]], extent: [0,0,1,1] }
 	]
 };
-const are: BlockType = {
+const are: BlockDef = {
 	desc: 'el',
 	color: 'khaki',
 	size: 3,
@@ -53,7 +53,7 @@ const are: BlockType = {
 		{ points: [[1,0], [2,0], [1,1], [1,2]], extent: [1,0,2,2] }
 	]
 };
-const ell: BlockType = {
+const ell: BlockDef = {
 	desc: 'el',
 	color: 'burlywood',
 	size: 3,
@@ -64,7 +64,7 @@ const ell: BlockType = {
 		{ points: [[1,0], [1,1], [1,2], [2,2]], extent: [1,0,2,2] }
 	]
 };
-const ess: BlockType = {
+const ess: BlockDef = {
 	desc: 'ess',
 	color: 'cornflowerblue',
 	size: 3,
@@ -73,7 +73,7 @@ const ess: BlockType = {
 		{ points: [[1,0], [1,1], [2,1], [2,2]], extent: [1,0,2,2] }
 	]
 };
-const zee: BlockType = {
+const zee: BlockDef = {
 	desc: 'zee',
 	color: 'lightpink',
 	size: 3,
@@ -82,7 +82,7 @@ const zee: BlockType = {
 		{ points: [[2,0], [1,1], [2,1], [1,2]], extent: [1,0,2,2] }
 	]
 };
-const tee: BlockType = {
+const tee: BlockDef = {
 	desc: 'tee',
 	color: 'aquamarine',
 	size: 3,
@@ -93,7 +93,9 @@ const tee: BlockType = {
 		{ points: [[1,0], [1,1], [2,1], [1,2]], extent: [1,0,2,2] }
 	]
 };
-const blockTypes = [ line, square, are, ell, ess, zee, tee ];
+
+const blockDefs: Array<BlockDef> = [ line, square, are, ell, ess, zee, tee ];
+enum BlockType { Line, Square, Are, Ell, Ess, Zee, Tee } // must be same order as blockDefs
 
 export interface PositionedBlock {
 	type: BlockType;
@@ -120,8 +122,11 @@ class MainStore {
 	}
 
 	getRandomBlockType(): BlockType {
-		const index = Math.floor(Math.random() * blockTypes.length);
-		return blockTypes[index];
+		return Math.floor(Math.random() * blockDefs.length);
+	}
+
+	getBlockDef(type: BlockType): BlockDef {
+		return blockDefs[type];
 	}
 
 	clear(): void {
@@ -131,20 +136,21 @@ class MainStore {
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
-		return block.type.rotations[block.rotation].points.map(point => [
+		return this.getBlockDef(block.type).rotations[block.rotation].points.map(point => [
 			block.x + point[0],
 			block.y + point[1]
 		]);
 	}
 
 	canRotate(block: PositionedBlock) {
+		const def = this.getBlockDef(block.type);
 		return block.x >= 0
-			&& block.x + block.type.size <= this.width
-			&& block.y + block.type.size <= this.height;
+			&& block.x + def.size <= this.width
+			&& block.y + def.size <= this.height;
 	}
 
 	inBounds(block: PositionedBlock): boolean {
-		const extent = block.type.rotations[block.rotation].extent;
+		const extent = this.getBlockDef(block.type).rotations[block.rotation].extent;
 		return block.x + extent[0] >= 0
 			// && block.y - extent[1] >= 0
 			&& block.x + extent[2] < this.width
@@ -167,7 +173,7 @@ class MainStore {
 		points.forEach(point => {
 			if (point[1] >= 0) {
 				this.filledPoints[point[1]][point[0]] = {
-					color: block.type.color
+					color: this.getBlockDef(block.type).color
 				}
 			}
 		});
@@ -182,8 +188,9 @@ class MainStore {
 
 	getRandomPosition(type: BlockType): PositionedBlock | null {
 		let tries = 20;
-		const rotation = Math.floor(Math.random() * type.rotations.length);
-		const extent = type.rotations[rotation].extent;
+		const def = this.getBlockDef(type);
+		const rotation = Math.floor(Math.random() * def.rotations.length);
+		const extent = def.rotations[rotation].extent;
 		const blockWidth = extent[2] - extent[0] + 1;
 		const blockHeight = extent[3] - extent[1] + 1;
 		while (tries > 0) {
@@ -212,7 +219,7 @@ class MainStore {
 	newBlock(): void {
 		const type = this.getRandomBlockType();
 		const rotation = 0;
-		const extent = type.rotations[rotation].extent;
+		const extent = this.getBlockDef(type).rotations[rotation].extent;
 		const blockWidth = extent[2] - extent[0] + 1;
 		const x = Math.ceil((this.width - blockWidth) / 2);
 		const y = -extent[1];
@@ -227,7 +234,7 @@ class MainStore {
 	getClearedRows(): number[] {
 		const rows: number[] = [];
 		if (!this.positionedBlock) return rows;
-		for (let checkOffset = 0; checkOffset < this.positionedBlock.type.size; checkOffset++) {
+		for (let checkOffset = 0; checkOffset < this.getBlockDef(this.positionedBlock.type).size; checkOffset++) {
 			const y = this.positionedBlock.y + checkOffset;
 			if (y < 0 || y >= this.height) continue;
 			const checkRow = this.filledPoints[y];
@@ -297,7 +304,7 @@ class MainStore {
 
 	rotateCW(): void {
 		if (!this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
-		const numRotations = this.positionedBlock.type.rotations.length;
+		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation + 1 >= numRotations ? 0 : this.positionedBlock.rotation + 1;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
@@ -310,7 +317,7 @@ class MainStore {
 
 	rotateCCW(): void {
 		if (!this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
-		const numRotations = this.positionedBlock.type.rotations.length;
+		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation - 1 < 0 ? numRotations - 1 : this.positionedBlock.rotation - 1;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
@@ -381,7 +388,7 @@ class MainStore {
 		this.markPositionUnfilled(unfrozenBlock);
 		const nextBlock = {
 			...unfrozenBlock,
-			y: unfrozenBlock.type.size === 2 ? 0 : -1
+			y: this.getBlockDef(unfrozenBlock.type).size === 2 ? 0 : -1
 		};
 		this.positionedBlock = nextBlock;
 	}
