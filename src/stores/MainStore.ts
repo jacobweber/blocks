@@ -19,7 +19,7 @@ const keyMap: { [key: string]: KeyActions } = {
 	'x': KeyActions.RotateCW,
 	'z+Meta': KeyActions.Undo
 };
-let leftRightAccelAfterMS = 300;
+let leftRightAccelAfterMS = 200;
 let allowUndo = true;
 
 export interface BlockDef {
@@ -131,9 +131,11 @@ class MainStore {
 	frozenBlocks: Array<PositionedBlock> = [];
 	nextBlockTypes: Array<BlockType> = [];
 
-	keysDown: { [key: string]: KeyActions } = {};
-	trackedAction: KeyActions | null = null;
-	trackedActionID: number | null = null;
+	heldKey: {
+		key: string,
+		action: KeyActions,
+		id: number
+	} | null = null
 
 	gameActive = false;
 	actionInProgress = false;
@@ -188,7 +190,7 @@ class MainStore {
 	}
 
 	startDownTimer(): void {
-		if (!this.gameActive) return;
+		if (!this.gameActive || this.downDelayMS === 0) return;
 		this.downTimeout = window.setTimeout(() => {
 			this.down();
 			this.startDownTimer();
@@ -507,15 +509,16 @@ class MainStore {
 		});
 	}
 
-	async startTrackingAction(action: KeyActions) {
-		this.trackedAction = action;
-		const actionID = Math.floor(Math.random() * 100000);
-		this.trackedActionID = actionID;
+	async startTrackingKey(key: string, action: KeyActions): Promise<void> {
+		const id = Math.floor(Math.random() * 100000);
+		this.heldKey = { key, action, id };
+
 		let done = false;
 		let delay = leftRightAccelAfterMS;
 		while (!done) {
 			await this.delay(delay);
-			if (this.trackedActionID !== actionID) {
+			// if we stopped, or started the same action a second time before finishing, interrupt the first one
+			if (this.heldKey === null || this.heldKey.id !== id) {
 				return;
 			}
 			if (action === KeyActions.Left) {
@@ -525,11 +528,11 @@ class MainStore {
 			}
 			delay = 10;
 		}
+		this.stopTrackingKey();
 	}
 
-	stopTrackingAction() {
-		this.trackedAction = null;
-		this.trackedActionID = null;
+	stopTrackingKey(): void {
+		this.heldKey = null;
 	}
 
 	keyDown(e: KeyboardEvent) {
@@ -541,33 +544,26 @@ class MainStore {
 		const action = keyMap[keyStr];
 		if (action === undefined) return;
 
-		const heldAction = this.keysDown[e.key];
-		if (heldAction !== undefined) {
-			if (heldAction !== action) {
-				// Should only happen if we release a modifier key and this results in a different action
-				delete this.keysDown[e.key];
-				if (this.trackedAction && this.trackedAction === heldAction) {
-					this.stopTrackingAction();
+		// The Mac won't send a keyup for a standard key while the command key is held down.
+		// So if your left or right key includes command, we won't try to track how long it's held down.
+		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)
+			&& leftRightAccelAfterMS !== 0 && !e.metaKey;
+
+		if (canHoldKey) {
+			if (this.heldKey) {
+				if (this.heldKey.action === action) {
+					// don't start tracking repeated key
+				} else {
+					this.stopTrackingKey();
+					this.startTrackingKey(e.key, action);
 				}
 			} else {
-				// We were already holding down this key
-				return;
+				this.startTrackingKey(e.key, action);
 			}
-		}
-
-		const shouldTrackAction = leftRightAccelAfterMS !== 0
-			&& !e.metaKey && (action === KeyActions.Left || action === KeyActions.Right);
-
-		if (shouldTrackAction) {
-			// Track when you release the key, but ignore modifiers.
-			// The Mac won't send a keyup for a standard key while the command key is held down.
-			// So if your left or right key includes command, we won't try to detect how long it's held down.
-			const rawKey = keyStr.replace(/\+.+/, '');
-			this.keysDown[rawKey] = action;
-			if (this.trackedAction && this.trackedAction !== action) {
-				this.stopTrackingAction();
+		} else {
+			if (this.heldKey) {
+				this.stopTrackingKey();
 			}
-			this.startTrackingAction(action);
 		}
 
 		switch (action) {
@@ -585,13 +581,9 @@ class MainStore {
 	}
 
 	keyUp(e: KeyboardEvent) {
-		const heldAction = this.keysDown[e.key];
-		delete this.keysDown[e.key];
-		if (heldAction === undefined) return;
-		if (this.trackedAction && this.trackedAction === heldAction) {
-			this.stopTrackingAction();
+		if (this.heldKey !== null && this.heldKey.key === e.key) {
+			this.stopTrackingKey();
 		}
-		e.preventDefault();
 	}
 }
 
