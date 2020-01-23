@@ -136,8 +136,8 @@ class MainStore {
 	trackedActionID: number | null = null;
 
 	gameActive = false;
-	dropDelayMS = 750;
-	dropTimeout: number | undefined = undefined;
+	downDelayMS = 750;
+	downTimeout: number | undefined = undefined;
 
 	constructor() {
 		this.resetGame();
@@ -167,25 +167,25 @@ class MainStore {
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
 		this.nextBlockTypes = [];
-		window.clearTimeout(this.dropTimeout);
+		window.clearTimeout(this.downTimeout);
 	}
 
 	newGame(): void {
 		this.resetGame();
 		this.gameActive = true;
 		this.newBlock();
-		this.dropAfterDelay();
+		this.downAfterDelay();
 	}
 
 	endGame(): void {
 		this.resetGame();
 	}
 
-	async dropAfterDelay() {
+	async downAfterDelay(): Promise<void> {
 		if (!this.gameActive) return;
-		await this.delay(this.dropDelayMS);
+		await this.delay(this.downDelayMS);
 		this.down();
-		this.dropAfterDelay();
+		this.downAfterDelay();
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
@@ -430,7 +430,8 @@ class MainStore {
 	async drop(): Promise<void> {
 		if (!this.gameActive || !this.positionedBlock) return;
 		let done = false;
-		while (!done) {
+		const nextDrop = () => {
+			if (!this.positionedBlock) return;
 			const nextBlock: PositionedBlock = {
 				...this.positionedBlock,
 				y: this.positionedBlock.y + 1
@@ -440,11 +441,16 @@ class MainStore {
 			} else {
 				done = true;
 			}
+		};
+
+		while (!done) {
+			runInAction(nextDrop);
+			await this.delay(5);
 		}
 		await this.freezeBlock();
 	}
 
-	undo() {
+	async undo(): Promise<void> {
 		if (!this.gameActive || !allowUndo || this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
@@ -452,14 +458,30 @@ class MainStore {
 		const unfrozenBlock = this.frozenBlocks.pop();
 		if (!unfrozenBlock) return;
 		this.markPositionUnfilled(unfrozenBlock);
-		const nextBlock = {
-			...unfrozenBlock,
-			y: this.getBlockDef(unfrozenBlock.type).size === 2 ? 0 : -1
+		const lastY = this.getBlockDef(unfrozenBlock.type).size === 2 ? 0 : -1;
+
+		let done = false;
+		let y = unfrozenBlock.y - 1;
+		const nextLift = () => {
+			const nextBlock: PositionedBlock = {
+				...unfrozenBlock,
+				y
+			};
+			this.positionedBlock = nextBlock;
+			if (y === lastY) {
+				done = true;
+			} else {
+				y--;
+			}
 		};
-		this.positionedBlock = nextBlock;
+
+		while (!done) {
+			runInAction(nextLift);
+			await this.delay(5);
+		}
 	}
 
-	delay(ms: number) {
+	delay(ms: number): Promise<void> {
 		return new Promise(function (resolve, reject) {
 			setTimeout(resolve, ms);
 		});
