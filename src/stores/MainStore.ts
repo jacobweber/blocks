@@ -133,6 +133,10 @@ class MainStore {
 	keysDown: { [key: string]: KeyActions } = {};
 	trackedAction: KeyActions | null = null;
 
+	gameActive = false;
+	dropDelayMS = 750;
+	dropTimeout: number | undefined = undefined;
+
 	constructor() {
 		this.resetGame();
 	}
@@ -156,19 +160,30 @@ class MainStore {
 	}
 
 	resetGame(): void {
+		this.gameActive = false;
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
 		this.nextBlockTypes = [];
+		window.clearTimeout(this.dropTimeout);
 	}
 
 	newGame(): void {
 		this.resetGame();
+		this.gameActive = true;
 		this.newBlock();
+		this.dropAfterDelay();
 	}
 
 	endGame(): void {
 		this.resetGame();
+	}
+
+	async dropAfterDelay() {
+		if (!this.gameActive) return;
+		await this.delay(this.dropDelayMS);
+		this.down();
+		this.dropAfterDelay();
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
@@ -349,7 +364,7 @@ class MainStore {
 	}
 
 	rotateCW(): void {
-		if (!this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (!this.gameActive || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation + 1 >= numRotations ? 0 : this.positionedBlock.rotation + 1;
 		const nextBlock: PositionedBlock = {
@@ -362,7 +377,7 @@ class MainStore {
 	}
 
 	rotateCCW(): void {
-		if (!this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (!this.gameActive || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation - 1 < 0 ? numRotations - 1 : this.positionedBlock.rotation - 1;
 		const nextBlock: PositionedBlock = {
@@ -375,7 +390,7 @@ class MainStore {
 	}
 
 	left(): boolean {
-		if (!this.positionedBlock) return false;
+		if (!this.gameActive || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x - 1
@@ -388,7 +403,7 @@ class MainStore {
 	}
 
 	right(): boolean {
-		if (!this.positionedBlock) return false;
+		if (!this.gameActive || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x + 1
@@ -401,7 +416,7 @@ class MainStore {
 	}
 
 	async down(): Promise<void> {
-		if (!this.positionedBlock) return;
+		if (!this.gameActive || !this.positionedBlock) return;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			y: this.positionedBlock.y + 1
@@ -414,7 +429,7 @@ class MainStore {
 	}
 
 	async drop(): Promise<void> {
-		if (!this.positionedBlock) return;
+		if (!this.gameActive || !this.positionedBlock) return;
 		let done = false;
 		while (!done) {
 			const nextBlock: PositionedBlock = {
@@ -431,7 +446,7 @@ class MainStore {
 	}
 
 	undo() {
-		if (this.frozenBlocks.length === 0) return;
+		if (!this.gameActive || this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
