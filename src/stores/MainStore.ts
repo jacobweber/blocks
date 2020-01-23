@@ -136,6 +136,7 @@ class MainStore {
 	trackedActionID: number | null = null;
 
 	gameActive = false;
+	actionInProgress = false;
 	downDelayMS = 750;
 	downTimeout: number | undefined = undefined;
 
@@ -163,6 +164,7 @@ class MainStore {
 
 	resetGame(): void {
 		this.gameActive = false;
+		this.actionInProgress = false;
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
@@ -173,19 +175,23 @@ class MainStore {
 	newGame(): void {
 		this.resetGame();
 		this.gameActive = true;
+		this.startDownTimer();
 		this.newBlock();
-		this.downAfterDelay();
 	}
 
 	endGame(): void {
 		this.resetGame();
 	}
 
-	async downAfterDelay(): Promise<void> {
+	stopDownTimer(): void {
+		window.clearTimeout(this.downTimeout);
+	}
+
+	startDownTimer(): void {
 		if (!this.gameActive) return;
 		this.downTimeout = window.setTimeout(() => {
 			this.down();
-			this.downAfterDelay();
+			this.startDownTimer();
 		}, this.downDelayMS);
 	}
 
@@ -271,6 +277,7 @@ class MainStore {
 	}
 
 	newBlock(): void {
+		if (this.actionInProgress) return;
 		let type;
 		if (this.nextBlockTypes.length > 0) {
 			type = this.nextBlockTypes[this.nextBlockTypes.length - 1];
@@ -331,11 +338,13 @@ class MainStore {
 			count++;
 		});
 
+		this.stopDownTimer();
 		flash();
 		for (var i = 0; i < numFlashes; i++) {
 			await this.delay(100);
 			flash();
 		}
+		this.startDownTimer();
 	}
 
 	clearRows(rows: number[]): void {
@@ -350,6 +359,7 @@ class MainStore {
 
 	async freezeBlock(): Promise<void> {
 		if (!this.positionedBlock) return;
+		this.actionInProgress = true;
 		if (allowUndo) {
 			this.frozenBlocks.push(this.positionedBlock);
 		}
@@ -357,6 +367,7 @@ class MainStore {
 		const clearedRows = this.getClearedRows();
 		this.positionedBlock = null;
 		await this.clearRowsBonus(clearedRows);
+		this.actionInProgress = false;
 		runInAction(() => {
 			this.clearRows(clearedRows);
 			this.newBlock();
@@ -364,7 +375,7 @@ class MainStore {
 	}
 
 	rotateCW(): void {
-		if (!this.gameActive || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (!this.gameActive || this.actionInProgress || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation + 1 >= numRotations ? 0 : this.positionedBlock.rotation + 1;
 		const nextBlock: PositionedBlock = {
@@ -377,7 +388,7 @@ class MainStore {
 	}
 
 	rotateCCW(): void {
-		if (!this.gameActive || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (!this.gameActive || this.actionInProgress || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation - 1 < 0 ? numRotations - 1 : this.positionedBlock.rotation - 1;
 		const nextBlock: PositionedBlock = {
@@ -390,7 +401,7 @@ class MainStore {
 	}
 
 	left(): boolean {
-		if (!this.gameActive || !this.positionedBlock) return false;
+		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x - 1
@@ -403,7 +414,7 @@ class MainStore {
 	}
 
 	right(): boolean {
-		if (!this.gameActive || !this.positionedBlock) return false;
+		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x + 1
@@ -416,7 +427,7 @@ class MainStore {
 	}
 
 	async down(): Promise<void> {
-		if (!this.gameActive || !this.positionedBlock) return;
+		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			y: this.positionedBlock.y + 1
@@ -429,7 +440,7 @@ class MainStore {
 	}
 
 	async drop(): Promise<void> {
-		if (!this.gameActive || !this.positionedBlock) return;
+		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return;
 		let done = false;
 		const nextDrop = () => {
 			if (!this.positionedBlock) return;
@@ -444,15 +455,19 @@ class MainStore {
 			}
 		};
 
+		this.actionInProgress = true;
+		this.stopDownTimer();
 		while (!done) {
 			runInAction(nextDrop);
 			await this.delay(5);
 		}
+		this.startDownTimer();
 		await this.freezeBlock();
+		this.actionInProgress = false;
 	}
 
 	async undo(): Promise<void> {
-		if (!this.gameActive || !allowUndo || this.frozenBlocks.length === 0) return;
+		if (!this.gameActive || this.actionInProgress || !allowUndo || this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
@@ -476,10 +491,14 @@ class MainStore {
 			}
 		};
 
+		this.actionInProgress = true;
+		this.stopDownTimer();
 		while (!done) {
 			runInAction(nextLift);
 			await this.delay(5);
 		}
+		this.startDownTimer();
+		this.actionInProgress = false;
 	}
 
 	delay(ms: number): Promise<void> {
