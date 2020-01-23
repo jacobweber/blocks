@@ -1,8 +1,17 @@
 .root-app {
+	margin: 20px;
 }
 .root-app .buttons {
 	display: flex;
 }
 .root-app .layout {
 	display: flex;
+}
+.root-app .right {
+	margin-left: 30px;
+}
+.root-app .nextBlock {
+}
+.root-app .gameState {
+	margin-top: 30px;
 }

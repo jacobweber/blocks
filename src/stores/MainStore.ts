@@ -6,11 +6,13 @@ const numClearRowsBonus = 4;
 type PointXY = [number, number];
 type ExtentLTRB = [ number, number, number, number ];
 type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
+export enum GameState { Stopped, Active, Paused };
 
-enum KeyActions { NewGame, EndGame, Left, Right, Down, Drop, RotateCCW, RotateCW, Undo }
+enum KeyActions { NewGame, EndGame, PauseResumeGame, Left, Right, Down, Drop, RotateCCW, RotateCW, Undo }
 const keyMap: { [key: string]: KeyActions } = {
 	'n': KeyActions.NewGame,
 	'k': KeyActions.EndGame,
+	'p': KeyActions.PauseResumeGame,
 	'ArrowLeft': KeyActions.Left,
 	'ArrowRight': KeyActions.Right,
 	'ArrowDown': KeyActions.Drop,
@@ -138,7 +140,7 @@ class MainStore {
 		id: number
 	} | null = null
 
-	gameActive = false;
+	gameState: GameState = GameState.Stopped;
 	actionInProgress = false;
 	downDelayMS = 750;
 	downTimeout: number | undefined = undefined;
@@ -167,19 +169,19 @@ class MainStore {
 	}
 
 	resetGame(): void {
-		this.gameActive = false;
+		this.gameState = GameState.Stopped;
 		this.actionInProgress = false;
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
 		this.nextBlockTypes = [];
 		this.lastMoveAboveBlockedSpace = null;
-		window.clearTimeout(this.downTimeout);
+		this.stopDownTimer();
 	}
 
 	newGame(): void {
 		this.resetGame();
-		this.gameActive = true;
+		this.gameState = GameState.Active;
 		this.startDownTimer();
 		this.newBlock();
 	}
@@ -193,11 +195,31 @@ class MainStore {
 	}
 
 	startDownTimer(): void {
-		if (!this.gameActive || this.downDelayMS === 0) return;
+		if (this.gameState !== GameState.Active || this.downDelayMS === 0) return;
 		this.downTimeout = window.setTimeout(() => {
 			this.down(true);
 			this.startDownTimer();
 		}, this.downDelayMS);
+	}
+
+	pause(): void {
+		if (this.gameState !== GameState.Active) return;
+		this.gameState = GameState.Paused;
+		this.stopDownTimer();
+	}
+
+	resume(): void {
+		if (this.gameState !== GameState.Paused) return;
+		this.gameState = GameState.Active;
+		this.startDownTimer();
+	}
+
+	pauseResume(): void {
+		if (this.gameState === GameState.Paused) {
+			this.resume();
+		} else if (this.gameState === GameState.Active) {
+			this.pause();
+		}
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
@@ -395,7 +417,7 @@ class MainStore {
 	}
 
 	rotateCW(): void {
-		if (!this.gameActive || this.actionInProgress || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation + 1 >= numRotations ? 0 : this.positionedBlock.rotation + 1;
 		const nextBlock: PositionedBlock = {
@@ -409,7 +431,7 @@ class MainStore {
 	}
 
 	rotateCCW(): void {
-		if (!this.gameActive || this.actionInProgress || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation - 1 < 0 ? numRotations - 1 : this.positionedBlock.rotation - 1;
 		const nextBlock: PositionedBlock = {
@@ -423,7 +445,7 @@ class MainStore {
 	}
 
 	left(): boolean {
-		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return false;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x - 1
@@ -437,7 +459,7 @@ class MainStore {
 	}
 
 	right(): boolean {
-		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return false;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x + 1
@@ -451,7 +473,7 @@ class MainStore {
 	}
 
 	async down(fromTimer: boolean = false): Promise<void> {
-		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.positionedBlock) return;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			y: this.positionedBlock.y + 1
@@ -467,7 +489,7 @@ class MainStore {
 	}
 
 	async drop(): Promise<void> {
-		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.positionedBlock) return;
 		let done = false;
 		const nextDrop = () => {
 			if (!this.positionedBlock) return;
@@ -494,7 +516,7 @@ class MainStore {
 	}
 
 	async undo(): Promise<void> {
-		if (!this.gameActive || this.actionInProgress || !allowUndo || this.frozenBlocks.length === 0) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !allowUndo || this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
@@ -594,6 +616,7 @@ class MainStore {
 		switch (action) {
 			case KeyActions.NewGame: this.newGame(); break;
 			case KeyActions.EndGame: this.endGame(); break;
+			case KeyActions.PauseResumeGame: this.pauseResume(); break;
 			case KeyActions.Undo: this.undo(); break;
 			case KeyActions.Left: this.left(); break;
 			case KeyActions.Right: this.right(); break;
@@ -615,6 +638,7 @@ class MainStore {
 decorate(MainStore, {
 	width: observable,
 	height: observable,
+	gameState: observable,
 	pointSize: observable,
 	positionedBlock: observable.ref,
 	nextBlockDef: computed,
@@ -622,6 +646,8 @@ decorate(MainStore, {
 	filledPoints: observable,
 	newGame: action,
 	endGame: action,
+	pause: action,
+	resume: action,
 	randomize: action,
 	newBlock: action,
 	freezeBlock: action,
