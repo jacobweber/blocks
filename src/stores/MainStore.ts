@@ -183,9 +183,10 @@ class MainStore {
 
 	async downAfterDelay(): Promise<void> {
 		if (!this.gameActive) return;
-		await this.delay(this.downDelayMS);
-		this.down();
-		this.downAfterDelay();
+		this.downTimeout = window.setTimeout(() => {
+			this.down();
+			this.downAfterDelay();
+		}, this.downDelayMS);
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
