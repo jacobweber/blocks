@@ -7,8 +7,10 @@ type PointXY = [number, number];
 type ExtentLTRB = [ number, number, number, number ];
 type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
-enum KeyActions { Left, Right, Down, Drop, RotateCCW, RotateCW, Undo }
+enum KeyActions { NewGame, EndGame, Left, Right, Down, Drop, RotateCCW, RotateCW, Undo }
 const keyMap: { [key: string]: KeyActions } = {
+	'n': KeyActions.NewGame,
+	'e': KeyActions.EndGame,
 	'ArrowLeft': KeyActions.Left,
 	'ArrowRight': KeyActions.Right,
 	'ArrowDown': KeyActions.Drop,
@@ -128,7 +130,12 @@ class MainStore {
 	nextBlockTypes: Array<BlockType> = [];
 
 	constructor() {
-		this.newGame();
+		this.resetGame();
+	}
+
+	initWindowEvents() {
+		window.addEventListener('keydown', e => this.keyDown(e));
+		window.addEventListener('keyup', e => this.keyUp(e));
 	}
 
 	get nextBlockDef(): BlockDef | null {
@@ -144,11 +151,20 @@ class MainStore {
 		return blockDefs.get(type)!;
 	}
 
-	newGame(): void {
+	resetGame(): void {
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
-		this.nextBlockTypes = [ this.getRandomBlockType() ];
+		this.nextBlockTypes = [];
+	}
+
+	newGame(): void {
+		this.resetGame();
+		this.newBlock();
+	}
+
+	endGame(): void {
+		this.resetGame();
 	}
 
 	getPoints(block: PositionedBlock): Array<PointXY> {
@@ -222,7 +238,7 @@ class MainStore {
 	}
 
 	randomize(numBlocks: number = 20): void {
-		this.newGame();
+		this.resetGame();
 		for (let i = 0; i < numBlocks; i++) {
 			const type = this.getRandomBlockType();
 			const positioned = this.getRandomPosition(type);
@@ -252,7 +268,7 @@ class MainStore {
 		if (this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
 		} else {
-			this.newGame();
+			this.endGame();
 		}
 	}
 
@@ -421,7 +437,7 @@ class MainStore {
 		this.positionedBlock = nextBlock;
 	}
 
-	keyDown(e: React.KeyboardEvent) {
+	keyDown(e: KeyboardEvent) {
 		const keyStr = e.key
 			+ (e.shiftKey ? '+Shift' : '')
 			+ (e.ctrlKey ? '+Ctrl' : '')
@@ -429,6 +445,8 @@ class MainStore {
 			+ (e.metaKey ? '+Meta' : '');
 		const action = keyMap[keyStr];
 		switch (+action) {
+			case KeyActions.NewGame: this.newGame(); break;
+			case KeyActions.EndGame: this.endGame(); break;
 			case KeyActions.Undo: this.undo(); break;
 			case KeyActions.Left: this.left(); break;
 			case KeyActions.Right: this.right(); break;
@@ -439,7 +457,7 @@ class MainStore {
 		}
 	}
 
-	keyUp(e: React.KeyboardEvent) {
+	keyUp(e: KeyboardEvent) {
 	}
 }
 
@@ -452,6 +470,7 @@ decorate(MainStore, {
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
 	newGame: action,
+	endGame: action,
 	randomize: action,
 	newBlock: action,
 	freezeBlock: action,

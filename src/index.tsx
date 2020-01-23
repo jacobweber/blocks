@@ -10,6 +10,7 @@ import { configure } from 'mobx';
 configure({ enforceActions: "observed" });
 
 const mainStore = new MainStore();
+mainStore.initWindowEvents();
 
 ReactDOM.render(
 	<StoreContext.Provider value={mainStore}>
