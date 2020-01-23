@@ -10,7 +10,7 @@ type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 enum KeyActions { NewGame, EndGame, Left, Right, Down, Drop, RotateCCW, RotateCW, Undo }
 const keyMap: { [key: string]: KeyActions } = {
 	'n': KeyActions.NewGame,
-	'e': KeyActions.EndGame,
+	'k': KeyActions.EndGame,
 	'ArrowLeft': KeyActions.Left,
 	'ArrowRight': KeyActions.Right,
 	'ArrowDown': KeyActions.Drop,
@@ -132,6 +132,7 @@ class MainStore {
 
 	keysDown: { [key: string]: KeyActions } = {};
 	trackedAction: KeyActions | null = null;
+	trackedActionID: number | null = null;
 
 	gameActive = false;
 	dropDelayMS = 750;
@@ -468,11 +469,15 @@ class MainStore {
 
 	async startTrackingAction(action: KeyActions) {
 		this.trackedAction = action;
+		const actionID = Math.floor(Math.random() * 100000);
+		this.trackedActionID = actionID;
 		let done = false;
 		let delay = leftRightAccelAfterMS;
 		while (!done) {
 			await this.delay(delay);
-			if (this.trackedAction !== action) return;
+			if (this.trackedActionID !== actionID) {
+				return;
+			}
 			if (action === KeyActions.Left) {
 				done = !this.left();
 			} else {
@@ -484,6 +489,7 @@ class MainStore {
 
 	stopTrackingAction() {
 		this.trackedAction = null;
+		this.trackedActionID = null;
 	}
 
 	keyDown(e: KeyboardEvent) {
