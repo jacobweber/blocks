@@ -318,27 +318,22 @@ class MainStore {
 		this.frozenBlocks = [];
 		const hasBonus = rows.length === numClearRowsBonus;
 		const numFlashes = hasBonus ? 4 : 1;
-		return new Promise((resolve, reject) => {
-			let count = 0;
-			const flash = action(() => {
-				const color = count % 2 === 0 ? 'black' : 'gray';
-				for (let row = 0; row < rows.length; row++) {
-					this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
-						color: color
-					}));
-				}
-				count++;
-			});
-			flash();
-			const interval = window.setInterval(action(() => {
-				if (count === numFlashes) {
-					window.clearInterval(interval);
-					resolve();
-				} else {
-					flash();
-				}
-			}), 100);
+		let count = 0;
+		const flash = action(() => {
+			const color = count % 2 === 0 ? 'black' : 'gray';
+			for (let row = 0; row < rows.length; row++) {
+				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
+					color: color
+				}));
+			}
+			count++;
 		});
+
+		flash();
+		for (var i = 0; i < numFlashes; i++) {
+			await this.delay(100);
+			flash();
+		}
 	}
 
 	clearRows(rows: number[]): void {
