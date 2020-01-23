@@ -486,7 +486,6 @@ class MainStore {
 				// Should only happen if we release a modifier key and this results in a different action
 				delete this.keysDown[e.key];
 				if (this.trackedAction && this.trackedAction === heldAction) {
-					console.log('switch');
 					this.stopTrackingAction();
 				}
 			} else {
