@@ -20,6 +20,7 @@ const keyMap: { [key: string]: KeyActions } = {
 	'z+Meta': KeyActions.Undo
 };
 let leftRightAccelAfterMS = 300;
+let allowUndo = true;
 
 export interface BlockDef {
 	desc: string;
@@ -348,7 +349,9 @@ class MainStore {
 
 	async freezeBlock(): Promise<void> {
 		if (!this.positionedBlock) return;
-		this.frozenBlocks.push(this.positionedBlock);
+		if (allowUndo) {
+			this.frozenBlocks.push(this.positionedBlock);
+		}
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
 		this.positionedBlock = null;
@@ -442,7 +445,7 @@ class MainStore {
 	}
 
 	undo() {
-		if (!this.gameActive || this.frozenBlocks.length === 0) return;
+		if (!this.gameActive || !allowUndo || this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
@@ -535,7 +538,9 @@ class MainStore {
 			case KeyActions.Drop: this.drop(); break;
 			case KeyActions.RotateCCW: this.rotateCCW(); break;
 			case KeyActions.RotateCW: this.rotateCW(); break;
+			default: return;
 		}
+		e.preventDefault();
 	}
 
 	keyUp(e: KeyboardEvent) {
@@ -545,6 +550,7 @@ class MainStore {
 		if (this.trackedAction && this.trackedAction === heldAction) {
 			this.stopTrackingAction();
 		}
+		e.preventDefault();
 	}
 }
 
