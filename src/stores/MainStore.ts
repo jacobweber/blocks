@@ -19,6 +19,7 @@ const keyMap: { [key: string]: KeyActions } = {
 	'x': KeyActions.RotateCW,
 	'z+Meta': KeyActions.Undo
 };
+let leftRightAccelAfterMS = 300;
 
 export interface BlockDef {
 	desc: string;
@@ -128,6 +129,9 @@ class MainStore {
 	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
 	frozenBlocks: Array<PositionedBlock> = [];
 	nextBlockTypes: Array<BlockType> = [];
+
+	keysDown: { [key: string]: KeyActions } = {};
+	trackedAction: KeyActions | null = null;
 
 	constructor() {
 		this.resetGame();
@@ -370,26 +374,30 @@ class MainStore {
 		}
 	}
 
-	left(): void {
-		if (!this.positionedBlock) return;
+	left(): boolean {
+		if (!this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x - 1
 		}
 		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
+			return true;
 		}
+		return false;
 	}
 
-	right(): void {
-		if (!this.positionedBlock) return;
+	right(): boolean {
+		if (!this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x + 1
 		}
 		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
+			return true;
 		}
+		return false;
 	}
 
 	async down(): Promise<void> {
@@ -437,6 +445,32 @@ class MainStore {
 		this.positionedBlock = nextBlock;
 	}
 
+	delay(ms: number) {
+		return new Promise(function (resolve, reject) {
+			setTimeout(resolve, ms);
+		});
+	}
+
+	async startTrackingAction(action: KeyActions) {
+		this.trackedAction = action;
+		let done = false;
+		let delay = leftRightAccelAfterMS;
+		while (!done) {
+			await this.delay(delay);
+			if (this.trackedAction !== action) return;
+			if (action === KeyActions.Left) {
+				done = !this.left();
+			} else {
+				done = !this.right();
+			}
+			delay = 10;
+		}
+	}
+
+	stopTrackingAction() {
+		this.trackedAction = null;
+	}
+
 	keyDown(e: KeyboardEvent) {
 		const keyStr = e.key
 			+ (e.shiftKey ? '+Shift' : '')
@@ -444,7 +478,39 @@ class MainStore {
 			+ (e.altKey ? '+Alt' : '')
 			+ (e.metaKey ? '+Meta' : '');
 		const action = keyMap[keyStr];
-		switch (+action) {
+		if (action === undefined) return;
+
+		const heldAction = this.keysDown[e.key];
+		if (heldAction !== undefined) {
+			if (heldAction !== action) {
+				// Should only happen if we release a modifier key and this results in a different action
+				delete this.keysDown[e.key];
+				if (this.trackedAction && this.trackedAction === heldAction) {
+					console.log('switch');
+					this.stopTrackingAction();
+				}
+			} else {
+				// We were already holding down this key
+				return;
+			}
+		}
+
+		const shouldTrackAction = leftRightAccelAfterMS !== 0
+			&& !e.metaKey && (action === KeyActions.Left || action === KeyActions.Right);
+
+		if (shouldTrackAction) {
+			// Track when you release the key, but ignore modifiers.
+			// The Mac won't send a keyup for a standard key while the command key is held down.
+			// So if your left or right key includes command, we won't try to detect how long it's held down.
+			const rawKey = keyStr.replace(/\+.+/, '');
+			this.keysDown[rawKey] = action;
+			if (this.trackedAction && this.trackedAction !== action) {
+				this.stopTrackingAction();
+			}
+			this.startTrackingAction(action);
+		}
+
+		switch (action) {
 			case KeyActions.NewGame: this.newGame(); break;
 			case KeyActions.EndGame: this.endGame(); break;
 			case KeyActions.Undo: this.undo(); break;
@@ -458,6 +524,12 @@ class MainStore {
 	}
 
 	keyUp(e: KeyboardEvent) {
+		const heldAction = this.keysDown[e.key];
+		delete this.keysDown[e.key];
+		if (heldAction === undefined) return;
+		if (this.trackedAction && this.trackedAction === heldAction) {
+			this.stopTrackingAction();
+		}
 	}
 }
 
