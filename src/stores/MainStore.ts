@@ -538,7 +538,6 @@ class MainStore {
 			case KeyActions.Drop: this.drop(); break;
 			case KeyActions.RotateCCW: this.rotateCCW(); break;
 			case KeyActions.RotateCW: this.rotateCW(); break;
-			default: return;
 		}
 		e.preventDefault();
 	}
