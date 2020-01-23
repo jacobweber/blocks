@@ -20,6 +20,7 @@ const keyMap: { [key: string]: KeyActions } = {
 	'z+Meta': KeyActions.Undo
 };
 let leftRightAccelAfterMS = 200;
+let downTimerPauseWhenMovingMS = 500;
 let allowUndo = true;
 
 export interface BlockDef {
@@ -141,6 +142,7 @@ class MainStore {
 	actionInProgress = false;
 	downDelayMS = 750;
 	downTimeout: number | undefined = undefined;
+	lastMoveAboveBlockedSpace: Date | null = null;
 
 	constructor() {
 		this.resetGame();
@@ -171,6 +173,7 @@ class MainStore {
 		this.positionedBlock = null;
 		this.frozenBlocks = [];
 		this.nextBlockTypes = [];
+		this.lastMoveAboveBlockedSpace = null;
 		window.clearTimeout(this.downTimeout);
 	}
 
@@ -192,7 +195,7 @@ class MainStore {
 	startDownTimer(): void {
 		if (!this.gameActive || this.downDelayMS === 0) return;
 		this.downTimeout = window.setTimeout(() => {
-			this.down();
+			this.down(true);
 			this.startDownTimer();
 		}, this.downDelayMS);
 	}
@@ -376,6 +379,21 @@ class MainStore {
 		});
 	}
 
+	checkAboveBlockedSpace(): void {
+		if (!this.positionedBlock) return;
+		const nextBlock: PositionedBlock = {
+			...this.positionedBlock,
+			y: this.positionedBlock.y + 1
+		}
+		if (!this.inBounds(nextBlock) || !this.positionFree(nextBlock)) {
+			this.lastMoveAboveBlockedSpace = new Date();
+		}
+	}
+
+	recentlyAboveBlockedSpace(): boolean {
+		return this.lastMoveAboveBlockedSpace !== null && this.lastMoveAboveBlockedSpace.getTime() + downTimerPauseWhenMovingMS >= (new Date()).getTime();
+	}
+
 	rotateCW(): void {
 		if (!this.gameActive || this.actionInProgress || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
@@ -385,6 +403,7 @@ class MainStore {
 			rotation: nextRotation
 		}
 		if (this.positionFree(nextBlock)) {
+			this.checkAboveBlockedSpace();
 			this.positionedBlock = nextBlock;
 		}
 	}
@@ -398,6 +417,7 @@ class MainStore {
 			rotation: nextRotation
 		}
 		if (this.positionFree(nextBlock)) {
+			this.checkAboveBlockedSpace();
 			this.positionedBlock = nextBlock;
 		}
 	}
@@ -409,6 +429,7 @@ class MainStore {
 			x: this.positionedBlock.x - 1
 		}
 		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
+			this.checkAboveBlockedSpace();
 			this.positionedBlock = nextBlock;
 			return true;
 		}
@@ -422,17 +443,21 @@ class MainStore {
 			x: this.positionedBlock.x + 1
 		}
 		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
+			this.checkAboveBlockedSpace();
 			this.positionedBlock = nextBlock;
 			return true;
 		}
 		return false;
 	}
 
-	async down(): Promise<void> {
+	async down(fromTimer: boolean = false): Promise<void> {
 		if (!this.gameActive || this.actionInProgress || !this.positionedBlock) return;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			y: this.positionedBlock.y + 1
+		}
+		if (fromTimer && this.recentlyAboveBlockedSpace()) {
+			return;
 		}
 		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
