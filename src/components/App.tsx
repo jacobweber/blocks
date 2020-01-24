@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore, GameState } from '../stores/MainStore';
+import { Button } from 'semantic-ui-react'
 
-import 'bulma/css/bulma.css';
 import './App.css';
 import { Board } from './Board';
 import { NextBlock } from './NextBlock';
@@ -23,7 +23,7 @@ const App = observer(() => {
 						{mainStore.gameState === GameState.Paused && 'Paused'}
 					</div>
 					<div className='preferences'>
-						<button className="button" onClick={e => preferencesStore.show()}>Preferences</button>
+						<Button onClick={e => preferencesStore.show()}>Preferences</Button>
 						{preferencesStore.visible && <Preferences />}
 					</div>
 				</div>

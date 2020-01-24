@@ -1,34 +1,30 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
-import usePortal from 'react-useportal'
+import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
 import './Preferences.css';
 
 const Preferences = observer(() => {
-	const { Portal } = usePortal();
 	const preferencesStore = useStore().preferencesStore;
 	const hide = () => preferencesStore.hide();
 	const save = () => preferencesStore.save();
 
 	return (
-		<Portal>
-			<div className='modal is-active'>
-				<div className='modal-background' onClick={hide}></div>
-				<div className='modal-card'>
-					<header className='modal-card-head'>
-						<p className='modal-card-title'>Preferences</p>
-						<button className='delete' onClick={hide} aria-label='close'></button>
-					</header>
-					<section className='modal-card-body'>
-					</section>
-					<footer className='modal-card-foot'>
-						<button onClick={save} className='button is-success'>Save</button>
-						<button onClick={hide} className='button'>Cancel</button>
-					</footer>
-				</div>
-			</div>
-		</Portal>
+		<Modal open={true} closeIcon onClose={hide}>
+			<Header icon='setting' content='Preferences' />
+			<Modal.Content>
+				test
+			</Modal.Content>
+			<Modal.Actions>
+				<Button onClick={hide} color='red'>
+					<Icon name='remove' /> Cancel
+				</Button>
+				<Button onClick={save} color='green'>
+					<Icon name='checkmark' /> Save
+				</Button>
+			</Modal.Actions>
+		</Modal>
 	);
 });
 
