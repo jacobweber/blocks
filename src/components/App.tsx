@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import { useStore, GameState } from '../stores/MainStore';
+import { useStore } from '../stores/MainStore';
+import { GameState } from '../utils/types';
 import { Button } from 'semantic-ui-react'
 
 import styles from './App.module.css';
@@ -23,7 +24,7 @@ const App = observer(() => {
 						{mainStore.gameState === GameState.Paused && 'Paused'}
 					</div>
 					<div className={styles.preferences}>
-						<Button onClick={e => preferencesStore.show()}>Preferences</Button>
+						<Button onClick={e => preferencesStore.dialogShow()}>Preferences</Button>
 						{preferencesStore.visible && <Preferences />}
 					</div>
 				</div>

@@ -1,30 +1,13 @@
 import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 import { PreferencesStore } from './PreferencesStore';
+import { GameState, KeyActions } from '../utils/types';
 
 const numClearRowsBonus = 4;
 
 type PointXY = [number, number];
 type ExtentLTRB = [ number, number, number, number ];
 type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
-export enum GameState { Stopped, Active, Paused };
-
-enum KeyActions { NewGame, EndGame, PauseResumeGame, Left, Right, Down, Drop, RotateCCW, RotateCW, Undo }
-const keyMap: { [key: string]: KeyActions } = {
-	'n': KeyActions.NewGame,
-	'k': KeyActions.EndGame,
-	'p': KeyActions.PauseResumeGame,
-	'ArrowLeft': KeyActions.Left,
-	'ArrowRight': KeyActions.Right,
-	'ArrowDown': KeyActions.Drop,
-	'ArrowUp': KeyActions.Down,
-	'z': KeyActions.RotateCCW,
-	'x': KeyActions.RotateCW,
-	'z+Meta': KeyActions.Undo
-};
-let leftRightAccelAfterMS = 200;
-let downTimerPauseWhenMovingMS = 500;
-let allowUndo = true;
 
 export interface BlockDef {
 	desc: string;
@@ -150,6 +133,7 @@ class MainStore {
 	lastMoveAboveBlockedSpace: Date | null = null;
 
 	constructor() {
+		this.preferencesStore.load();
 		this.resetGame();
 	}
 
@@ -390,7 +374,7 @@ class MainStore {
 	async freezeBlock(): Promise<void> {
 		if (!this.positionedBlock) return;
 		this.actionInProgress = true;
-		if (allowUndo) {
+		if (this.preferencesStore.prefs.allowUndo) {
 			this.frozenBlocks.push(this.positionedBlock);
 		}
 		this.markPositionFilled(this.positionedBlock);
@@ -416,6 +400,7 @@ class MainStore {
 	}
 
 	recentlyAboveBlockedSpace(): boolean {
+		const downTimerPauseWhenMovingMS = this.preferencesStore.prefs.downTimerPauseWhenMovingMS;
 		return this.lastMoveAboveBlockedSpace !== null && this.lastMoveAboveBlockedSpace.getTime() + downTimerPauseWhenMovingMS >= (new Date()).getTime();
 	}
 
@@ -519,7 +504,7 @@ class MainStore {
 	}
 
 	async undo(): Promise<void> {
-		if (this.gameState !== GameState.Active || this.actionInProgress || !allowUndo || this.frozenBlocks.length === 0) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.preferencesStore.prefs.allowUndo || this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
@@ -564,7 +549,7 @@ class MainStore {
 		this.heldKey = { key, action, id };
 
 		let done = false;
-		let delay = leftRightAccelAfterMS;
+		let delay = this.preferencesStore.prefs.leftRightAccelAfterMS;
 		while (!done) {
 			await this.delay(delay);
 			// if we stopped, or started the same action a second time before finishing, interrupt the first one
@@ -597,13 +582,13 @@ class MainStore {
 			return;
 		}
 
-		const action = keyMap[keyStr];
+		const action = this.preferencesStore.prefs.keyMap[keyStr];
 		if (action === undefined) return;
 
 		// The Mac won't send a keyup for a standard key while the command key is held down.
 		// So if your left or right key includes command, we won't try to track how long it's held down.
 		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)
-			&& leftRightAccelAfterMS !== 0 && !e.metaKey;
+			&& this.preferencesStore.prefs.leftRightAccelAfterMS !== 0 && !e.metaKey;
 
 		if (canHoldKey) {
 			if (this.heldKey) {

@@ -7,8 +7,8 @@ import styles from './Preferences.module.css';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
-	const hide = () => preferencesStore.hide();
-	const save = () => preferencesStore.save();
+	const hide = () => preferencesStore.dialogHide();
+	const save = () => preferencesStore.dialogSave();
 
 	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={hide}>
