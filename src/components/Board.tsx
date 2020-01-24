@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
 
-import './Board.css';
+import styles from './Board.module.css';
 import { Points } from './Points';
 import { PositionedBlock } from './PositionedBlock';
 
@@ -19,7 +19,7 @@ const Board = observer(() => {
 	}
 
 	return (
-		<div className="root-board">
+		<div className={styles.root}>
 			<svg
 				version="1.1"
 				baseProfile="full"

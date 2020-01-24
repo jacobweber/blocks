@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { useStore, GameState } from '../stores/MainStore';
 import { Button } from 'semantic-ui-react'
 
-import './App.css';
+import styles from './App.module.css';
 import { Board } from './Board';
 import { NextBlock } from './NextBlock';
 import { Preferences } from './Preferences';
@@ -12,17 +12,17 @@ const App = observer(() => {
 	const mainStore = useStore();
 	const preferencesStore = mainStore.preferencesStore;
 	return (
-		<div className='root-app'>
-			<div className='layout'>
+		<div className={styles.root}>
+			<div className={styles.layout}>
 				<Board />
-				<div className='right'>
-					<div className='nextBlock'>
+				<div className={styles.right}>
+					<div className={styles.nextBlock}>
 						<NextBlock />
 					</div>
-					<div className='gameState'>
+					<div className={styles.gameState}>
 						{mainStore.gameState === GameState.Paused && 'Paused'}
 					</div>
-					<div className='preferences'>
+					<div className={styles.preferences}>
 						<Button onClick={e => preferencesStore.show()}>Preferences</Button>
 						{preferencesStore.visible && <Preferences />}
 					</div>

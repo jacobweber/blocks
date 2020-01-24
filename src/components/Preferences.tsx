@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
 import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
-import './Preferences.css';
+import styles from './Preferences.module.css';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -11,7 +11,7 @@ const Preferences = observer(() => {
 	const save = () => preferencesStore.save();
 
 	return (
-		<Modal open={true} closeIcon onClose={hide}>
+		<Modal className={styles.root} open={true} closeIcon onClose={hide}>
 			<Header icon='setting' content='Preferences' />
 			<Modal.Content>
 				test

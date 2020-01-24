@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
 
-import './NextBlock.css';
+import styles from './NextBlock.module.css';
 import { Point } from './Point';
 
 const NextBlock = observer(() => {
@@ -21,7 +21,7 @@ const NextBlock = observer(() => {
 	}
 
 	return (
-		<div className="root-nextBlock">
+		<div className={styles.root}>
 			<svg
 				version="1.1"
 				baseProfile="full"
