@@ -1,5 +1,6 @@
 import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
+import { PreferencesStore } from './PreferencesStore';
 
 const numClearRowsBonus = 4;
 
@@ -125,6 +126,8 @@ export interface FilledPoint {
 }
 
 class MainStore {
+	preferencesStore: PreferencesStore = new PreferencesStore();
+
 	width: number = 10;
 	height: number = 20;
 	pointSize: number = 30;
