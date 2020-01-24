@@ -1,25 +1,37 @@
-import { decorate, observable, action } from 'mobx';
-import { KeyActions } from '../utils/types';
+import { decorate, observable, action, computed } from 'mobx';
+import { ActionName, KeyActions } from '../utils/types';
+import { validKey, getKeyStr } from '../utils/helpers';
 
 export interface Preferences {
-	keyMap: { [key: string]: KeyActions };
+	keys: {
+		newGame: string;
+		endGame: string;
+		pauseResumeGame: string;
+		left: string;
+		right: string;
+		drop: string;
+		down: string;
+		rotateCCW: string;
+		rotateCW: string;
+		undo: string;
+	};
 	leftRightAccelAfterMS: number;
 	downTimerPauseWhenMovingMS: number;
 	allowUndo: boolean;
 }
 
 const defaultPrefs: Preferences = {
-	keyMap: {
-		'n': KeyActions.NewGame,
-		'k': KeyActions.EndGame,
-		'p': KeyActions.PauseResumeGame,
-		'ArrowLeft': KeyActions.Left,
-		'ArrowRight': KeyActions.Right,
-		'ArrowDown': KeyActions.Drop,
-		'ArrowUp': KeyActions.Down,
-		'z': KeyActions.RotateCCW,
-		'x': KeyActions.RotateCW,
-		'z+Meta': KeyActions.Undo
+	keys: {
+		newGame: 'n',
+		endGame: 'k',
+		pauseResumeGame: 'p',
+		left: 'ArrowLeft',
+		right: 'ArrowRight',
+		drop: 'ArrowDown',
+		down: 'ArrowUp',
+		rotateCCW: 'z',
+		rotateCW: 'x',
+		undo: 'a'
 	},
 	leftRightAccelAfterMS: 200,
 	downTimerPauseWhenMovingMS: 500,
@@ -27,8 +39,25 @@ const defaultPrefs: Preferences = {
 };
 
 class PreferencesStore {
+	key: string = '';
 	visible: boolean = false;
 	prefs: Preferences = defaultPrefs;
+
+	get keyMap(): { [key: string]: KeyActions } {
+		const keys = this.prefs.keys;
+		return {
+			[keys.newGame]: KeyActions.NewGame,
+			[keys.endGame]: KeyActions.EndGame,
+			[keys.pauseResumeGame]: KeyActions.PauseResumeGame,
+			[keys.left]: KeyActions.Left,
+			[keys.right]: KeyActions.Right,
+			[keys.drop]: KeyActions.Drop,
+			[keys.down]: KeyActions.Down,
+			[keys.rotateCCW]: KeyActions.RotateCCW,
+			[keys.rotateCW]: KeyActions.RotateCW,
+			[keys.undo]: KeyActions.Undo
+		};
+	}
 
 	load() {
 		const str = window.localStorage.getItem('preferences');
@@ -39,7 +68,7 @@ class PreferencesStore {
 			} catch (e) {
 			}
 		}
-		this.prefs = Object.assign({}, defaultPrefs, prefs);
+		this.prefs = Object.assign({}, defaultPrefs, prefs || {});
 	}
 
 	save() {
@@ -53,21 +82,49 @@ class PreferencesStore {
 
 	dialogHide() {
 		this.visible = false;
+		this.load();
 	}
 
 	dialogSave() {
 		this.visible = false;
 		this.save();
 	}
+
+	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: ActionName): void {
+		if (validKey(e.key)) {
+			let value = this.prefs.keys[name];
+			let keyStr = getKeyStr(e);
+			if (keyStr === 'Backspace') {
+				if (value === '') {
+					value = 'Backspace';
+				} else {
+					value = '';
+				}
+			} else {
+				value = keyStr;
+			}
+			this.prefs = {
+				...this.prefs,
+				keys: {
+					...this.prefs.keys,
+					[name]: value
+				}
+			}
+		}
+	}
 }
 
 decorate(PreferencesStore, {
 	visible: observable,
+	prefs: observable,
+	key: observable,
+	keyMap: computed,
 	load: action,
 	save: action,
 	dialogShow: action,
 	dialogHide: action,
-	dialogSave: action
+	dialogSave: action,
+	handleDialogKeySelectorKeyDown: action
 });
 
 export { PreferencesStore };

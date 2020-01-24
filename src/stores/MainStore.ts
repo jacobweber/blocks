@@ -2,6 +2,7 @@ import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 import { PreferencesStore } from './PreferencesStore';
 import { GameState, KeyActions } from '../utils/types';
+import { getKeyStr } from '../utils/helpers';
 
 const numClearRowsBonus = 4;
 
@@ -571,18 +572,14 @@ class MainStore {
 	}
 
 	keyDown(e: KeyboardEvent) {
-		const keyStr = e.key
-			+ (e.shiftKey ? '+Shift' : '')
-			+ (e.ctrlKey ? '+Ctrl' : '')
-			+ (e.altKey ? '+Alt' : '')
-			+ (e.metaKey ? '+Meta' : '');
+		const keyStr = getKeyStr(e);
 
 		if (keyStr === 'ArrowLeft+Meta' || keyStr === 'ArrowRight+Meta') {
 			e.preventDefault();
 			return;
 		}
 
-		const action = this.preferencesStore.prefs.keyMap[keyStr];
+		const action = this.preferencesStore.keyMap[keyStr];
 		if (action === undefined) return;
 
 		// The Mac won't send a keyup for a standard key while the command key is held down.
