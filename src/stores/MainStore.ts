@@ -591,6 +591,12 @@ class MainStore {
 			+ (e.ctrlKey ? '+Ctrl' : '')
 			+ (e.altKey ? '+Alt' : '')
 			+ (e.metaKey ? '+Meta' : '');
+
+		if (keyStr === 'ArrowLeft+Meta' || keyStr === 'ArrowRight+Meta') {
+			e.preventDefault();
+			return;
+		}
+
 		const action = keyMap[keyStr];
 		if (action === undefined) return;
 
