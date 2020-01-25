@@ -345,7 +345,7 @@ class MainStore {
 		if (rows.length === 0) return;
 		this.frozenBlocks = [];
 		const hasBonus = rows.length === numClearRowsBonus;
-		const numFlashes = hasBonus ? 4 : 1;
+		const numFlashes = hasBonus ? 1 : 1;
 		let count = 0;
 		const flash = action(() => {
 			const color = count % 2 === 0 ? 'black' : 'gray';
