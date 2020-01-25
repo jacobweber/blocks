@@ -588,7 +588,7 @@ class MainStore {
 	keyDown(e: KeyboardEvent) {
 		const keyStr = getKeyStr(e);
 
-		if (keyStr === 'Meta≠ArrowLeft' || keyStr === 'Meta+ArrowRight') {
+		if (keyStr === 'Meta+ArrowLeft' || keyStr === 'Meta+ArrowRight') {
 			e.preventDefault();
 			return;
 		}
