@@ -143,6 +143,10 @@ class MainStore {
 		window.addEventListener('keyup', e => this.keyUp(e));
 	}
 
+	get prefs() {
+		return this.preferencesStore.prefs;
+	}
+
 	get nextBlockDef(): BlockDef | null {
 		if (this.nextBlockTypes.length === 0) return null;
 		return this.getBlockDef(this.nextBlockTypes[this.nextBlockTypes.length - 1]);
@@ -375,7 +379,7 @@ class MainStore {
 	async freezeBlock(): Promise<void> {
 		if (!this.positionedBlock) return;
 		this.actionInProgress = true;
-		if (this.preferencesStore.prefs.allowUndo) {
+		if (this.prefs.allowUndo) {
 			this.frozenBlocks.push(this.positionedBlock);
 		}
 		this.markPositionFilled(this.positionedBlock);
@@ -401,7 +405,7 @@ class MainStore {
 	}
 
 	recentlyAboveBlockedSpace(): boolean {
-		const downTimerPauseWhenMovingMS = this.preferencesStore.prefs.downTimerPauseWhenMovingMS;
+		const downTimerPauseWhenMovingMS = this.prefs.downTimerPauseWhenMovingMS;
 		return this.lastMoveAboveBlockedSpace !== null && this.lastMoveAboveBlockedSpace.getTime() + downTimerPauseWhenMovingMS >= (new Date()).getTime();
 	}
 
@@ -505,7 +509,7 @@ class MainStore {
 	}
 
 	async undo(): Promise<void> {
-		if (this.gameState !== GameState.Active || this.actionInProgress || !this.preferencesStore.prefs.allowUndo || this.frozenBlocks.length === 0) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.prefs.allowUndo || this.frozenBlocks.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
@@ -550,7 +554,7 @@ class MainStore {
 		this.heldKey = { key, action, id };
 
 		let done = false;
-		let delay = this.preferencesStore.prefs.leftRightAccelAfterMS;
+		let delay = this.prefs.leftRightAccelAfterMS;
 		while (!done) {
 			await this.delay(delay);
 			// if we stopped, or started the same action a second time before finishing, interrupt the first one
@@ -585,7 +589,7 @@ class MainStore {
 		// The Mac won't send a keyup for a standard key while the command key is held down.
 		// So if your left or right key includes command, we won't try to track how long it's held down.
 		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)
-			&& this.preferencesStore.prefs.leftRightAccelAfterMS !== 0 && !e.metaKey;
+			&& this.prefs.leftRightAccelAfterMS !== 0 && !e.metaKey;
 
 		if (canHoldKey) {
 			if (this.heldKey) {
@@ -632,6 +636,7 @@ decorate(MainStore, {
 	gameState: observable,
 	pointSize: observable,
 	positionedBlock: observable.ref,
+	prefs: computed,
 	nextBlockDef: computed,
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
