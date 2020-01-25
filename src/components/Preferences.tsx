@@ -18,6 +18,28 @@ const Preferences = observer(() => {
 				<Form>
 					<Form.Group>
 						<Form.Field>
+							<Checkbox
+								label='Allow Undo'
+								onChange={e => preferencesStore.handleChangeAllowUndo(e)}
+								checked={preferencesStore.prefs.allowUndo} />
+						</Form.Field>
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Field>
+							<label>Accelerate Left/Right after holding for</label>
+							<Input
+								label={{ basic: true, content: 'ms' }}
+								labelPosition='right'
+								onChange={e => preferencesStore.handleChangeLeftRightAccel(e)}
+								value={preferencesStore.prefs.leftRightAccelAfterMS}
+							/>
+						</Form.Field>
+					</Form.Group>
+
+					<Header as='h3' dividing>Keyboard Controls</Header>
+					<Form.Group>
+						<Form.Field>
 							<label>New Game</label>
 							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'newGame')} name='newGame' value={keys.newGame} />
 						</Form.Field>
@@ -64,25 +86,6 @@ const Preferences = observer(() => {
 							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'undo')} name='undo' value={keys.undo} />
 						</Form.Field>
 		          	</Form.Group>
-
-					<Form.Group>
-						<Form.Field>
-							<label>Accelerate Left/Right after holding for</label>
-							<Input
-								label={{ basic: true, content: 'ms' }}
-								labelPosition='right'
-								onChange={e => preferencesStore.handleChangeLeftRightAccel(e)}
-								value={preferencesStore.prefs.leftRightAccelAfterMS}
-							/>
-						</Form.Field>
-					</Form.Group>
-
-					<Form.Group>
-						<Checkbox
-							label='Allow Undo'
-							onChange={e => preferencesStore.handleChangeAllowUndo(e)}
-							checked={preferencesStore.prefs.allowUndo} />
-					</Form.Group>
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
