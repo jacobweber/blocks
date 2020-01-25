@@ -114,7 +114,7 @@ class MainStore {
 
 	width: number = 10;
 	height: number = 20;
-	pointSize: number = 30;
+	windowHeight: number = 0;
 
 	positionedBlock: PositionedBlock | null = null;
 	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
@@ -139,12 +139,22 @@ class MainStore {
 	}
 
 	initWindowEvents() {
+		this.updateWindowHeight();
 		window.addEventListener('keydown', e => this.keyDown(e));
 		window.addEventListener('keyup', e => this.keyUp(e));
+		window.addEventListener('resize', e => this.updateWindowHeight());
 	}
 
 	get prefs() {
 		return this.preferencesStore.prefs;
+	}
+
+	updateWindowHeight() {
+		this.windowHeight = window.innerHeight;
+	}
+
+	get pointSize() {
+		return Math.max(Math.floor((this.windowHeight - 50) / this.height), 10);
 	}
 
 	get nextBlockDef(): BlockDef | null {
@@ -633,13 +643,15 @@ class MainStore {
 decorate(MainStore, {
 	width: observable,
 	height: observable,
+	windowHeight: observable,
 	gameState: observable,
-	pointSize: observable,
+	pointSize: computed,
 	positionedBlock: observable.ref,
 	prefs: computed,
 	nextBlockDef: computed,
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
+	updateWindowHeight: action,
 	newGame: action,
 	endGame: action,
 	pause: action,
