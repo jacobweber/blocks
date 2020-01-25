@@ -39,7 +39,6 @@ const defaultPrefs: Preferences = {
 };
 
 class PreferencesStore {
-	key: string = '';
 	visible: boolean = false;
 	prefs: Preferences = defaultPrefs;
 
@@ -80,7 +79,7 @@ class PreferencesStore {
 		this.visible = true;
 	}
 
-	dialogHide() {
+	dialogCancel() {
 		this.visible = false;
 		this.load();
 	}
@@ -88,6 +87,29 @@ class PreferencesStore {
 	dialogSave() {
 		this.visible = false;
 		this.save();
+	}
+
+	setPrefs(prefs: Preferences): void {
+		this.prefs = prefs;
+	}
+
+	handleChangeLeftRightAccel(e: React.ChangeEvent<HTMLInputElement>): void {
+		let value = 0;
+		if (e.target.value.length > 0) {
+			value = parseInt(e.target.value, 10);
+			if (isNaN(value)) return;
+		}
+		this.setPrefs({
+			...this.prefs,
+			leftRightAccelAfterMS: value
+		});
+	}
+
+	handleChangeAllowUndo(e: React.FormEvent<HTMLInputElement>): void {
+		this.setPrefs({
+			...this.prefs,
+			allowUndo: !this.prefs.allowUndo
+		});
 	}
 
 	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: ActionName): void {
@@ -103,28 +125,27 @@ class PreferencesStore {
 			} else {
 				value = keyStr;
 			}
-			this.prefs = {
+			this.setPrefs({
 				...this.prefs,
 				keys: {
 					...this.prefs.keys,
 					[name]: value
 				}
-			}
+			});
 		}
 	}
 }
 
 decorate(PreferencesStore, {
 	visible: observable,
-	prefs: observable,
-	key: observable,
+	prefs: observable.ref,
 	keyMap: computed,
 	load: action,
 	save: action,
+	setPrefs: action,
 	dialogShow: action,
-	dialogHide: action,
-	dialogSave: action,
-	handleDialogKeySelectorKeyDown: action
+	dialogCancel: action,
+	dialogSave: action
 });
 
 export { PreferencesStore };
