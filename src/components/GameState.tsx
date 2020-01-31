@@ -12,7 +12,7 @@ const GameState = observer(() => {
 		<div className={styles.root}>
 			{mainStore.gameState !== State.Stopped && (<>
 				Score: {mainStore.score}<br />
-				Lines: {mainStore.lines}<br />
+				Lines: {mainStore.rows}<br />
 				Level: {mainStore.level}<br />
 			</>)}
 			{mainStore.gameState === State.Paused && 'Paused'}

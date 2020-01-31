@@ -133,8 +133,7 @@ class MainStore {
 	downTimeout: number | undefined = undefined;
 	lastMoveAboveBlockedSpace: Date | null = null;
 	score = 0;
-	lines = 0;
-	level = 0;
+	rows = 0;
 
 	constructor() {
 		this.preferencesStore.load();
@@ -182,8 +181,7 @@ class MainStore {
 		this.nextBlockTypes = [];
 		this.lastMoveAboveBlockedSpace = null;
 		this.score = 0;
-		this.lines = 0;
-		this.level = 0;
+		this.rows = 0;
 		this.stopDownTimer();
 	}
 
@@ -357,7 +355,7 @@ class MainStore {
 		return rows;
 	}
 
-	async clearRowsBonus(rows: number[]): Promise<void> {
+	async clearRowsDisplay(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
 		this.frozenBlocks = [];
 		const hasBonus = rows.length === numClearRowsBonus;
@@ -392,7 +390,7 @@ class MainStore {
 		}
 	}
 
-	async freezeBlock(points = 0): Promise<void> {
+	async freezeBlock(points: number = 0): Promise<void> {
 		if (!this.positionedBlock) return;
 		this.actionInProgress = true;
 		if (this.prefs.allowUndo) {
@@ -401,13 +399,41 @@ class MainStore {
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
 		this.positionedBlock = null;
-		this.score += points;
-		await this.clearRowsBonus(clearedRows);
+		this.scoreDrop(points);
+		this.scoreClearedRows(clearedRows.length);
+		await this.clearRowsDisplay(clearedRows);
 		this.actionInProgress = false;
 		runInAction(() => {
 			this.clearRows(clearedRows);
 			this.newBlock();
 		});
+	}
+
+	scoreDrop(points: number): void {
+		this.score += points;
+	}
+
+	scoreClearedRows(rows: number): void {
+		const mult = (rows === 1 ? 40
+			: (rows === 2 ? 100
+				: (rows === 3 ? 300
+					: (rows === 4 ? 1200 : 0))));
+		this.score += this.level * mult;
+		// score based on level before adding rows
+		this.rows += rows;
+	}
+
+	get level() {
+		if (this.rows < 10) return 1;
+		if (this.rows < 30) return 2;
+		if (this.rows < 60) return 3;
+		if (this.rows < 100) return 4;
+		if (this.rows < 150) return 5;
+		if (this.rows < 210) return 6;
+		if (this.rows < 280) return 7;
+		if (this.rows < 360) return 8;
+		if (this.rows < 450) return 9;
+		return 10;
 	}
 
 	checkAboveBlockedSpace(): void {
@@ -655,8 +681,8 @@ decorate(MainStore, {
 	height: observable,
 	windowHeight: observable,
 	score: observable,
-	lines: observable,
-	level: observable,
+	rows: observable,
+	level: computed,
 	gameState: observable,
 	pointSize: computed,
 	positionedBlock: observable.ref,
@@ -672,6 +698,8 @@ decorate(MainStore, {
 	randomize: action,
 	newBlock: action,
 	freezeBlock: action,
+	scoreDrop: action,
+	scoreClearedRows: action,
 	clearRows: action,
 	undo: action,
 	rotateCW: action,
