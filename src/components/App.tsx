@@ -1,12 +1,12 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
-import { GameState } from '../utils/types';
 import { Button } from 'semantic-ui-react'
 
 import styles from './App.module.css';
 import { Board } from './Board';
 import { NextBlock } from './NextBlock';
+import { GameState } from './GameState';
 import { Preferences } from './Preferences';
 
 const App = observer(() => {
@@ -21,7 +21,7 @@ const App = observer(() => {
 						<NextBlock />
 					</div>
 					<div className={styles.gameState}>
-						{mainStore.gameState === GameState.Paused && 'Paused'}
+						<GameState />
 					</div>
 					<div className={styles.preferences}>
 						<Button onClick={e => preferencesStore.dialogShow()}>Preferences</Button>

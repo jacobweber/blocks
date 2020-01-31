@@ -132,6 +132,9 @@ class MainStore {
 	downDelayMS = 750;
 	downTimeout: number | undefined = undefined;
 	lastMoveAboveBlockedSpace: Date | null = null;
+	score = 0;
+	lines = 0;
+	level = 0;
 
 	constructor() {
 		this.preferencesStore.load();
@@ -178,6 +181,9 @@ class MainStore {
 		this.frozenBlocks = [];
 		this.nextBlockTypes = [];
 		this.lastMoveAboveBlockedSpace = null;
+		this.score = 0;
+		this.lines = 0;
+		this.level = 0;
 		this.stopDownTimer();
 	}
 
