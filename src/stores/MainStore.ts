@@ -1,6 +1,6 @@
 import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
-import { PreferencesStore } from './PreferencesStore';
+import { PreferencesStore, Preferences } from './PreferencesStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr } from '../utils/helpers';
 
@@ -149,7 +149,7 @@ class MainStore {
 		window.addEventListener('resize', e => this.updateWindowHeight());
 	}
 
-	get prefs() {
+	get prefs(): Preferences {
 		return this.preferencesStore.prefs;
 	}
 
@@ -157,7 +157,7 @@ class MainStore {
 		this.windowHeight = window.innerHeight;
 	}
 
-	get pointSize() {
+	get pointSize(): number {
 		return Math.max(Math.floor((this.windowHeight - 50) / this.height), 10);
 	}
 
@@ -428,7 +428,7 @@ class MainStore {
 		this.rows += rows;
 	}
 
-	get level() {
+	get level(): number {
 		if (this.rows < 10) return 1;
 		if (this.rows < 30) return 2;
 		if (this.rows < 60) return 3;
