@@ -152,6 +152,11 @@ class MainStore {
 		return this.preferencesStore.prefs;
 	}
 
+	showPrefs(): void {
+		this.pause();
+		this.preferencesStore.dialogShow();
+	}
+
 	get downDelayMS(): number {
 		return 800 - (this.level * 50);
 	}

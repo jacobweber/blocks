@@ -24,7 +24,7 @@ const App = observer(() => {
 						<GameState />
 					</div>
 					<div className={styles.preferences}>
-						<Button onClick={e => preferencesStore.dialogShow()}>Preferences</Button>
+						<Button onClick={e => mainStore.showPrefs()}>Preferences</Button>
 						{preferencesStore.visible && <Preferences />}
 					</div>
 				</div>
