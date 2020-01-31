@@ -131,7 +131,6 @@ class MainStore {
 
 	gameState: GameState = GameState.Stopped;
 	actionInProgress = false;
-	downDelayMS = 750;
 	downTimeout: number | undefined = undefined;
 	lastMoveAboveBlockedSpace: Date | null = null;
 	score = 0;
@@ -151,6 +150,10 @@ class MainStore {
 
 	get prefs(): Preferences {
 		return this.preferencesStore.prefs;
+	}
+
+	get downDelayMS(): number {
+		return 800 - (this.level * 50);
 	}
 
 	updateWindowHeight() {
@@ -426,6 +429,8 @@ class MainStore {
 		this.score += this.level * mult;
 		// score based on level before adding rows
 		this.rows += rows;
+		this.stopDownTimer();
+		this.startDownTimer();
 	}
 
 	get level(): number {
@@ -690,6 +695,7 @@ decorate(MainStore, {
 	score: observable,
 	rows: observable,
 	level: computed,
+	downDelayMS: computed,
 	gameState: observable,
 	pointSize: computed,
 	positionedBlock: observable.ref,
