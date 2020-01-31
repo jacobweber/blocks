@@ -392,7 +392,7 @@ class MainStore {
 		}
 	}
 
-	async freezeBlock(): Promise<void> {
+	async freezeBlock(points = 0): Promise<void> {
 		if (!this.positionedBlock) return;
 		this.actionInProgress = true;
 		if (this.prefs.allowUndo) {
@@ -401,6 +401,7 @@ class MainStore {
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
 		this.positionedBlock = null;
+		this.score += points;
 		await this.clearRowsBonus(clearedRows);
 		this.actionInProgress = false;
 		runInAction(() => {
@@ -513,6 +514,9 @@ class MainStore {
 			}
 		};
 
+		const extent = this.getBlockDef(this.positionedBlock.type).rotations[this.positionedBlock.rotation].extent;
+		const points = this.height -  (this.positionedBlock.y + extent[3]) - 1;
+
 		this.actionInProgress = true;
 		this.stopDownTimer();
 		while (!done) {
@@ -520,7 +524,7 @@ class MainStore {
 			await this.delay(5);
 		}
 		this.startDownTimer();
-		await this.freezeBlock();
+		await this.freezeBlock(points);
 		this.actionInProgress = false;
 	}
 
@@ -650,6 +654,9 @@ decorate(MainStore, {
 	width: observable,
 	height: observable,
 	windowHeight: observable,
+	score: observable,
+	lines: observable,
+	level: observable,
 	gameState: observable,
 	pointSize: computed,
 	positionedBlock: observable.ref,
