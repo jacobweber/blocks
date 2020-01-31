@@ -105,6 +105,8 @@ export interface PositionedBlock {
 	rotation: number;
 }
 
+type UndoFrame = { block: PositionedBlock; score: number };
+
 export interface FilledPoint {
 	color: string;
 }
@@ -118,7 +120,7 @@ class MainStore {
 
 	positionedBlock: PositionedBlock | null = null;
 	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
-	frozenBlocks: Array<PositionedBlock> = [];
+	undoStack: Array<UndoFrame> = [];
 	nextBlockTypes: Array<BlockType> = [];
 
 	heldKey: {
@@ -177,7 +179,7 @@ class MainStore {
 		this.actionInProgress = false;
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
-		this.frozenBlocks = [];
+		this.undoStack = [];
 		this.nextBlockTypes = [];
 		this.lastMoveAboveBlockedSpace = null;
 		this.score = 0;
@@ -357,7 +359,7 @@ class MainStore {
 
 	async clearRowsDisplay(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
-		this.frozenBlocks = [];
+		this.undoStack = [];
 		const hasBonus = rows.length === numClearRowsBonus;
 		const numFlashes = hasBonus ? 1 : 1;
 		let count = 0;
@@ -394,7 +396,10 @@ class MainStore {
 		if (!this.positionedBlock) return;
 		this.actionInProgress = true;
 		if (this.prefs.allowUndo) {
-			this.frozenBlocks.push(this.positionedBlock);
+			this.undoStack.push({
+				block: this.positionedBlock,
+				score: this.score
+			});
 		}
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
@@ -555,12 +560,14 @@ class MainStore {
 	}
 
 	async undo(): Promise<void> {
-		if (this.gameState !== GameState.Active || this.actionInProgress || !this.prefs.allowUndo || this.frozenBlocks.length === 0) return;
+		if (this.gameState !== GameState.Active || this.actionInProgress || !this.prefs.allowUndo || this.undoStack.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
-		const unfrozenBlock = this.frozenBlocks.pop();
-		if (!unfrozenBlock) return;
+		const undoFrame = this.undoStack.pop();
+		if (!undoFrame) return;
+		this.score = undoFrame.score;
+		const unfrozenBlock = undoFrame.block;
 		this.markPositionUnfilled(unfrozenBlock);
 		const lastY = this.getBlockDef(unfrozenBlock.type).size === 2 ? 0 : -1;
 
