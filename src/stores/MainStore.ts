@@ -431,6 +431,7 @@ class MainStore {
 	}
 
 	scoreClearedRows(rows: number): void {
+		if (rows === 0) return;
 		const mult = (rows === 1 ? 40
 			: (rows === 2 ? 100
 				: (rows === 3 ? 300
