@@ -14,7 +14,7 @@ const PositionedBlock = observer(() => {
 		positionedBlockPoints.forEach(point => {
 			const x = point[0];
 			const y = point[1];
-			points.push(<Point key={x + '-' + y} x={x * size} y={y * size} id={id} />);
+			points.push(<Point key={x + '-' + y} x={x} y={y} size={size} id={id} />);
 		});
 	}
 	return <>{points}</>;

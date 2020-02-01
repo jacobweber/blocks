@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
 
 import styles from './Board.module.css';
-import { PointDefs } from './PointDefs';
+import { PointDefs } from './points/Grad';
 import { Points } from './Points';
 import { PositionedBlock } from './PositionedBlock';
 
@@ -28,7 +28,7 @@ const Board = observer(() => {
 				height={mainStore.pointSize * mainStore.height}
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<PointDefs size={mainStore.pointSize} />
+				<PointDefs />
 				<Points />
 				<PositionedBlock />
 				{xLines}

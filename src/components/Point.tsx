@@ -6,10 +6,11 @@ type PointProps = {
 	id: PointID;
 	x: number;
 	y: number;
+	size: number;
 };
 
-const Point = ({ id, x, y }: PointProps) => {
-	return <use xlinkHref={'#' + id} x={x} y={y} />;
+const Point = ({ id, x, y, size }: PointProps) => {
+	return <use x={x * size} y={y * size} width={size} height={size} xlinkHref={'#' + id} />;
 };
 
 export { Point };
