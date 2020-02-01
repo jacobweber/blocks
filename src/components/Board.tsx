@@ -21,6 +21,9 @@ const Board = observer(() => {
 
 	return (
 		<div className={styles.root}>
+			<div className={styles.pointDefs}>
+				<PointDefs />
+			</div>
 			<svg
 				version="1.1"
 				baseProfile="full"
@@ -28,7 +31,6 @@ const Board = observer(() => {
 				height={mainStore.pointSize * mainStore.height}
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<PointDefs />
 				<Points />
 				<PositionedBlock />
 				{xLines}
