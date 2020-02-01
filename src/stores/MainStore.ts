@@ -644,6 +644,7 @@ class MainStore {
 	}
 
 	keyDown(e: KeyboardEvent) {
+		if (this.preferencesStore.visible) return;
 		const keyStr = getKeyStr(e);
 
 		if (keyStr === 'Meta+ArrowLeft' || keyStr === 'Meta+ArrowRight' || keyStr === 'Meta+[' || keyStr === 'Meta+]') {
