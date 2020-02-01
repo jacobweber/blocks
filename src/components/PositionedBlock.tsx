@@ -10,11 +10,11 @@ const PositionedBlock = observer(() => {
 	const size = mainStore.pointSize;
 	if (mainStore.positionedBlock) {
 		const positionedBlockPoints = mainStore.getPoints(mainStore.positionedBlock);
-		const color = mainStore.getBlockDef(mainStore.positionedBlock.type).color;
+		const id = mainStore.getBlockDef(mainStore.positionedBlock.type).id;
 		positionedBlockPoints.forEach(point => {
 			const x = point[0];
 			const y = point[1];
-			points.push(<Point key={x + '-' + y} x={x} y={y} color={color} size={size} />);
+			points.push(<Point key={x + '-' + y} x={x * size} y={y * size} id={id} />);
 		});
 	}
 	return <>{points}</>;

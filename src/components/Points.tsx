@@ -12,7 +12,7 @@ const Points = observer(() => {
 		for (let y = 0; y < mainStore.height; y++) {
 			const point = mainStore.filledPoints[y][x];
 			if (point) {
-				points.push(<Point key={x + '-' + y} x={x} y={y} color={point.color} size={size} />);
+				points.push(<Point key={x + '-' + y} x={x * size} y={y * size} id={point.id} />);
 			}
 		}
 	}

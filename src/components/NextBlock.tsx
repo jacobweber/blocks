@@ -12,11 +12,11 @@ const NextBlock = observer(() => {
 	if (mainStore.nextBlockDef) {
 		const rotation = mainStore.nextBlockDef.rotations[0];
 		const top = rotation.extent[1];
-		const color = mainStore.nextBlockDef.color;
+		const id = mainStore.nextBlockDef.id;
 		rotation.points.forEach(point => {
 			const x = point[0];
 			const y = point[1] - top;
-			points.push(<Point key={x + '-' + y} x={x} y={y} color={color} size={size} />);
+			points.push(<Point key={x + '-' + y} x={x * size} y={y * size} id={id} />);
 		});
 	}
 

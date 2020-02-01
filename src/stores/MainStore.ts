@@ -11,15 +11,25 @@ type ExtentLTRB = [ number, number, number, number ];
 type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
 export interface BlockDef {
-	desc: string;
-	color: string;
+	id: PointID;
 	size: number;
 	rotations: Array<Rotation>; // index is rotation number
 }
 
+export enum PointID {
+	Line = 'line',
+	Square = 'square',
+	Are = 'are',
+	Ell = 'ell',
+	Ess = 'ess',
+	Zee = 'zee',
+	Tee = 'tee',
+	FlashOn = 'flashOn',
+	FlashOff = 'flashOff'
+}
+
 const line: BlockDef = {
-	desc: 'line',
-	color: 'greenyellow',
+	id: PointID.Line,
 	size: 4,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [3,1]], extent: [0,1,3,1] },
@@ -27,16 +37,14 @@ const line: BlockDef = {
 	]
 };
 const square: BlockDef = {
-	desc: 'square',
-	color: 'lightcoral',
+	id: PointID.Square,
 	size: 2,
 	rotations: [
 		{ points: [[0,0], [1,0], [0,1], [1,1]], extent: [0,0,1,1] }
 	]
 };
 const are: BlockDef = {
-	desc: 'are',
-	color: 'khaki',
+	id: PointID.Are,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [2,2]], extent: [0,1,2,2] },
@@ -46,8 +54,7 @@ const are: BlockDef = {
 	]
 };
 const ell: BlockDef = {
-	desc: 'ell',
-	color: 'burlywood',
+	id: PointID.Ell,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [0,2]], extent: [0,1,2,2] },
@@ -57,8 +64,7 @@ const ell: BlockDef = {
 	]
 };
 const ess: BlockDef = {
-	desc: 'ess',
-	color: 'cornflowerblue',
+	id: PointID.Ess,
 	size: 3,
 	rotations: [
 		{ points: [[1,1], [2,1], [0,2], [1,2]], extent: [0,1,2,2] },
@@ -66,8 +72,7 @@ const ess: BlockDef = {
 	]
 };
 const zee: BlockDef = {
-	desc: 'zee',
-	color: 'lightpink',
+	id: PointID.Zee,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [1,2], [2,2]], extent: [0,1,2,2] },
@@ -75,8 +80,7 @@ const zee: BlockDef = {
 	]
 };
 const tee: BlockDef = {
-	desc: 'tee',
-	color: 'aquamarine',
+	id: PointID.Tee,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [1,2]], extent: [0,1,2,2] },
@@ -108,7 +112,7 @@ export interface PositionedBlock {
 type UndoFrame = { block: PositionedBlock; score: number };
 
 export interface FilledPoint {
-	color: string;
+	id: PointID;
 }
 
 class MainStore {
@@ -276,7 +280,7 @@ class MainStore {
 		points.forEach(point => {
 			if (point[1] >= 0) {
 				this.filledPoints[point[1]][point[0]] = {
-					color: this.getBlockDef(block.type).color
+					id: this.getBlockDef(block.type).id
 				}
 			}
 		});
@@ -372,10 +376,10 @@ class MainStore {
 		const numFlashes = hasBonus ? 1 : 1;
 		let count = 0;
 		const flash = action(() => {
-			const color = count % 2 === 0 ? 'black' : 'gray';
+			const id = count % 2 === 0 ? PointID.FlashOn : PointID.FlashOff;
 			for (let row = 0; row < rows.length; row++) {
 				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
-					color: color
+					id: id
 				}));
 			}
 			count++;
