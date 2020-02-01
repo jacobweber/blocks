@@ -1,5 +1,4 @@
 import React from 'react';
-import { observer } from "mobx-react-lite"
 import { lightenColor } from '../../utils/colors';
 
 const types = [
@@ -16,7 +15,7 @@ const types = [
 
 const lightenAmount = -50;
 
-const PointDefs = observer(() => {
+const PointDefs = () => {
 	return (
 		<defs>
 			{types.map((type, index) => (
@@ -30,6 +29,6 @@ const PointDefs = observer(() => {
 			))}
 		</defs>
 	);
-});
+};
 
 export { PointDefs };
