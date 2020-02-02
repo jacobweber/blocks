@@ -1,6 +1,6 @@
 import { decorate, observable, action, computed } from 'mobx';
 import { ActionName, KeyActions } from '../utils/types';
-import { validKey, getKeyStr } from '../utils/helpers';
+import { validKey, getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
 export interface Preferences {
 	keys: {
@@ -42,19 +42,25 @@ class PreferencesStore {
 	visible: boolean = false;
 	prefs: Preferences = defaultPrefs;
 
-	get keyMap(): { [key: string]: KeyActions } {
+	get gameKeyMap(): { [key: string]: KeyActions } {
 		const keys = this.prefs.keys;
 		return {
 			[keys.newGame]: KeyActions.NewGame,
 			[keys.endGame]: KeyActions.EndGame,
 			[keys.pauseResumeGame]: KeyActions.PauseResumeGame,
+			[keys.undo]: KeyActions.Undo
+		};
+	}
+
+	get moveKeyMap(): { [key: string]: KeyActions } {
+		const keys = this.prefs.keys;
+		return {
 			[keys.left]: KeyActions.Left,
 			[keys.right]: KeyActions.Right,
 			[keys.drop]: KeyActions.Drop,
 			[keys.down]: KeyActions.Down,
 			[keys.rotateCCW]: KeyActions.RotateCCW,
-			[keys.rotateCW]: KeyActions.RotateCW,
-			[keys.undo]: KeyActions.Undo
+			[keys.rotateCW]: KeyActions.RotateCW
 		};
 	}
 
@@ -115,7 +121,9 @@ class PreferencesStore {
 	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: ActionName): void {
 		if (validKey(e.key)) {
 			let value = this.prefs.keys[name];
-			let keyStr = getKeyStr(e);
+			const keysAllowingModifiers: Array<ActionName> = ['newGame', 'endGame', 'pauseResumeGame', 'undo'];
+			const allowModifiers = keysAllowingModifiers.includes(name);
+			let keyStr = allowModifiers ? getModifiedKeyStr(e) : getKeyStr(e);
 			if (keyStr === 'Backspace') {
 				if (value === '') {
 					value = 'Backspace';
@@ -139,7 +147,8 @@ class PreferencesStore {
 decorate(PreferencesStore, {
 	visible: observable,
 	prefs: observable.ref,
-	keyMap: computed,
+	gameKeyMap: computed,
+	moveKeyMap: computed,
 	load: action,
 	save: action,
 	setPrefs: action,

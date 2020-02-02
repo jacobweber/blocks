@@ -13,19 +13,18 @@ export function validKey(key: string): boolean {
 }
 
 export function getKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
-	let keyText;
-
 	switch (e.key) {
 		case ' ':
-			keyText = 'Space';
-			break;
+			return 'Space';
 		default:
-			keyText = e.key;
+			return e.key;
 	}
+}
 
+export function getModifiedKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
 	return (e.shiftKey ? 'Shift+' : '')
 		+ (e.ctrlKey ? 'Ctrl+' : '')
 		+ (e.altKey ? 'Alt+' : '')
 		+ (e.metaKey ? 'Meta+' : '')
-		+ keyText;
+		+ getKeyStr(e);
 }

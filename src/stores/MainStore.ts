@@ -2,7 +2,7 @@ import { decorate, observable, computed, action, observe, runInAction } from 'mo
 import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
 import { GameState, KeyActions } from '../utils/types';
-import { getKeyStr } from '../utils/helpers';
+import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
 const numClearRowsBonus = 4;
 
@@ -655,50 +655,58 @@ class MainStore {
 
 	keyDown(e: KeyboardEvent) {
 		if (this.preferencesStore.visible) return;
-		const keyStr = getKeyStr(e);
+		const modKeyStr = getModifiedKeyStr(e);
 
-		if (keyStr === 'Meta+ArrowLeft' || keyStr === 'Meta+ArrowRight' || keyStr === 'Meta+[' || keyStr === 'Meta+]') {
+		// ignore browser keys
+		if (modKeyStr === 'Meta+ArrowLeft' || modKeyStr === 'Meta+ArrowRight' || modKeyStr === 'Meta+[' || modKeyStr === 'Meta+]') {
 			e.preventDefault();
 			return;
 		}
 
-		const action = this.preferencesStore.keyMap[keyStr];
-		if (action === undefined) return;
-
-		// The Mac won't send a keyup for a standard key while the command key is held down.
-		// So if your left or right key includes command, we won't try to track how long it's held down.
-		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)
-			&& this.prefs.leftRightAccelAfterMS !== 0 && !e.metaKey;
-
-		if (canHoldKey) {
-			if (this.heldKey) {
-				if (this.heldKey.action === action) {
-					// don't start tracking repeated key
-				} else {
-					this.stopTrackingKey();
-					this.startTrackingKey(e.key, action);
-				}
-			} else {
-				this.startTrackingKey(e.key, action);
+		const gameAction = this.preferencesStore.gameKeyMap[modKeyStr];
+		if (gameAction !== undefined) {
+			switch (gameAction) {
+				case KeyActions.NewGame: this.newGame(); break;
+				case KeyActions.EndGame: this.endGame(); break;
+				case KeyActions.PauseResumeGame: this.pauseResume(); break;
+				case KeyActions.Undo: this.undo(); break;
 			}
 		} else {
-			if (this.heldKey) {
-				this.stopTrackingKey();
+			// Ignore modifiers for motion keys
+			const keyStr = getKeyStr(e);
+			const moveAction = this.preferencesStore.moveKeyMap[keyStr];
+			if (moveAction === undefined) return;
+
+			const canHoldKey = (moveAction === KeyActions.Left || moveAction === KeyActions.Right)
+				&& this.prefs.leftRightAccelAfterMS !== 0;
+
+			if (canHoldKey) {
+				if (this.heldKey) {
+					if (this.heldKey.action === moveAction) {
+						// don't start tracking repeated key
+					} else {
+						this.stopTrackingKey();
+						this.startTrackingKey(e.key, moveAction);
+					}
+				} else {
+					this.startTrackingKey(e.key, moveAction);
+				}
+			} else {
+				if (this.heldKey) {
+					this.stopTrackingKey();
+				}
+			}
+
+			switch (moveAction) {
+				case KeyActions.Left: this.left(); break;
+				case KeyActions.Right: this.right(); break;
+				case KeyActions.Down: this.down(); break;
+				case KeyActions.Drop: this.drop(); break;
+				case KeyActions.RotateCCW: this.rotateCCW(); break;
+				case KeyActions.RotateCW: this.rotateCW(); break;
 			}
 		}
 
-		switch (action) {
-			case KeyActions.NewGame: this.newGame(); break;
-			case KeyActions.EndGame: this.endGame(); break;
-			case KeyActions.PauseResumeGame: this.pauseResume(); break;
-			case KeyActions.Undo: this.undo(); break;
-			case KeyActions.Left: this.left(); break;
-			case KeyActions.Right: this.right(); break;
-			case KeyActions.Down: this.down(); break;
-			case KeyActions.Drop: this.drop(); break;
-			case KeyActions.RotateCCW: this.rotateCCW(); break;
-			case KeyActions.RotateCW: this.rotateCW(); break;
-		}
 		e.preventDefault();
 	}
 
