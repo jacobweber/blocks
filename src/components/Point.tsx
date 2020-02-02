@@ -9,8 +9,8 @@ type PointProps = {
 	size: number;
 };
 
-const Point = ({ id, x, y, size }: PointProps) => {
+const Point = React.memo(({ id, x, y, size }: PointProps) => {
 	return <use x={x * size} y={y * size} width={size} height={size} xlinkHref={'#' + id} />;
-};
+});
 
 export { Point };
