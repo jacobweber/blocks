@@ -149,6 +149,7 @@ class MainStore {
 
 	initWindowEvents() {
 		this.updateWindowHeight();
+		window.addEventListener('blur', e => this.pause());
 		window.addEventListener('keydown', e => this.keyDown(e));
 		window.addEventListener('keyup', e => this.keyUp(e));
 		window.addEventListener('resize', e => this.updateWindowHeight());
