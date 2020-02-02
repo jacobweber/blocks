@@ -761,6 +761,9 @@ class MainStore {
 
 		e.preventDefault();
 
+		const noRepeat = action === KeyActions.Drop || action === KeyActions.NewGame || action === KeyActions.PauseResumeGame;
+		if (noRepeat && e.repeat) return;
+
 		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)
 			&& this.prefs.leftRightAccelAfterMS !== 0;
 
