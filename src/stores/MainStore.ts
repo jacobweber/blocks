@@ -1,4 +1,4 @@
-import { decorate, observable, computed, action, runInAction } from 'mobx';
+import { decorate, observable, computed, action, observe, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
 import { GameState, KeyActions } from '../utils/types';
@@ -142,6 +142,8 @@ class MainStore {
 
 	constructor() {
 		this.preferencesStore.load();
+		observe(this, 'animating', change => this.updateDownTimer());
+		observe(this, 'gameState', change => this.updateDownTimer());
 		this.resetGame();
 	}
 
@@ -196,13 +198,11 @@ class MainStore {
 		this.lastMoveAboveBlockedSpace = null;
 		this.score = 0;
 		this.rows = 0;
-		this.stopDownTimer();
 	}
 
 	newGame(): void {
 		this.resetGame();
 		this.gameState = GameState.Active;
-		this.startDownTimer();
 		this.newBlock();
 	}
 
@@ -210,28 +210,43 @@ class MainStore {
 		this.resetGame();
 	}
 
+	updateDownTimer(): void {
+		if (this.gameState !== GameState.Active || this.animating) {
+			if (this.downTimeout) {
+				this.stopDownTimer();
+			}
+		} else {
+			if (!this.downTimeout) {
+				this.startDownTimer();
+			}
+		}
+	}
+
 	stopDownTimer(): void {
 		window.clearTimeout(this.downTimeout);
+		this.downTimeout = undefined;
 	}
 
 	startDownTimer(): void {
-		if (this.gameState !== GameState.Active || this.downDelayMS === 0) return;
+		if (this.gameState !== GameState.Active) return;
 		this.downTimeout = window.setTimeout(() => {
 			this.down(true);
 			this.startDownTimer();
 		}, this.downDelayMS);
 	}
 
+	setAnimating(animating: boolean): void {
+		this.animating = animating;
+	}
+
 	pause(): void {
 		if (this.gameState !== GameState.Active) return;
 		this.gameState = GameState.Paused;
-		this.stopDownTimer();
 	}
 
 	resume(): void {
 		if (this.gameState !== GameState.Paused) return;
 		this.gameState = GameState.Active;
-		this.startDownTimer();
 	}
 
 	pauseResume(): void {
@@ -385,13 +400,13 @@ class MainStore {
 			count++;
 		});
 
-		this.stopDownTimer();
+		this.setAnimating(true);
 		flash();
 		for (var i = 0; i < numFlashes; i++) {
 			await this.delay(100);
 			flash();
 		}
-		this.startDownTimer();
+		this.setAnimating(false);
 	}
 
 	clearRows(rows: number[]): void {
@@ -406,7 +421,6 @@ class MainStore {
 
 	async freezeBlock(points: number = 0): Promise<void> {
 		if (!this.positionedBlock) return;
-		this.animating = true;
 		if (this.prefs.allowUndo) {
 			this.undoStack.push({
 				block: this.positionedBlock,
@@ -419,7 +433,6 @@ class MainStore {
 		this.scoreDrop(points);
 		this.scoreClearedRows(clearedRows.length);
 		await this.clearRowsDisplay(clearedRows);
-		this.animating = false;
 		runInAction(() => {
 			this.clearRows(clearedRows);
 			this.newBlock();
@@ -563,15 +576,13 @@ class MainStore {
 		const extent = this.getBlockDef(this.positionedBlock.type).rotations[this.positionedBlock.rotation].extent;
 		const points = this.height -  (this.positionedBlock.y + extent[3]) - 1;
 
-		this.animating = true;
-		this.stopDownTimer();
+		this.setAnimating(true);
 		while (!done) {
 			runInAction(nextDrop);
 			await this.delay(5);
 		}
-		this.startDownTimer();
+		this.setAnimating(false);
 		await this.freezeBlock(points);
-		this.animating = false;
 	}
 
 	async undo(): Promise<void> {
@@ -601,14 +612,12 @@ class MainStore {
 			}
 		};
 
-		this.animating = true;
-		this.stopDownTimer();
+		this.setAnimating(true);
 		while (!done) {
 			runInAction(nextLift);
 			await this.delay(5);
 		}
-		this.startDownTimer();
-		this.animating = false;
+		this.setAnimating(false);
 	}
 
 	delay(ms: number): Promise<void> {
@@ -703,6 +712,7 @@ decorate(MainStore, {
 	width: observable,
 	height: observable,
 	windowHeight: observable,
+	animating: observable,
 	score: observable,
 	rows: observable,
 	level: computed,
@@ -715,6 +725,7 @@ decorate(MainStore, {
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
 	updateWindowHeight: action,
+	resetGame: action,
 	newGame: action,
 	endGame: action,
 	pause: action,
