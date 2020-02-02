@@ -190,6 +190,10 @@ class MainStore {
 	resetGame(): void {
 		if (log) console.clear();
 		this.gameState = GameState.Stopped;
+		window.clearTimeout(this.downTimeout);
+		this.downTimeout = undefined;
+		window.clearTimeout(this.heldTimeout);
+		this.heldTimeout = undefined;
 		this.actionQueue = [];
 		this.animating = false;
 		this.heldAction = null;
