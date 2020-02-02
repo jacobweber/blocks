@@ -1,4 +1,4 @@
-import { decorate, observable, computed, action, observe, runInAction } from 'mobx';
+import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
 import { GameState, KeyActions } from '../utils/types';
@@ -142,8 +142,6 @@ class MainStore {
 
 	constructor() {
 		this.preferencesStore.load();
-		observe(this, 'animating', change => this.onAnimatingUpdated());
-		observe(this, 'gameState', change => this.onGameStateUpdated());
 		this.resetGame();
 	}
 
@@ -205,22 +203,15 @@ class MainStore {
 	}
 
 	newGame(): void {
+		if (this.gameState !== GameState.Stopped) return;
 		this.resetGame();
-		this.gameState = GameState.Active;
+		this.setGameState(GameState.Active);
 		this.newBlock();
 	}
 
 	endGame(): void {
+		if (this.gameState === GameState.Stopped) return;
 		this.resetGame();
-	}
-
-	onGameStateUpdated(): void {
-		this.updateDownTimer();
-	}
-
-	onAnimatingUpdated(): void {
-		this.updateDownTimer();
-		this.handleQueuedAction();
 	}
 
 	updateDownTimer(): void {
@@ -248,18 +239,27 @@ class MainStore {
 		}, this.downDelayMS);
 	}
 
+	setGameState(gameState: GameState): void {
+		this.gameState = gameState;
+		this.updateDownTimer();
+	}
+
 	setAnimating(animating: boolean): void {
 		this.animating = animating;
+		this.updateDownTimer();
+		if (!animating) {
+			this.handleQueuedAction();
+		}
 	}
 
 	pause(): void {
 		if (this.gameState !== GameState.Active) return;
-		this.gameState = GameState.Paused;
+		this.setGameState(GameState.Paused);
 	}
 
 	resume(): void {
 		if (this.gameState !== GameState.Paused) return;
-		this.gameState = GameState.Active;
+		this.setGameState(GameState.Active);
 	}
 
 	pauseResume(): void {
