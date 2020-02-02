@@ -172,7 +172,7 @@ class MainStore {
 	}
 
 	get pointSize(): number {
-		return Math.max(Math.floor((this.windowHeight - 50) / this.height), 10);
+		return Math.min(Math.max(Math.floor((this.windowHeight - 50) / this.height), 10), 30);
 	}
 
 	get nextBlockDef(): BlockDef | null {
