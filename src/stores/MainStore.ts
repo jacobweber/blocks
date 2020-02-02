@@ -4,7 +4,9 @@ import { PreferencesStore, Preferences } from './PreferencesStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
+const log = false;
 const numClearRowsBonus = 4;
+const animDelayMS = 5;
 
 type PointXY = [number, number];
 type ExtentLTRB = [ number, number, number, number ];
@@ -127,11 +129,9 @@ class MainStore {
 	undoStack: Array<UndoFrame> = [];
 	nextBlockTypes: Array<BlockType> = [];
 
-	heldKey: {
-		key: string,
-		action: KeyActions,
-		id: number
-	} | null = null
+	actionQueue: Array<KeyActions> = [];
+	heldAction: KeyActions | null = null;
+	heldTimeout: number | undefined = undefined;
 
 	gameState: GameState = GameState.Stopped;
 	animating = false;
@@ -142,8 +142,8 @@ class MainStore {
 
 	constructor() {
 		this.preferencesStore.load();
-		observe(this, 'animating', change => this.updateDownTimer());
-		observe(this, 'gameState', change => this.updateDownTimer());
+		observe(this, 'animating', change => this.onAnimatingUpdated());
+		observe(this, 'gameState', change => this.onGameStateUpdated());
 		this.resetGame();
 	}
 
@@ -190,8 +190,11 @@ class MainStore {
 	}
 
 	resetGame(): void {
+		if (log) console.clear();
 		this.gameState = GameState.Stopped;
+		this.actionQueue = [];
 		this.animating = false;
+		this.heldAction = null;
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.undoStack = [];
@@ -209,6 +212,15 @@ class MainStore {
 
 	endGame(): void {
 		this.resetGame();
+	}
+
+	onGameStateUpdated(): void {
+		this.updateDownTimer();
+	}
+
+	onAnimatingUpdated(): void {
+		this.updateDownTimer();
+		this.handleQueuedAction();
 	}
 
 	updateDownTimer(): void {
@@ -340,7 +352,6 @@ class MainStore {
 	}
 
 	newBlock(): void {
-		if (this.animating) return;
 		let type;
 		if (this.nextBlockTypes.length > 0) {
 			type = this.nextBlockTypes[this.nextBlockTypes.length - 1];
@@ -487,7 +498,7 @@ class MainStore {
 	}
 
 	rotateCW(): void {
-		if (this.gameState !== GameState.Active || this.animating || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (this.gameState !== GameState.Active || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation + 1 >= numRotations ? 0 : this.positionedBlock.rotation + 1;
 		const nextBlock: PositionedBlock = {
@@ -501,7 +512,7 @@ class MainStore {
 	}
 
 	rotateCCW(): void {
-		if (this.gameState !== GameState.Active || this.animating || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
+		if (this.gameState !== GameState.Active || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockDef(this.positionedBlock.type).rotations.length;
 		const nextRotation = this.positionedBlock.rotation - 1 < 0 ? numRotations - 1 : this.positionedBlock.rotation - 1;
 		const nextBlock: PositionedBlock = {
@@ -515,7 +526,7 @@ class MainStore {
 	}
 
 	left(): boolean {
-		if (this.gameState !== GameState.Active || this.animating || !this.positionedBlock) return false;
+		if (this.gameState !== GameState.Active || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x - 1
@@ -529,7 +540,7 @@ class MainStore {
 	}
 
 	right(): boolean {
-		if (this.gameState !== GameState.Active || this.animating || !this.positionedBlock) return false;
+		if (this.gameState !== GameState.Active || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x + 1
@@ -542,8 +553,28 @@ class MainStore {
 		return false;
 	}
 
+	async leftAccel(): Promise<void> {
+		this.setAnimating(true);
+		let done = false;
+		while (!done) {
+			done = !this.left();
+			await this.delay(animDelayMS);
+		}
+		this.setAnimating(false);
+	}
+
+	async rightAccel(): Promise<void> {
+		this.setAnimating(true);
+		let done = false;
+		while (!done) {
+			done = !this.right();
+			await this.delay(animDelayMS);
+		}
+		this.setAnimating(false);
+	}
+
 	async down(fromTimer: boolean = false): Promise<void> {
-		if (this.gameState !== GameState.Active || this.animating || !this.positionedBlock) return;
+		if (this.gameState !== GameState.Active || !this.positionedBlock) return;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
 			y: this.positionedBlock.y + 1
@@ -559,7 +590,7 @@ class MainStore {
 	}
 
 	async drop(): Promise<void> {
-		if (this.gameState !== GameState.Active || this.animating || !this.positionedBlock) return;
+		if (this.gameState !== GameState.Active || !this.positionedBlock) return;
 		let done = false;
 		const nextDrop = () => {
 			if (!this.positionedBlock) return;
@@ -580,14 +611,14 @@ class MainStore {
 		this.setAnimating(true);
 		while (!done) {
 			runInAction(nextDrop);
-			await this.delay(5);
+			await this.delay(animDelayMS);
 		}
-		this.setAnimating(false);
 		await this.freezeBlock(points);
+		this.setAnimating(false);
 	}
 
 	async undo(): Promise<void> {
-		if (this.gameState !== GameState.Active || this.animating || !this.prefs.allowUndo || this.undoStack.length === 0) return;
+		if (this.gameState !== GameState.Active || !this.prefs.allowUndo || this.undoStack.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
 		}
@@ -616,7 +647,7 @@ class MainStore {
 		this.setAnimating(true);
 		while (!done) {
 			runInAction(nextLift);
-			await this.delay(5);
+			await this.delay(animDelayMS);
 		}
 		this.setAnimating(false);
 	}
@@ -627,91 +658,132 @@ class MainStore {
 		});
 	}
 
-	async startTrackingKey(key: string, action: KeyActions): Promise<void> {
-		const id = Math.floor(Math.random() * 100000);
-		this.heldKey = { key, action, id };
+	async startTrackingKey(action: KeyActions): Promise<void> {
+		this.heldAction = action;
 
-		let done = false;
-		let delay = this.prefs.leftRightAccelAfterMS;
-		while (!done) {
-			await this.delay(delay);
-			// if we stopped, or started the same action a second time before finishing, interrupt the first one
-			if (this.heldKey === null || this.heldKey.id !== id) {
+		if (log) console.log('press', this.getActionName(action));
+		this.heldTimeout = window.setTimeout(() => {
+			if (log) console.log('accel', this.getActionName(action));
+			this.heldAction = null;
+			const accelAction = action === KeyActions.Left ? KeyActions.LeftAccel : KeyActions.RightAccel;
+			if (this.animating) {
+				this.accelLastQueuedAction(accelAction);
+			} else {
+				this.handleAction(accelAction);
+			}
+		}, this.prefs.leftRightAccelAfterMS);
+	}
+
+	accelLastQueuedAction(action: KeyActions.LeftAccel | KeyActions.RightAccel): void {
+		for (let i = this.actionQueue.length - 1; i >= 0; i--) {
+			if (this.actionQueue[i] === KeyActions.Left && action === KeyActions.LeftAccel) {
+				this.actionQueue[i] = action;
+				return;
+			} else if (this.actionQueue[i] === KeyActions.Right && action === KeyActions.RightAccel) {
+				this.actionQueue[i] = action;
 				return;
 			}
-			if (action === KeyActions.Left) {
-				done = !this.left();
-			} else {
-				done = !this.right();
-			}
-			delay = 10;
 		}
-		this.stopTrackingKey();
 	}
 
 	stopTrackingKey(): void {
-		this.heldKey = null;
+		// TODO: if queued, keyup happens before we start tracking, so ignored
+		if (log && this.heldAction) console.log('release', this.getActionName(this.heldAction));
+		window.clearTimeout(this.heldTimeout);
+		this.heldAction = null;
+		this.handleQueuedAction();
+	}
+
+	handleQueuedAction() {
+		if (this.animating) return;
+		const queuedAction = this.actionQueue.shift();
+		if (queuedAction) {
+			if (log) console.log('unqueue', this.getActionName(queuedAction));
+			this.handleAction(queuedAction);
+		}
+	}
+
+	getActionName(action: KeyActions): string {
+		switch (action) {
+			case KeyActions.NewGame: return 'newGame';
+			case KeyActions.EndGame: return 'endGame';
+			case KeyActions.PauseResumeGame: return 'pauseResumeGame';
+			case KeyActions.Undo: return 'undo';
+			case KeyActions.Left: return 'left';
+			case KeyActions.LeftAccel: return 'leftAccel';
+			case KeyActions.Right: return 'right';
+			case KeyActions.RightAccel: return 'rightAccel';
+			case KeyActions.Down: return 'down';
+			case KeyActions.Drop: return 'drop';
+			case KeyActions.RotateCCW: return 'rotateCCW';
+			case KeyActions.RotateCW: return 'rotateCW';
+		}
+	}
+
+	async handleAction(action: KeyActions) {
+		if (log) console.log('action', this.getActionName(action));
+		switch (action) {
+			case KeyActions.NewGame: this.newGame(); break;
+			case KeyActions.EndGame: this.endGame(); break;
+			case KeyActions.PauseResumeGame: this.pauseResume(); break;
+			case KeyActions.Undo: await this.undo(); break;
+			case KeyActions.Left: this.left(); break;
+			case KeyActions.LeftAccel: await this.leftAccel(); break;
+			case KeyActions.Right: this.right(); break;
+			case KeyActions.RightAccel: await this.rightAccel(); break;
+			case KeyActions.Down: await this.down(); break;
+			case KeyActions.Drop: await this.drop(); break;
+			case KeyActions.RotateCCW: this.rotateCCW(); break;
+			case KeyActions.RotateCW: this.rotateCW(); break;
+		}
+
+		// in case any more actions were queued
+		this.handleQueuedAction();
 	}
 
 	keyDown(e: KeyboardEvent) {
 		if (this.preferencesStore.visible) return;
-		const modKeyStr = getModifiedKeyStr(e);
+		let keyStr = getModifiedKeyStr(e);
 
 		// ignore browser keys
-		if (modKeyStr === 'Meta+ArrowLeft' || modKeyStr === 'Meta+ArrowRight' || modKeyStr === 'Meta+[' || modKeyStr === 'Meta+]') {
+		if (keyStr === 'Meta+ArrowLeft' || keyStr === 'Meta+ArrowRight' || keyStr === 'Meta+[' || keyStr === 'Meta+]') {
+			if (log) console.log('ignore browser key');
 			e.preventDefault();
 			return;
 		}
 
-		const gameAction = this.preferencesStore.gameKeyMap[modKeyStr];
-		if (gameAction !== undefined) {
-			switch (gameAction) {
-				case KeyActions.NewGame: this.newGame(); break;
-				case KeyActions.EndGame: this.endGame(); break;
-				case KeyActions.PauseResumeGame: this.pauseResume(); break;
-				case KeyActions.Undo: this.undo(); break;
-			}
-		} else {
-			// Ignore modifiers for motion keys
-			const keyStr = getKeyStr(e);
-			const moveAction = this.preferencesStore.moveKeyMap[keyStr];
-			if (moveAction === undefined) return;
-
-			const canHoldKey = (moveAction === KeyActions.Left || moveAction === KeyActions.Right)
-				&& this.prefs.leftRightAccelAfterMS !== 0;
-
-			if (canHoldKey) {
-				if (this.heldKey) {
-					if (this.heldKey.action === moveAction) {
-						// don't start tracking repeated key
-					} else {
-						this.stopTrackingKey();
-						this.startTrackingKey(e.key, moveAction);
-					}
-				} else {
-					this.startTrackingKey(e.key, moveAction);
-				}
-			} else {
-				if (this.heldKey) {
-					this.stopTrackingKey();
-				}
-			}
-
-			switch (moveAction) {
-				case KeyActions.Left: this.left(); break;
-				case KeyActions.Right: this.right(); break;
-				case KeyActions.Down: this.down(); break;
-				case KeyActions.Drop: this.drop(); break;
-				case KeyActions.RotateCCW: this.rotateCCW(); break;
-				case KeyActions.RotateCW: this.rotateCW(); break;
-			}
+		let action = this.preferencesStore.gameKeyMap[keyStr];
+		if (action === undefined) {
+			keyStr = getKeyStr(e);
+			action = this.preferencesStore.moveKeyMap[keyStr];
+			if (action === undefined) return;
 		}
 
 		e.preventDefault();
+
+		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)
+			&& this.prefs.leftRightAccelAfterMS !== 0;
+
+		// ignore repeated left/right keys; use tracking instead
+		if (canHoldKey && e.repeat) return;
+
+		if (this.animating || this.heldAction) {
+			if (log) console.log('queue', this.getActionName(action));
+			this.actionQueue.push(action);
+		} else {
+			this.handleAction(action);
+		}
+
+		if (canHoldKey && !this.heldAction) {
+			this.startTrackingKey(action);
+		}
 	}
 
 	keyUp(e: KeyboardEvent) {
-		if (this.heldKey !== null && this.heldKey.key === e.key) {
+		const keyStr = getKeyStr(e);
+		const moveAction = this.preferencesStore.moveKeyMap[keyStr];
+		if (moveAction === undefined) return;
+		if (this.heldAction && this.heldAction === moveAction) {
 			this.stopTrackingKey();
 		}
 	}
