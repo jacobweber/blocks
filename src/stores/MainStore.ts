@@ -653,7 +653,7 @@ class MainStore {
 				y
 			};
 			this.positionedBlock = nextBlock;
-			if (y === lastY) {
+			if (y <= lastY) {
 				done = true;
 			} else {
 				y--;
