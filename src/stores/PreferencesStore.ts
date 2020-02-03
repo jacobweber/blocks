@@ -19,6 +19,7 @@ export interface Preferences {
 		backgroundColor: string;
 		textColor: string;
 		gridColor: string;
+		outlineColor: string;
 	}
 	leftRightAccelAfterMS: number;
 	downTimerPauseWhenMovingMS: number;
@@ -41,7 +42,8 @@ const defaultPrefs: Preferences = {
 	styles: {
 		backgroundColor: 'white',
 		textColor: 'black',
-		gridColor: 'black'
+		gridColor: 'black',
+		outlineColor: 'black'
 	},
 	leftRightAccelAfterMS: 200,
 	downTimerPauseWhenMovingMS: 500,

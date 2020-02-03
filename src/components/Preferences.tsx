@@ -103,6 +103,10 @@ const Preferences = observer(() => {
 							<label>Grid</label>
 							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'gridColor')} value={prefsStyles.gridColor} />
 						</Form.Field>
+						<Form.Field className={styles.cell}>
+							<label>Outline</label>
+							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'outlineColor')} value={prefsStyles.outlineColor} />
+						</Form.Field>
 					</Form.Group>
 				</Form>
 			</Modal.Content>
