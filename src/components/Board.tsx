@@ -7,6 +7,7 @@ import { BoardDef } from './boards/Grad';
 import { PointDefs } from './points/Grad';
 import { Points } from './Points';
 import { PositionedBlock } from './PositionedBlock';
+import { GameState } from '../utils/types';
 
 const Board = observer(() => {
 	const mainStore = useStore();
@@ -22,7 +23,7 @@ const Board = observer(() => {
 	}
 
 	return (
-		<div className={styles.root}>
+		<div className={styles.root + (mainStore.gameState === GameState.Active ? ' ' + styles.hideCursor : '')}>
 			<div className={styles.pointDefs}>
 				<PointDefs />
 				<BoardDef />
@@ -39,7 +40,7 @@ const Board = observer(() => {
 				<PositionedBlock />
 				{xLines}
 				{yLines}
-				<rect width="100%" height="100%" stroke={prefsStyles.gridColor} strokeWidth='3' fillOpacity='0' />
+				<rect width="100%" height="100%" stroke={prefsStyles.outlineColor} strokeWidth='3' fillOpacity='0' />
 			</svg>
 		</div>
 	);
