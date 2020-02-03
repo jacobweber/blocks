@@ -41,6 +41,11 @@ const defaultPrefs: Preferences = {
 class PreferencesStore {
 	visible: boolean = false;
 	prefs: Preferences = defaultPrefs;
+	styles = {
+		backgroundColor: 'white',
+		textColor: 'black',
+		gridColor: 'black'
+	};
 
 	get gameKeyMap(): { [key: string]: KeyActions } {
 		const keys = this.prefs.keys;

@@ -7,9 +7,10 @@ import styles from './GameState.module.css';
 
 const GameState = observer(() => {
 	const mainStore = useStore();
+ 	const prefsStyles = mainStore.preferencesStore.styles;
 
 	return (
-		<div className={styles.root}>
+		<div className={styles.root} style={{ color: prefsStyles.textColor }}>
 			{mainStore.gameState !== State.Stopped && (<>
 				Score: {mainStore.score}<br />
 				Lines: {mainStore.rows}<br />

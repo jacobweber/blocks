@@ -13,7 +13,7 @@ const App = observer(() => {
 	const mainStore = useStore();
 	const preferencesStore = mainStore.preferencesStore;
 	return (
-		<div className={styles.root}>
+		<div className={styles.root} style={{ backgroundColor: preferencesStore.styles.backgroundColor }}>
 			<div className={styles.layout}>
 				<Board />
 				<div className={styles.right}>
