@@ -128,6 +128,7 @@ class MainStore {
 
 	width: number = 10;
 	height: number = 20;
+	windowWidth: number = 0;
 	windowHeight: number = 0;
 
 	positionedBlock: PositionedBlock | null = null;
@@ -152,11 +153,11 @@ class MainStore {
 	}
 
 	initWindowEvents() {
-		this.updateWindowHeight();
+		this.updateWindowSize();
 		window.addEventListener('blur', e => this.pause());
 		window.addEventListener('keydown', e => this.keyDown(e));
 		window.addEventListener('keyup', e => this.keyUp(e));
-		window.addEventListener('resize', e => this.updateWindowHeight());
+		window.addEventListener('resize', e => this.updateWindowSize());
 	}
 
 	get prefs(): Preferences {
@@ -172,12 +173,15 @@ class MainStore {
 		return 800 - (this.level * 50);
 	}
 
-	updateWindowHeight() {
+	updateWindowSize() {
+		this.windowWidth = window.innerWidth;
 		this.windowHeight = window.innerHeight;
 	}
 
 	get pointSize(): number {
-		return Math.min(Math.max(Math.floor((this.windowHeight - 50) / this.height), 10), 30);
+		const minWidth = Math.floor((this.windowWidth - 50) / this.width);
+		const minHeight = Math.floor((this.windowHeight - 50) / this.height);
+		return Math.min(Math.max(Math.min(minHeight, minWidth), 10), 30);
 	}
 
 	get nextBlockDef(): BlockDef | null {
@@ -845,6 +849,7 @@ class MainStore {
 decorate(MainStore, {
 	width: observable,
 	height: observable,
+	windowWidth: observable,
 	windowHeight: observable,
 	animating: observable,
 	score: observable,
@@ -858,7 +863,7 @@ decorate(MainStore, {
 	nextBlockDef: computed,
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
-	updateWindowHeight: action,
+	updateWindowSize: action,
 	resetGame: action,
 	newGame: action,
 	endGame: action,
