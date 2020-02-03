@@ -1,2 +1,12 @@
 .root {
 }
+.colorInput {
+	width: 150px !important;
+}
+.colorInput input {
+	padding: initial !important;
+}
+.cell {
+	width: 200px;
+	flex-shrink: 0 !important;
+}

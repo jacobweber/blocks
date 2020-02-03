@@ -4,12 +4,14 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox } from 'semantic-ui-
 import { useStore } from '../stores/MainStore';
 
 import styles from './Preferences.module.css';
-import { KeySelector } from './KeySelector';
+import { ActionName } from '../utils/types';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
 	const keys = preferencesStore.prefs.keys;
+	const prefsStyles = preferencesStore.prefs.styles;
 	const save = () => preferencesStore.dialogSave();
+	const onKeyDown = (name: ActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
 
 	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={save}>
@@ -39,53 +41,69 @@ const Preferences = observer(() => {
 
 					<Header as='h3' dividing>Keyboard Controls</Header>
 					<Form.Group>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>New Game</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'newGame')} name='newGame' value={keys.newGame} />
+							<Input fluid onKeyDown={onKeyDown('newGame')} name='newGame' value={keys.newGame} />
 						</Form.Field>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>End Game</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'endGame')} name='endGame' value={keys.endGame} />
+							<Input fluid onKeyDown={onKeyDown('endGame')} name='endGame' value={keys.endGame} />
 						</Form.Field>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Pause/Resume Game</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
+							<Input fluid onKeyDown={onKeyDown('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
 						</Form.Field>
 					</Form.Group>
 
 					<Form.Group>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Left</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'left')} name='left' value={keys.left} />
+							<Input fluid onKeyDown={onKeyDown('left')} name='left' value={keys.left} />
 						</Form.Field>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Right</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'right')} name='right' value={keys.right} />
+							<Input fluid onKeyDown={onKeyDown('right')} name='right' value={keys.right} />
 						</Form.Field>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Down</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'down')} name='down' value={keys.down} />
+							<Input fluid onKeyDown={onKeyDown('down')} name='down' value={keys.down} />
 						</Form.Field>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Drop</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'drop')} name='drop' value={keys.drop} />
+							<Input fluid onKeyDown={onKeyDown('drop')} name='drop' value={keys.drop} />
 						</Form.Field>
 					</Form.Group>
 
 					<Form.Group>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Rotate Left</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
+							<Input fluid onKeyDown={onKeyDown('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
 						</Form.Field>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Rotate Right</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'rotateCW')} name='rotateCW' value={keys.rotateCW} />
+							<Input fluid onKeyDown={onKeyDown('rotateCW')} name='rotateCW' value={keys.rotateCW} />
 						</Form.Field>
-						<Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>Undo</label>
-							<KeySelector onKeyDown={e => preferencesStore.handleDialogKeySelectorKeyDown(e, 'undo')} name='undo' value={keys.undo} />
+							<Input fluid onKeyDown={onKeyDown('undo')} name='undo' value={keys.undo} />
 						</Form.Field>
 		          	</Form.Group>
+
+					<Header as='h3' dividing>Styles</Header>
+					<Form.Group>
+						<Form.Field className={styles.cell}>
+							<label>Background</label>
+							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'backgroundColor')} value={prefsStyles.backgroundColor} />
+						</Form.Field>
+						<Form.Field className={styles.cell}>
+							<label>Text</label>
+							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'textColor')} value={prefsStyles.textColor} />
+						</Form.Field>
+						<Form.Field className={styles.cell}>
+							<label>Grid</label>
+							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'gridColor')} value={prefsStyles.gridColor} />
+						</Form.Field>
+					</Form.Group>
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>

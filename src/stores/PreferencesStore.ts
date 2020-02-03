@@ -15,6 +15,11 @@ export interface Preferences {
 		rotateCW: string;
 		undo: string;
 	};
+	styles: {
+		backgroundColor: string;
+		textColor: string;
+		gridColor: string;
+	}
 	leftRightAccelAfterMS: number;
 	downTimerPauseWhenMovingMS: number;
 	allowUndo: boolean;
@@ -33,6 +38,11 @@ const defaultPrefs: Preferences = {
 		rotateCW: 'x',
 		undo: 'a'
 	},
+	styles: {
+		backgroundColor: 'white',
+		textColor: 'black',
+		gridColor: 'black'
+	},
 	leftRightAccelAfterMS: 200,
 	downTimerPauseWhenMovingMS: 500,
 	allowUndo: true
@@ -41,11 +51,10 @@ const defaultPrefs: Preferences = {
 class PreferencesStore {
 	visible: boolean = false;
 	prefs: Preferences = defaultPrefs;
-	styles = {
-		backgroundColor: 'white',
-		textColor: 'black',
-		gridColor: 'black'
-	};
+
+	get styles() {
+		return this.prefs.styles;
+	}
 
 	get gameKeyMap(): { [key: string]: KeyActions } {
 		const keys = this.prefs.keys;
@@ -147,11 +156,22 @@ class PreferencesStore {
 			});
 		}
 	}
+
+	handleDialogColorChange(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
+		this.setPrefs({
+			...this.prefs,
+			styles: {
+				...this.prefs.styles,
+				[name]: e.target.value
+			}
+		});
+	}
 }
 
 decorate(PreferencesStore, {
 	visible: observable,
 	prefs: observable.ref,
+	styles: computed,
 	gameKeyMap: computed,
 	moveKeyMap: computed,
 	load: action,
