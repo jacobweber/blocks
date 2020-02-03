@@ -12,6 +12,12 @@ type PointXY = [number, number];
 type ExtentLTRB = [ number, number, number, number ];
 type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
+export interface PositionedPoint {
+	x: number;
+	y: number;
+	id: PointID;
+}
+
 export interface BlockDef {
 	id: PointID;
 	size: number;
@@ -793,6 +799,46 @@ class MainStore {
 		if (this.heldAction && this.heldAction === moveAction) {
 			this.stopTrackingKey();
 		}
+	}
+
+	getFrozenPoints(): Array<PositionedPoint> {
+		const points: Array<PositionedPoint> = [];
+		for (let x = 0; x < this.width; x++) {
+			for (let y = 0; y < this.height; y++) {
+				const point = this.filledPoints[y][x];
+				if (point) {
+					points.push({
+						x,
+						y,
+						id: point.id
+					});
+				}
+			}
+		}
+		return points;
+	}
+
+	getPositionedBlockPoints(): Array<PositionedPoint> {
+		if (!this.positionedBlock) return [];
+		const positionedBlockPoints = this.getPoints(this.positionedBlock);
+		const id = this.getBlockDef(this.positionedBlock.type).id;
+		return positionedBlockPoints.map(point => ({
+			x: point[0],
+			y: point[1],
+			id
+		}));
+	}
+
+	getNextBlockPoints(): Array<PositionedPoint> {
+		if (!this.nextBlockDef) return [];
+		const rotation = this.nextBlockDef.rotations[0];
+		const top = rotation.extent[1];
+		const id = this.nextBlockDef.id;
+		return rotation.points.map(point => ({
+			x: point[0],
+			y: point[1] - top,
+			id: id
+		}));
 	}
 }
 

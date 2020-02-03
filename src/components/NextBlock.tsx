@@ -7,18 +7,8 @@ import { Point } from './Point';
 
 const NextBlock = observer(() => {
 	const mainStore = useStore();
-	const points: Array<JSX.Element> = [];
 	const size = mainStore.pointSize;
-	if (mainStore.nextBlockDef) {
-		const rotation = mainStore.nextBlockDef.rotations[0];
-		const top = rotation.extent[1];
-		const id = mainStore.nextBlockDef.id;
-		rotation.points.forEach(point => {
-			const x = point[0];
-			const y = point[1] - top;
-			points.push(<Point key={x + '-' + y} x={x} y={y} size={size} id={id} />);
-		});
-	}
+	const points = mainStore.getNextBlockPoints();
 
 	return (
 		<div className={styles.root}>
@@ -29,7 +19,9 @@ const NextBlock = observer(() => {
 				height={mainStore.pointSize * 2}
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				{points}
+				{points.map(point => (
+					<Point key={point.x + '-' + point.y} x={point.x} y={point.y} size={size} id={point.id} />
+				))}
 			</svg>
 		</div>
 	);

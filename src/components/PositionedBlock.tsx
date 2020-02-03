@@ -6,18 +6,12 @@ import { Point } from './Point';
 
 const PositionedBlock = observer(() => {
 	const mainStore = useStore();
-	const points: Array<JSX.Element> = [];
 	const size = mainStore.pointSize;
-	if (mainStore.positionedBlock) {
-		const positionedBlockPoints = mainStore.getPoints(mainStore.positionedBlock);
-		const id = mainStore.getBlockDef(mainStore.positionedBlock.type).id;
-		positionedBlockPoints.forEach(point => {
-			const x = point[0];
-			const y = point[1];
-			points.push(<Point key={x + '-' + y} x={x} y={y} size={size} id={id} />);
-		});
-	}
-	return <>{points}</>;
+	const points = mainStore.getPositionedBlockPoints();
+
+	return <>{points.map(point => (
+		<Point key={point.x + '-' + point.y} x={point.x} y={point.y} size={size} id={point.id} />
+	))}</>;
 });
 
 export { PositionedBlock };

@@ -6,17 +6,12 @@ import { Point } from './Point';
 
 const Points = observer(() => {
 	const mainStore = useStore();
-	const points: Array<JSX.Element> = [];
 	const size = mainStore.pointSize;
-	for (let x = 0; x < mainStore.width; x++) {
-		for (let y = 0; y < mainStore.height; y++) {
-			const point = mainStore.filledPoints[y][x];
-			if (point) {
-				points.push(<Point key={x + '-' + y} x={x} y={y} size={size} id={point.id} />);
-			}
-		}
-	}
-	return <>{points}</>;
+	const points = mainStore.getFrozenPoints();
+
+	return <>{points.map(point => (
+		<Point key={point.x + '-' + point.y} x={point.x} y={point.y} size={size} id={point.id} />
+	))}</>;
 });
 
 export { Points };
