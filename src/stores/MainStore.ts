@@ -331,7 +331,9 @@ class MainStore {
 	markPositionUnfilled(block: PositionedBlock): void {
 		const points = this.getPoints(block);
 		points.forEach(point => {
-			this.filledPoints[point[1]][point[0]] = null;
+			if (point[1] >= 0) {
+				this.filledPoints[point[1]][point[0]] = null;
+			}
 		});
 	}
 
