@@ -12,6 +12,10 @@ const Preferences = observer(() => {
 	const prefsStyles = preferencesStore.prefs.styles;
 	const save = () => preferencesStore.dialogSave();
 	const onKeyDown = (name: ActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
+	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
+		type: 'color',
+		className: styles.colorInput
+	}; // breaks on safari
 
 	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={save}>
@@ -93,19 +97,19 @@ const Preferences = observer(() => {
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Background</label>
-							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'backgroundColor')} value={prefsStyles.backgroundColor} />
+							<Input {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'backgroundColor')} value={prefsStyles.backgroundColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Text</label>
-							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'textColor')} value={prefsStyles.textColor} />
+							<Input  {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'textColor')} value={prefsStyles.textColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Grid</label>
-							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'gridColor')} value={prefsStyles.gridColor} />
+							<Input  {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'gridColor')} value={prefsStyles.gridColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Outline</label>
-							<Input type='color' className={styles.colorInput} onChange={e => preferencesStore.handleDialogColorChange(e, 'outlineColor')} value={prefsStyles.outlineColor} />
+							<Input {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'outlineColor')} value={prefsStyles.outlineColor} />
 						</Form.Field>
 					</Form.Group>
 				</Form>
