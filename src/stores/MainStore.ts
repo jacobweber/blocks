@@ -184,7 +184,16 @@ class MainStore {
 	}
 
 	get downDelayMS(): number {
-		return 800 - (this.level * 50);
+		if (this.level === 1) return 800;
+		if (this.level === 2) return 600;
+		if (this.level === 3) return 480;
+		if (this.level === 4) return 350;
+		if (this.level === 5) return 250;
+		if (this.level === 6) return 180;
+		if (this.level === 7) return 140;
+		if (this.level === 8) return 100;
+		if (this.level === 9) return 80;
+		return 60;
 	}
 
 	updateWindowSize() {
