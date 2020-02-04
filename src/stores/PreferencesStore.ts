@@ -40,10 +40,10 @@ const defaultPrefs: Preferences = {
 		undo: 'a'
 	},
 	styles: {
-		backgroundColor: '#FFFFFF',
-		textColor: '#000000',
-		gridColor: '#000000',
-		outlineColor: '#000000'
+		backgroundColor: '#000000',
+		textColor: '#FFFFFF',
+		gridColor: '#FFFFFF',
+		outlineColor: '#FFFFFF'
 	},
 	leftRightAccelAfterMS: 200,
 	downTimerPauseWhenMovingMS: 500,
