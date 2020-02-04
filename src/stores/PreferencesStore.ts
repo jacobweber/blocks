@@ -21,6 +21,7 @@ export interface Preferences {
 		gridColor: string;
 		outlineColor: string;
 	}
+	name: string;
 	leftRightAccelAfterMS: number;
 	downTimerPauseWhenMovingMS: number;
 	allowUndo: boolean;
@@ -45,6 +46,7 @@ const defaultPrefs: Preferences = {
 		gridColor: '#FFFFFF',
 		outlineColor: '#FFFFFF'
 	},
+	name: 'Anonymous',
 	leftRightAccelAfterMS: 200,
 	downTimerPauseWhenMovingMS: 500,
 	allowUndo: true
@@ -124,6 +126,13 @@ class PreferencesStore {
 		this.setPrefs({
 			...this.prefs,
 			leftRightAccelAfterMS: value
+		});
+	}
+
+	handleChangeText(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
+		this.setPrefs({
+			...this.prefs,
+			[name]: e.target.value
 		});
 	}
 

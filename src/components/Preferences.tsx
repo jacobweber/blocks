@@ -24,6 +24,13 @@ const Preferences = observer(() => {
 				<Form>
 					<Form.Group>
 						<Form.Field>
+							<label>Your Name</label>
+							<Input onChange={e => preferencesStore.handleChangeText(e, 'name')} value={preferencesStore.prefs.name} />
+						</Form.Field>
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Field>
 							<Checkbox
 								label='Allow Undo'
 								onChange={e => preferencesStore.handleChangeAllowUndo(e)}
