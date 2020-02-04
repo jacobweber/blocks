@@ -1,6 +1,7 @@
 import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
+import { HighScoresStore, HighScores, HighScore } from './HighScoresStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
@@ -125,6 +126,7 @@ export interface FilledPoint {
 
 class MainStore {
 	preferencesStore: PreferencesStore = new PreferencesStore();
+	highScoresStore: HighScoresStore = new HighScoresStore();
 
 	width: number = 10;
 	height: number = 20;
@@ -151,6 +153,7 @@ class MainStore {
 
 	constructor() {
 		this.preferencesStore.load();
+		this.highScoresStore.load();
 		this.resetGame();
 	}
 
@@ -166,9 +169,18 @@ class MainStore {
 		return this.preferencesStore.prefs;
 	}
 
+	get scores(): HighScores {
+		return this.highScoresStore.scores;
+	}
+
 	showPrefs(): void {
 		this.pause();
 		this.preferencesStore.dialogShow();
+	}
+
+	showHighScores(): void {
+		this.pause();
+		this.highScoresStore.dialogShow();
 	}
 
 	get downDelayMS(): number {
@@ -230,12 +242,20 @@ class MainStore {
 	endGame(): void {
 		if (this.gameState === GameState.Stopped) return;
 		this.setGameState(GameState.Stopped);
-		// TODO: save score
-		console.log('total time: ' + Math.floor(this.totalTime / 1000) + ' secs');
-		console.log('score: ' + this.score);
-		console.log('lines: ' + this.rows);
-		console.log('level: ' + this.level);
+		const entry: HighScore = {
+			name: this.prefs.name,
+			score: this.score,
+			rows: this.rows,
+			startLevel: 1,
+			endLevel: this.level,
+			totalTime: this.totalTime,
+			time: (new Date().getTime())
+		};
+		const newPosition = this.highScoresStore.recordIfHighScore(entry);
 		this.resetGame();
+		if (newPosition !== null) {
+			this.highScoresStore.dialogShow();
+		}
 	}
 
 	updateDownTimer(): void {
@@ -775,7 +795,7 @@ class MainStore {
 	}
 
 	keyDown(e: KeyboardEvent) {
-		if (this.preferencesStore.visible) return;
+		if (this.preferencesStore.visible || this.highScoresStore.visible) return;
 		let keyStr = getModifiedKeyStr(e);
 
 		let action = this.preferencesStore.gameKeyMap[keyStr];

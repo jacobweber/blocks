@@ -21,5 +21,8 @@
 	height: 50px;
 	flex: 1
 }
+.highScores {
+	margin-bottom: 30px;
+}
 .preferences {
 }

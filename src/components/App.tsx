@@ -8,10 +8,13 @@ import { Board } from './Board';
 import { NextBlock } from './NextBlock';
 import { GameState } from './GameState';
 import { Preferences } from './Preferences';
+import { HighScores } from './HighScores';
 
 const App = observer(() => {
 	const mainStore = useStore();
 	const preferencesStore = mainStore.preferencesStore;
+	const highScoresStore = mainStore.highScoresStore;
+
 	return (
 		<div className={styles.root} style={{ backgroundColor: preferencesStore.styles.backgroundColor }}>
 			<div className={styles.layout}>
@@ -22,6 +25,10 @@ const App = observer(() => {
 					</div>
 					<div className={styles.gameState}>
 						<GameState />
+					</div>
+					<div className={styles.highScores}>
+						<Button onClick={e => mainStore.showHighScores()}>High Scores</Button>
+						{highScoresStore.visible && <HighScores />}
 					</div>
 					<div className={styles.preferences}>
 						<Button onClick={e => mainStore.showPrefs()}>Preferences</Button>
