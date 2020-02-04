@@ -146,6 +146,8 @@ class MainStore {
 	lastMoveAboveBlockedSpace: Date | null = null;
 	score = 0;
 	rows = 0;
+	totalTime = 0;
+	unpausedStart = 0;
 
 	constructor() {
 		this.preferencesStore.load();
@@ -214,6 +216,8 @@ class MainStore {
 		this.lastMoveAboveBlockedSpace = null;
 		this.score = 0;
 		this.rows = 0;
+		this.totalTime = 0;
+		this.unpausedStart = 0;
 	}
 
 	newGame(): void {
@@ -225,6 +229,12 @@ class MainStore {
 
 	endGame(): void {
 		if (this.gameState === GameState.Stopped) return;
+		this.setGameState(GameState.Stopped);
+		// TODO: save score
+		console.log('total time: ' + Math.floor(this.totalTime / 1000) + ' secs');
+		console.log('score: ' + this.score);
+		console.log('lines: ' + this.rows);
+		console.log('level: ' + this.level);
 		this.resetGame();
 	}
 
@@ -254,7 +264,14 @@ class MainStore {
 	}
 
 	setGameState(gameState: GameState): void {
+		if (this.gameState === gameState) return;
 		this.gameState = gameState;
+		if (this.gameState === GameState.Active) {
+			this.unpausedStart = (new Date()).getTime();
+		} else {
+			const unpausedTime = (new Date()).getTime() - this.unpausedStart;
+			this.totalTime += unpausedTime;
+		}
 		this.updateDownTimer();
 	}
 
