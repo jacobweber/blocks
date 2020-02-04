@@ -5,6 +5,8 @@ import { HighScoresStore, HighScores, HighScore } from './HighScoresStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
+const extraHeight = 50;
+const extraWidth = 150;
 const log = false;
 const numClearRowsBonus = 4;
 const animDelayMS = 5;
@@ -202,8 +204,8 @@ class MainStore {
 	}
 
 	get pointSize(): number {
-		const minWidth = Math.floor((this.windowWidth - 50) / this.width);
-		const minHeight = Math.floor((this.windowHeight - 50) / this.height);
+		const minWidth = Math.floor((this.windowWidth - extraWidth) / this.width);
+		const minHeight = Math.floor((this.windowHeight - extraHeight) / this.height);
 		return Math.min(Math.max(Math.min(minHeight, minWidth), 10), 30);
 	}
 
