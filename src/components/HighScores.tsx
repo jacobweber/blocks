@@ -12,10 +12,10 @@ const HighScores = observer(() => {
 
 	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={hide}>
-			<Header icon='setting' content='High Scores' />
+			<Header icon='trophy' content='High Scores' />
 			<Modal.Content scrolling>
 
-				<Table celled striped>
+				<Table unstackable celled striped>
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Name</Table.HeaderCell>
