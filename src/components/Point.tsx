@@ -1,16 +1,16 @@
 import React from 'react';
 import { PointID } from '../stores/MainStore';
+import { pointSize } from '../utils/helpers';
 
 type PointProps = {
 	key: string;
 	id: PointID;
 	x: number;
 	y: number;
-	size: number;
 };
 
-const Point = React.memo(({ id, x, y, size }: PointProps) => {
-	return <use x={x * size} y={y * size} width={size} height={size} xlinkHref={'#' + id} />;
+const Point = React.memo(({ id, x, y }: PointProps) => {
+	return <use x={x * pointSize} y={y * pointSize} width={pointSize} height={pointSize} xlinkHref={'#' + id} />;
 });
 
 export { Point };

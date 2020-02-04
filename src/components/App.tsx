@@ -18,7 +18,9 @@ const App = observer(() => {
 	return (
 		<div className={styles.root} style={{ backgroundColor: preferencesStore.styles.backgroundColor }}>
 			<div className={styles.layout}>
-				<Board />
+				<div className={styles.left}>
+					<Board />
+				</div>
 				<div className={styles.right}>
 					<div className={styles.nextBlock}>
 						<NextBlock />

@@ -11,6 +11,11 @@
 }
 .layout {
 	display: flex;
+	width: 100%;
+	max-width: 450px;
+}
+.left {
+	flex: 1;
 }
 .right {
 	margin-left: 30px;

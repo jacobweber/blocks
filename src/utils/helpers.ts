@@ -1,3 +1,5 @@
+export const pointSize = 60;
+
 export function validKey(key: string): boolean {
 	switch (key) {
 		case 'Unidentified':

@@ -8,6 +8,9 @@ import { PointDefs } from './points/Grad';
 import { Points } from './Points';
 import { PositionedBlock } from './PositionedBlock';
 import { GameState } from '../utils/types';
+import { pointSize } from '../utils/helpers';
+
+const lineOffset = 0.5; // seems to help with antialiasing on small sizes
 
 const Board = observer(() => {
 	const mainStore = useStore();
@@ -15,11 +18,11 @@ const Board = observer(() => {
 
 	const xLines = [];
 	for (let i = 0; i < mainStore.height; i++) {
-		xLines.push(<line key={i} stroke={prefsStyles.gridColor} strokeWidth='.5' x1='0' y1={mainStore.pointSize * i} x2='100%' y2={mainStore.pointSize * i} />);
+		xLines.push(<line key={i} stroke={prefsStyles.gridColor} strokeWidth='1' x1='0' y1={(pointSize * i) + lineOffset} x2='100%' y2={pointSize * i} />);
 	}
 	const yLines = [];
 	for (let i = 0; i < mainStore.width; i++) {
-		yLines.push(<line key={i} stroke={prefsStyles.gridColor} strokeWidth='.5' x1={mainStore.pointSize * i} y1='0' x2={mainStore.pointSize * i} y2='100%' />);
+		yLines.push(<line key={i} stroke={prefsStyles.gridColor} strokeWidth='1' x1={(pointSize * i) + lineOffset} y1='0' x2={pointSize * i} y2='100%' />);
 	}
 
 	return (
@@ -31,8 +34,7 @@ const Board = observer(() => {
 			<svg
 				version="1.1"
 				baseProfile="full"
-				width={mainStore.pointSize * mainStore.width}
-				height={mainStore.pointSize * mainStore.height}
+				viewBox={`0 0 ${pointSize * mainStore.width} ${pointSize * mainStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<use x='0' y='0' width='100%' height='100%' xlinkHref='#board' />
@@ -40,7 +42,7 @@ const Board = observer(() => {
 				<PositionedBlock />
 				{xLines}
 				{yLines}
-				<rect width="100%" height="100%" stroke={prefsStyles.outlineColor} strokeWidth='3' fillOpacity='0' />
+				<rect width="100%" height="100%" stroke={prefsStyles.outlineColor} strokeWidth='6' fillOpacity='0' />
 			</svg>
 		</div>
 	);

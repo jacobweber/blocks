@@ -5,8 +5,6 @@ import { HighScoresStore, HighScores, HighScore } from './HighScoresStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
-const extraHeight = 50;
-const extraWidth = 150;
 const log = false;
 const numClearRowsBonus = 4;
 const animDelayMS = 5;
@@ -132,8 +130,6 @@ class MainStore {
 
 	width: number = 10;
 	height: number = 20;
-	windowWidth: number = 0;
-	windowHeight: number = 0;
 
 	positionedBlock: PositionedBlock | null = null;
 	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
@@ -160,11 +156,9 @@ class MainStore {
 	}
 
 	initWindowEvents() {
-		this.updateWindowSize();
 		window.addEventListener('blur', e => this.pause());
 		window.addEventListener('keydown', e => this.keyDown(e));
 		window.addEventListener('keyup', e => this.keyUp(e));
-		window.addEventListener('resize', e => this.updateWindowSize());
 	}
 
 	get prefs(): Preferences {
@@ -196,17 +190,6 @@ class MainStore {
 		if (this.level === 8) return 100;
 		if (this.level === 9) return 80;
 		return 60;
-	}
-
-	updateWindowSize() {
-		this.windowWidth = window.innerWidth;
-		this.windowHeight = window.innerHeight;
-	}
-
-	get pointSize(): number {
-		const minWidth = Math.floor((this.windowWidth - extraWidth) / this.width);
-		const minHeight = Math.floor((this.windowHeight - extraHeight) / this.height);
-		return Math.min(Math.max(Math.min(minHeight, minWidth), 10), 30);
 	}
 
 	get nextBlockDef(): BlockDef | null {
@@ -899,21 +882,17 @@ class MainStore {
 decorate(MainStore, {
 	width: observable,
 	height: observable,
-	windowWidth: observable,
-	windowHeight: observable,
 	animating: observable,
 	score: observable,
 	rows: observable,
 	level: computed,
 	downDelayMS: computed,
 	gameState: observable,
-	pointSize: computed,
 	positionedBlock: observable.ref,
 	prefs: computed,
 	nextBlockDef: computed,
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
-	updateWindowSize: action,
 	resetGame: action,
 	newGame: action,
 	endGame: action,
