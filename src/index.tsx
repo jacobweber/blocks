@@ -12,6 +12,7 @@ configure({ enforceActions: "observed" });
 
 const mainStore = new MainStore();
 mainStore.initWindowEvents();
+(window as any).mainStore = mainStore;
 
 ReactDOM.render(
 	<StoreContext.Provider value={mainStore}>
