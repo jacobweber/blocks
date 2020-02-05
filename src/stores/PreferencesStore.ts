@@ -113,6 +113,10 @@ class PreferencesStore {
 		this.save();
 	}
 
+	dialogReset() {
+		this.prefs = defaultPrefs;
+	}
+
 	setPrefs(prefs: Preferences): void {
 		this.prefs = prefs;
 	}
@@ -190,7 +194,8 @@ decorate(PreferencesStore, {
 	setPrefs: action,
 	dialogShow: action,
 	dialogCancel: action,
-	dialogSave: action
+	dialogSave: action,
+	dialogReset: action
 });
 
 export { PreferencesStore };

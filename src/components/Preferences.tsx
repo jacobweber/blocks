@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
-import { Button, Header, Icon, Modal, Form, Input, Checkbox } from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'semantic-ui-react'
 import { useStore } from '../stores/MainStore';
 
 import styles from './Preferences.module.css';
@@ -17,7 +17,23 @@ const Preferences = observer(() => {
 		className: styles.colorInput
 	}; // breaks on safari
 
-	return (
+	const [ confirmOpen, setConfirmOpen ] = useState(false);
+	const reset = () => setConfirmOpen(true);
+	const cancelReset = () => setConfirmOpen(false);
+	const confirmReset = () => {
+		setConfirmOpen(false);
+		preferencesStore.dialogReset();
+	}
+
+	return (<>
+		<Confirm
+			content='Are you sure you want to reset the preferences?'
+			open={confirmOpen}
+			onCancel={cancelReset}
+			onConfirm={confirmReset}
+			confirmButton='Reset'
+		/>
+
 		<Modal className={styles.root} open={true} closeIcon onClose={save}>
 			<Header icon='setting' content='Preferences' />
 			<Modal.Content scrolling>
@@ -122,12 +138,15 @@ const Preferences = observer(() => {
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
+				<Button onClick={reset} color='red'>
+					<Icon name='undo' /> Reset
+				</Button>
 				<Button onClick={save} color='green'>
 					<Icon name='checkmark' /> Save
 				</Button>
 			</Modal.Actions>
 		</Modal>
-	);
+	</>);
 });
 
 export { Preferences };
