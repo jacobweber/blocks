@@ -75,7 +75,7 @@ class HighScoresStore {
 	}
 
 	recordIfHighScore(entry: HighScore): number | null {
-		if (entry.score < minHighScore) return false;
+		if (entry.score < minHighScore) return null;
 		const position = this.getScorePosition(entry);
 		if (position !== null) {
 			this.setScores({
