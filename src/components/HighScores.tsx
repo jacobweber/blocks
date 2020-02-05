@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
-import { Button, Header, Icon, Modal, Table } from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Table, Confirm } from 'semantic-ui-react'
 import { useStore } from '../stores/MainStore';
 
 import styles from './HighScores.module.css';
 
 const HighScores = observer(() => {
 	const highScoresStore = useStore().highScoresStore;
-	const reset = () => highScoresStore.dialogReset();
 	const hide = () => highScoresStore.dialogHide();
+	const [ confirmOpen, setConfirmOpen ] = useState(false);
+	const reset = () => setConfirmOpen(true);
+	const cancelReset = () => setConfirmOpen(false);
+	const confirmReset = () => {
+		setConfirmOpen(false);
+		highScoresStore.dialogReset();
+	}
 
-	return (
+	return (<>
+		<Confirm
+			content='Are you sure you want to reset the high scores?'
+			open={confirmOpen}
+			onCancel={cancelReset}
+			onConfirm={confirmReset}
+			confirmButton='Reset'
+		/>
 		<Modal className={styles.root} open={true} closeIcon onClose={hide}>
 			<Header icon='trophy' content='High Scores' />
 			<Modal.Content scrolling>
@@ -51,7 +64,7 @@ const HighScores = observer(() => {
 				</Button>
 			</Modal.Actions>
 		</Modal>
-	);
+	</>);
 });
 
 export { HighScores };
