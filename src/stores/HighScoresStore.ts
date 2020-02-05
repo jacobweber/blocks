@@ -18,6 +18,7 @@ const defaultScores: HighScores = {
 	entries: []
 }
 
+const minHighScore = 2000;
 const numScores = 10;
 
 class HighScoresStore {
@@ -74,6 +75,7 @@ class HighScoresStore {
 	}
 
 	recordIfHighScore(entry: HighScore): number | null {
+		if (entry.score < minHighScore) return false;
 		const position = this.getScorePosition(entry);
 		if (position !== null) {
 			this.setScores({
