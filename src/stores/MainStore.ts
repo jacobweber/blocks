@@ -1,7 +1,7 @@
 import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
-import { HighScoresStore, HighScores, HighScore } from './HighScoresStore';
+import { HighScoresStore, HighScore } from './HighScoresStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
@@ -163,10 +163,6 @@ class MainStore {
 
 	get prefs(): Preferences {
 		return this.preferencesStore.prefs;
-	}
-
-	get scores(): HighScores {
-		return this.highScoresStore.scores;
 	}
 
 	showPrefs(): void {
