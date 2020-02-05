@@ -4,7 +4,7 @@
 	padding: 20px;
 	display: flex;
 	justify-content: center;
-	align-items: flex-start;
+	align-items: center;
 }
 .buttons {
 	display: flex;
@@ -19,19 +19,23 @@
 }
 .right {
 	margin-left: 30px;
-	width: 120px;
+	width: 150px;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 }
 .nextBlock {
+	width: 120px;
 }
 .gameState {
 	margin-top: 30px;
-	height: 50px;
-	flex: 1
+	flex: 1;
+	align-self: stretch;
 }
 .highScores {
-	margin-bottom: 30px;
+	margin-top: 30px;
 }
 .preferences {
+	margin-top: 30px;
 }

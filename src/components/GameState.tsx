@@ -11,12 +11,18 @@ const GameState = observer(() => {
 
 	return (
 		<div className={styles.root} style={{ color: prefsStyles.textColor }}>
-			{mainStore.gameState !== State.Stopped && (<>
-				Score: {mainStore.score}<br />
-				Lines: {mainStore.rows}<br />
-				Level: {mainStore.level}<br />
-			</>)}
-			{mainStore.gameState === State.Paused && 'Paused'}
+			<table className={styles.score} style={{ borderColor: prefsStyles.outlineColor }}>
+				<tbody>
+					{mainStore.gameState !== State.Stopped && (<>
+						<tr><td>Score</td><td>{mainStore.score.toLocaleString()}</td></tr>
+						<tr><td>Lines</td><td>{mainStore.rows}</td></tr>
+						<tr><td>Level</td><td>{mainStore.level}</td></tr>
+					</>)}
+				</tbody>
+			</table>
+			<div className={styles.paused}>
+				{mainStore.gameState === State.Paused && 'Paused'}
+			</div>
 		</div>
 	);
 });

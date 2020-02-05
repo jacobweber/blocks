@@ -1,2 +1,21 @@
 .root {
 }
+.score {
+	width: 100%;
+	border-width: 1px;
+	border-style: solid;
+	border-collapse: collapse;
+}
+.score td {
+	padding: 10px;
+}
+.score td:first-child {
+}
+.score td:last-child {
+	text-align: right;
+}
+.paused {
+	display: flex;
+	justify-content: center;
+	margin-top: 10px;
+}
