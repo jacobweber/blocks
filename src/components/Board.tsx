@@ -38,10 +38,10 @@ const Board = observer(() => {
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<use x='0' y='0' width='100%' height='100%' xlinkHref='#board' />
-				<Points />
-				<PositionedBlock />
 				{xLines}
 				{yLines}
+				<Points />
+				<PositionedBlock />
 				<rect width="100%" height="100%" stroke={prefsStyles.outlineColor} strokeWidth='6' fillOpacity='0' />
 			</svg>
 		</div>
