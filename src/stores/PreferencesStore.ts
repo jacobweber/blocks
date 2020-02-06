@@ -58,8 +58,11 @@ const defaultPrefs: Preferences = {
 	rowsJunk: 0
 };
 
+type DoneCallbackType = () => void;
+
 class PreferencesStore {
 	visible: boolean = false;
+	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
 
 	get styles() {
@@ -114,18 +117,29 @@ class PreferencesStore {
 		window.localStorage.setItem('preferences', str);
 	}
 
-	dialogShow() {
+	dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
+		if (doneCallback) {
+			this.doneCallback = doneCallback;
+		}
 	}
 
 	dialogCancel() {
 		this.visible = false;
 		this.load();
+		if (this.doneCallback) {
+			this.doneCallback();
+			delete this.doneCallback;
+		}
 	}
 
 	dialogSave() {
 		this.visible = false;
 		this.save();
+		if (this.doneCallback) {
+			this.doneCallback();
+			delete this.doneCallback;
+		}
 	}
 
 	dialogReset() {

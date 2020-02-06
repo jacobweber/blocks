@@ -21,8 +21,11 @@ const defaultScores: HighScores = {
 const minHighScore = 2000;
 const numScores = 10;
 
+type DoneCallbackType = () => void;
+
 class HighScoresStore {
 	visible: boolean = false;
+	doneCallback: DoneCallbackType | null = null;
 	lastScoreName: string = '';
 	scores: HighScores = defaultScores;
 	lastPosition: number | null = null;
@@ -44,8 +47,11 @@ class HighScoresStore {
 		window.localStorage.setItem('highScores', str);
 	}
 
-	dialogShow() {
+	dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
+		if (doneCallback) {
+			this.doneCallback = doneCallback;
+		}
 	}
 
 	dialogHide() {
@@ -58,6 +64,10 @@ class HighScoresStore {
 		}
 		this.visible = false;
 		this.lastPosition = null;
+		if (this.doneCallback) {
+			this.doneCallback();
+			delete this.doneCallback;
+		}
 	}
 
 	dialogReset() {

@@ -160,7 +160,16 @@ class MainStore {
 	}
 
 	initWindowEvents() {
-		window.addEventListener('blur', e => this.pause());
+		let wasActive = false;
+		window.addEventListener('blur', e => {
+			wasActive = this.gameState === GameState.Active;
+			this.pause();
+		});
+		window.addEventListener('focus', e => {
+			if (wasActive) {
+				this.resume();
+			}
+		});
 		window.addEventListener('keydown', e => this.keyDown(e));
 		window.addEventListener('keyup', e => this.keyUp(e));
 	}
@@ -170,13 +179,23 @@ class MainStore {
 	}
 
 	showPrefs(): void {
+		const wasActive = this.gameState === GameState.Active;
 		this.pause();
-		this.preferencesStore.dialogShow();
+		this.preferencesStore.dialogShow(() => {
+			if (wasActive) {
+				this.resume();
+			}
+		});
 	}
 
 	showHighScores(): void {
+		const wasActive = this.gameState === GameState.Active;
 		this.pause();
-		this.highScoresStore.dialogShow();
+		this.highScoresStore.dialogShow(() => {
+			if (wasActive) {
+				this.resume();
+			}
+		});
 	}
 
 	get downDelayMS(): number {
