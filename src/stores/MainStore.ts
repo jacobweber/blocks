@@ -232,9 +232,12 @@ class MainStore {
 	newGame(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
 		this.resetGame();
+
 		this.startLevel = this.prefs.startLevel;
 		this.fillRowsWithJunk();
-		this.setGameState(GameState.Active);
+		this.gameState = GameState.Active;
+		this.unpausedStart = (new Date()).getTime();
+		this.updateDownTimer();
 		this.newBlock();
 	}
 
@@ -267,14 +270,18 @@ class MainStore {
 
 	endGame(): void {
 		if (this.gameState === GameState.Ended) {
-			this.setGameState(GameState.Reset);
+			this.gameState = GameState.Reset;
 			this.resetGame();
 			return;
 		}
 
 		if (this.gameState === GameState.Reset) return;
-		this.setGameState(GameState.Ended);
+		this.gameState = GameState.Ended;
+		const unpausedTime = (new Date()).getTime() - this.unpausedStart;
+		this.totalTime += unpausedTime;
+		this.updateDownTimer();
 		this.resetGameLeavingBoard();
+
 		const entry: HighScore = {
 			name: this.prefs.name,
 			score: this.score,
@@ -317,18 +324,6 @@ class MainStore {
 		}, this.downDelayMS);
 	}
 
-	setGameState(gameState: GameState): void {
-		if (this.gameState === gameState) return;
-		this.gameState = gameState;
-		if (this.gameState === GameState.Active) {
-			this.unpausedStart = (new Date()).getTime();
-		} else {
-			const unpausedTime = (new Date()).getTime() - this.unpausedStart;
-			this.totalTime += unpausedTime;
-		}
-		this.updateDownTimer();
-	}
-
 	setAnimating(animating: boolean): void {
 		this.animating = animating;
 		this.updateDownTimer();
@@ -339,12 +334,17 @@ class MainStore {
 
 	pause(): void {
 		if (this.gameState !== GameState.Active) return;
-		this.setGameState(GameState.Paused);
+		this.gameState = GameState.Paused;
+		const unpausedTime = (new Date()).getTime() - this.unpausedStart;
+		this.totalTime += unpausedTime;
+		this.updateDownTimer();
 	}
 
 	resume(): void {
 		if (this.gameState !== GameState.Paused) return;
-		this.setGameState(GameState.Active);
+		this.gameState = GameState.Active;
+		this.unpausedStart = (new Date()).getTime();
+		this.updateDownTimer();
 	}
 
 	pauseResume(): void {
