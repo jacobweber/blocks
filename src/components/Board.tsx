@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import { useStore } from '../stores/MainStore';
 
 import styles from 'components/Board.module.css';
+import { useStore } from 'stores/MainStore';
 import { BoardDef } from 'components/boards/Black';
 import { PointDefs } from 'components/points/Standard';
 import { Points } from 'components/Points';
