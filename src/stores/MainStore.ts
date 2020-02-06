@@ -247,7 +247,9 @@ class MainStore {
 		};
 		const newPosition = this.highScoresStore.recordIfHighScore(entry);
 		if (newPosition !== null) {
-			this.highScoresStore.dialogShow();
+			window.setTimeout(() => {
+				this.highScoresStore.dialogShow();
+			}, 750);
 		}
 	}
 
