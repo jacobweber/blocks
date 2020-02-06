@@ -9,11 +9,13 @@ import { NextBlock } from './NextBlock';
 import { ScoreBoard } from './ScoreBoard';
 import { Preferences } from './Preferences';
 import { HighScores } from './HighScores';
+import { NewGame } from './NewGame';
 
 const App = observer(() => {
 	const mainStore = useStore();
 	const preferencesStore = mainStore.preferencesStore;
 	const highScoresStore = mainStore.highScoresStore;
+	const newGameStore = mainStore.newGameStore;
 
 	return (
 		<div className={styles.root} style={{ backgroundColor: preferencesStore.styles.backgroundColor }}>
@@ -38,6 +40,7 @@ const App = observer(() => {
 					</div>
 				</div>
 			</div>
+			{newGameStore.visible && <NewGame />}
 		</div>
 	);
 });

@@ -1,6 +1,7 @@
 import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
+import { NewGameStore } from './NewGameStore';
 import { HighScoresStore, HighScore } from './HighScoresStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
@@ -127,6 +128,7 @@ export interface FilledPoint {
 class MainStore {
 	preferencesStore: PreferencesStore = new PreferencesStore();
 	highScoresStore: HighScoresStore = new HighScoresStore();
+	newGameStore: NewGameStore = new NewGameStore();
 
 	width: number = 10;
 	height: number = 20;
@@ -146,6 +148,7 @@ class MainStore {
 	lastMoveAboveBlockedSpace: Date | null = null;
 	score = 0;
 	rows = 0;
+	startLevel = 1;
 	totalTime = 0;
 	unpausedStart = 0;
 
@@ -225,15 +228,21 @@ class MainStore {
 		this.totalTime = 0;
 	}
 
-	newGame(): void {
+	newGame(level: number = 1, rows: number = 0): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
 		this.resetGame();
+		this.startLevel = level;
 		this.setGameState(GameState.Active);
 		this.newBlock();
 	}
 
 	newGameOptions(): void {
-		this.newGame();
+		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
+		this.newGameStore.dialogShow((result, level, rows) => {
+			if (result) {
+				this.newGame(level, rows);
+			}
+		});
 	}
 
 	endGame(): void {
@@ -250,7 +259,7 @@ class MainStore {
 			name: this.prefs.name,
 			score: this.score,
 			rows: this.rows,
-			startLevel: 1,
+			startLevel: this.startLevel,
 			endLevel: this.level,
 			totalTime: this.totalTime,
 			time: (new Date().getTime())
@@ -496,7 +505,7 @@ class MainStore {
 		this.startDownTimer();
 	}
 
-	get level(): number {
+	levelCalculated(): number {
 		if (this.rows < 10) return 1;
 		if (this.rows < 30) return 2;
 		if (this.rows < 60) return 3;
@@ -507,6 +516,10 @@ class MainStore {
 		if (this.rows < 360) return 8;
 		if (this.rows < 450) return 9;
 		return 10;
+	}
+
+	get level(): number {
+		return Math.max(this.startLevel, this.levelCalculated());
 	}
 
 	checkAboveBlockedSpace(): void {
@@ -869,6 +882,7 @@ decorate(MainStore, {
 	score: observable,
 	rows: observable,
 	level: computed,
+	startLevel: observable,
 	downDelayMS: computed,
 	gameState: observable,
 	positionedBlock: observable.ref,
