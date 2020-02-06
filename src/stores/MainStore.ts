@@ -249,7 +249,7 @@ class MainStore {
 		if (newPosition !== null) {
 			window.setTimeout(() => {
 				this.highScoresStore.dialogShow();
-			}, 750);
+			}, 500);
 		}
 	}
 
