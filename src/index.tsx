@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as serviceWorker from './serviceWorker';
-
-import 'fomantic-ui-css/semantic.min.css';
-import './index.css';
-import { MainStore, StoreContext } from './stores/MainStore';
-import { App } from './components/App';
 import { configure } from 'mobx';
+import 'fomantic-ui-css/semantic.min.css';
+
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+import { MainStore, StoreContext } from 'stores/MainStore';
+import { App } from 'components/App';
 
 configure({ enforceActions: "observed" });
 
