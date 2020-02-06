@@ -18,11 +18,12 @@ const defaultScores: HighScores = {
 	entries: []
 }
 
-const minHighScore = 2000;
+const minHighScore = 200;
 const numScores = 10;
 
 class HighScoresStore {
 	visible: boolean = false;
+	lastScoreName: string = '';
 	scores: HighScores = defaultScores;
 	lastPosition: number | null = null;
 
@@ -48,6 +49,13 @@ class HighScoresStore {
 	}
 
 	dialogHide() {
+		if (this.lastPosition) {
+			const entries = [...this.scores.entries];
+			entries[this.lastPosition].name = this.lastScoreName;
+			this.setScores({
+				entries
+			});
+		}
 		this.visible = false;
 		this.lastPosition = null;
 	}
@@ -81,11 +89,16 @@ class HighScoresStore {
 			this.setScores({
 				entries: this.getScoresAfterAdding(entry, position)
 			});
+			this.lastScoreName = entry.name;
 			this.lastPosition = position;
 			return position;
 		} else {
 			return null;
 		}
+	}
+
+	handleChangeLastScoreName(e: React.ChangeEvent<HTMLInputElement>): void {
+		this.lastScoreName = e.target.value;
 	}
 
 	setScores(scores: HighScores): void {
@@ -96,6 +109,7 @@ class HighScoresStore {
 
 decorate(HighScoresStore, {
 	visible: observable,
+	lastScoreName: observable,
 	scores: observable.ref,
 	lastPosition: observable,
 	load: action,
@@ -104,6 +118,7 @@ decorate(HighScoresStore, {
 	dialogShow: action,
 	dialogHide: action,
 	dialogReset: action,
+	handleChangeLastScoreName: action,
 	recordIfHighScore: action
 });
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
-import { Button, Header, Icon, Modal, Table, Confirm } from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Table, Confirm, Form, Input } from 'semantic-ui-react'
 import { useStore } from '../stores/MainStore';
 
 import styles from './HighScores.module.css';
@@ -43,7 +43,13 @@ const HighScores = observer(() => {
 					<Table.Body>
 						{highScoresStore.scores.entries.map((entry, index) => (
 							<Table.Row key={index} positive={highScoresStore.lastPosition === index}>
-								<Table.Cell>{entry.name}</Table.Cell>
+								<Table.Cell>
+									{highScoresStore.lastPosition === index ? (
+										<Form.Field>
+											<Input onChange={e => highScoresStore.handleChangeLastScoreName(e)} value={highScoresStore.lastScoreName} />
+										</Form.Field>
+									) : entry.name}
+								</Table.Cell>
 								<Table.Cell>{entry.score.toLocaleString()}</Table.Cell>
 								<Table.Cell>{entry.rows}</Table.Cell>
 								<Table.Cell>{(entry.rows / (entry.totalTime / 1000 / 60)).toFixed(1)}</Table.Cell>
