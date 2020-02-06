@@ -7,6 +7,7 @@ import { BoardDef } from './boards/Grad';
 import { PointDefs } from './points/Grad';
 import { Points } from './Points';
 import { PositionedBlock } from './PositionedBlock';
+import { StatusOverlay } from './StatusOverlay';
 import { GameState } from '../utils/types';
 import { pointSize } from '../utils/helpers';
 
@@ -44,6 +45,7 @@ const Board = observer(() => {
 				<PositionedBlock />
 				<rect width="100%" height="100%" stroke={prefsStyles.outlineColor} strokeWidth='6' fillOpacity='0' />
 			</svg>
+			<StatusOverlay />
 		</div>
 	);
 });

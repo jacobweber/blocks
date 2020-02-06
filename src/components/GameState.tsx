@@ -20,9 +20,6 @@ const GameState = observer(() => {
 					</>)}
 				</tbody>
 			</table>
-			<div className={styles.paused}>
-				{mainStore.gameState === State.Paused && 'Paused'}
-			</div>
 		</div>
 	);
 });
