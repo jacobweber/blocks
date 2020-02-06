@@ -6,9 +6,9 @@ import { useStore } from '../stores/MainStore';
 import styles from './NewGame.module.css';
 
 const NewGame = observer(() => {
-	const [ level, setLevel ] = useState(1);
-	const [ rows, setRows ] = useState(0);
 	const newGameStore = useStore().newGameStore;
+	const [ level, setLevel ] = useState(newGameStore.level);
+	const [ rows, setRows ] = useState(newGameStore.rows);
 	const cancel = () => newGameStore.dialogCancel();
 	const ok = () => newGameStore.dialogOK(level, rows);
 
@@ -25,10 +25,10 @@ const NewGame = observer(() => {
 					))}
 				</Button.Group>
 
-				<Header as='h3' dividing>Rows of Randomness</Header>
+				<Header as='h3' dividing>Rows of Junk</Header>
 				<Button.Group>
 					{[0, 3, 6, 9, 12].map(val => (
-						<Button active={rows === val} key={val} onClick={() => setRows(rows)}>
+						<Button active={rows === val} key={val} onClick={() => setRows(val)}>
 							{val === 0 ? 'None' : val}
 						</Button>
 					))}

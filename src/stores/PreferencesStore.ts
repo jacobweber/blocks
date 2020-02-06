@@ -26,6 +26,8 @@ export interface Preferences {
 	leftRightAccelAfterMS: number;
 	downTimerPauseWhenMovingMS: number;
 	allowUndo: boolean;
+	startLevel: number;
+	rowsJunk: number;
 }
 
 const defaultPrefs: Preferences = {
@@ -51,7 +53,9 @@ const defaultPrefs: Preferences = {
 	name: 'Anonymous',
 	leftRightAccelAfterMS: 200,
 	downTimerPauseWhenMovingMS: 500,
-	allowUndo: true
+	allowUndo: true,
+	startLevel: 1,
+	rowsJunk: 0
 };
 
 class PreferencesStore {
@@ -130,6 +134,15 @@ class PreferencesStore {
 
 	setPrefs(prefs: Preferences): void {
 		this.prefs = prefs;
+	}
+
+	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
+		this.setPrefs({
+			...this.prefs,
+			startLevel,
+			rowsJunk
+		});
+		this.save();
 	}
 
 	handleChangeLeftRightAccel(e: React.ChangeEvent<HTMLInputElement>): void {

@@ -238,11 +238,15 @@ class MainStore {
 
 	newGameOptions(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
-		this.newGameStore.dialogShow((result, level, rows) => {
-			if (result) {
-				this.newGame(level, rows);
+		this.newGameStore.dialogShow(
+			this.prefs.startLevel, this.prefs.rowsJunk,
+			(result, level, rows) => {
+				if (result) {
+					this.preferencesStore.saveNewGameOptions(level, rows);
+					this.newGame(level, rows);
+				}
 			}
-		});
+		);
 	}
 
 	endGame(): void {
