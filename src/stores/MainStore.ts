@@ -228,10 +228,10 @@ class MainStore {
 		this.totalTime = 0;
 	}
 
-	newGame(level: number = 1, rows: number = 0): void {
+	newGame(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
 		this.resetGame();
-		this.startLevel = level;
+		this.startLevel = this.prefs.startLevel;
 		this.setGameState(GameState.Active);
 		this.newBlock();
 	}
@@ -243,7 +243,7 @@ class MainStore {
 			(result, level, rows) => {
 				if (result) {
 					this.preferencesStore.saveNewGameOptions(level, rows);
-					this.newGame(level, rows);
+					this.newGame();
 				}
 			}
 		);
