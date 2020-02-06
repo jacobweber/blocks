@@ -11,7 +11,7 @@ const Preferences = observer(() => {
 	const keys = preferencesStore.prefs.keys;
 	const prefsStyles = preferencesStore.prefs.styles;
 	const save = () => preferencesStore.dialogSave();
-	const onKeyDown = (name: ActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
+	const handleKeySelectorKeyDown = (name: ActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
 		type: 'color',
 		className: styles.colorInput
@@ -70,53 +70,53 @@ const Preferences = observer(() => {
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>New Game</label>
-							<Input fluid onKeyDown={onKeyDown('newGame')} name='newGame' value={keys.newGame} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('newGame')} name='newGame' value={keys.newGame} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>New Game with Options</label>
-							<Input fluid onKeyDown={onKeyDown('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>End Game</label>
-							<Input fluid onKeyDown={onKeyDown('endGame')} name='endGame' value={keys.endGame} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('endGame')} name='endGame' value={keys.endGame} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Pause/Resume Game</label>
-							<Input fluid onKeyDown={onKeyDown('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
 						</Form.Field>
 					</Form.Group>
 
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Left</label>
-							<Input fluid onKeyDown={onKeyDown('left')} name='left' value={keys.left} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('left')} name='left' value={keys.left} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Right</label>
-							<Input fluid onKeyDown={onKeyDown('right')} name='right' value={keys.right} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('right')} name='right' value={keys.right} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Down</label>
-							<Input fluid onKeyDown={onKeyDown('down')} name='down' value={keys.down} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('down')} name='down' value={keys.down} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Drop</label>
-							<Input fluid onKeyDown={onKeyDown('drop')} name='drop' value={keys.drop} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('drop')} name='drop' value={keys.drop} />
 						</Form.Field>
 					</Form.Group>
 
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Rotate Left</label>
-							<Input fluid onKeyDown={onKeyDown('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Rotate Right</label>
-							<Input fluid onKeyDown={onKeyDown('rotateCW')} name='rotateCW' value={keys.rotateCW} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('rotateCW')} name='rotateCW' value={keys.rotateCW} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Undo</label>
-							<Input fluid onKeyDown={onKeyDown('undo')} name='undo' value={keys.undo} />
+							<Input fluid onKeyDown={handleKeySelectorKeyDown('undo')} name='undo' value={keys.undo} />
 						</Form.Field>
 		          	</Form.Group>
 
