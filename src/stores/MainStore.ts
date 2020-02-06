@@ -679,7 +679,7 @@ class MainStore {
 	}
 
 	keyDown(e: KeyboardEvent) {
-		if (this.preferencesStore.visible || this.highScoresStore.visible) return;
+		if (this.newGameStore.visible || this.preferencesStore.visible || this.highScoresStore.visible) return;
 		let keyStr = getModifiedKeyStr(e);
 
 		let action = this.preferencesStore.gameKeyMap[keyStr];
