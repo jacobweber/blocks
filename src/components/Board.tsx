@@ -3,8 +3,8 @@ import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
 
 import styles from './Board.module.css';
-import { BoardDef } from './boards/Grad';
-import { PointDefs } from './points/Grad';
+import { BoardDef } from './boards/Black';
+import { PointDefs } from './points/Standard';
 import { Points } from './Points';
 import { PositionedBlock } from './PositionedBlock';
 import { StatusOverlay } from './StatusOverlay';
