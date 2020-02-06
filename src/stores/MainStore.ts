@@ -42,6 +42,7 @@ class MainStore {
 
 	actionQueue: Array<Actions> = [];
 	heldAction: Actions | null = null;
+	heldKey: string | null = null;
 	heldTimeout: number | undefined = undefined;
 
 	gameState: GameState = GameState.Reset;
@@ -125,6 +126,7 @@ class MainStore {
 		this.actionQueue = [];
 		this.animating = false;
 		this.heldAction = null;
+		this.heldKey = null;
 		this.positionedBlock = null;
 		this.undoStack = [];
 		this.nextBlockTypes = [];
@@ -611,13 +613,15 @@ class MainStore {
 		});
 	}
 
-	async startHeldAction(action: Actions): Promise<void> {
+	async startHeldAction(action: Actions, key: string): Promise<void> {
 		this.heldAction = action;
+		this.heldKey = key;
 
 		if (log) console.log('press', getActionName(action));
 		this.heldTimeout = window.setTimeout(() => {
 			if (log) console.log('accel', getActionName(action));
 			this.heldAction = null;
+			this.heldKey = null;
 			const accelAction = action === Actions.Left ? Actions.LeftAccel : Actions.RightAccel;
 			if (this.animating) {
 				this.accelLastQueuedAction(accelAction);
@@ -644,6 +648,7 @@ class MainStore {
 		if (log && this.heldAction) console.log('release', getActionName(this.heldAction));
 		window.clearTimeout(this.heldTimeout);
 		this.heldAction = null;
+		this.heldKey = null;
 		this.handleQueuedAction();
 	}
 
@@ -715,15 +720,13 @@ class MainStore {
 		}
 
 		if (canHoldKey && !this.heldAction) {
-			this.startHeldAction(action);
+			this.startHeldAction(action, keyStr);
 		}
 	}
 
 	keyUp(e: KeyboardEvent) {
 		const keyStr = getKeyStr(e);
-		const moveAction = this.preferencesStore.moveKeyMap[keyStr];
-		if (moveAction === undefined) return;
-		if (this.heldAction && this.heldAction === moveAction) {
+		if (this.heldKey !== null && this.heldKey === keyStr) {
 			this.cancelHeldAction();
 		}
 	}
