@@ -369,36 +369,6 @@ class MainStore {
 		});
 	}
 
-	getRandomPosition(type: BlockType): PositionedBlock | null {
-		let tries = 20;
-		const def = this.getBlockDef(type);
-		const rotation = Math.floor(Math.random() * def.rotations.length);
-		const extent = def.rotations[rotation].extent;
-		const blockWidth = extent[2] - extent[0] + 1;
-		const blockHeight = extent[3] - extent[1] + 1;
-		while (tries > 0) {
-			const x = Math.floor(Math.random() * (this.width - blockWidth + 1)) - extent[0];
-			const y = Math.floor(Math.random() * (this.height - blockHeight + 1)) - extent[1];
-			const positioned: PositionedBlock = { x, y, type, rotation }
-			if (this.positionFree(positioned)) {
-				return positioned;
-			}
-			tries--;
-		}
-		return null;
-	}
-
-	randomize(numBlocks: number = 20): void {
-		this.resetGame();
-		for (let i = 0; i < numBlocks; i++) {
-			const type = this.getRandomBlockType();
-			const positioned = this.getRandomPosition(type);
-			if (positioned) {
-				this.markPositionFilled(positioned);
-			}
-		}
-	}
-
 	newBlock(): void {
 		let type;
 		if (this.nextBlockTypes.length > 0) {
@@ -900,7 +870,6 @@ decorate(MainStore, {
 	endGame: action,
 	pause: action,
 	resume: action,
-	randomize: action,
 	newBlock: action,
 	freezeBlock: action,
 	scoreDrop: action,
