@@ -18,7 +18,7 @@ const defaultScores: HighScores = {
 	entries: []
 }
 
-const minHighScore = 200;
+const minHighScore = 2000;
 const numScores = 10;
 
 class HighScoresStore {
