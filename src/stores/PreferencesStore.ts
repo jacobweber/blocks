@@ -5,6 +5,7 @@ import { validKey, getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 export interface Preferences {
 	keys: {
 		newGame: string;
+		newGameOptions: string;
 		endGame: string;
 		pauseResumeGame: string;
 		left: string;
@@ -30,6 +31,7 @@ export interface Preferences {
 const defaultPrefs: Preferences = {
 	keys: {
 		newGame: 'n',
+		newGameOptions: 'Shift+N',
 		endGame: 'k',
 		pauseResumeGame: 'p',
 		left: 'ArrowLeft',
@@ -64,6 +66,7 @@ class PreferencesStore {
 		const keys = this.prefs.keys;
 		return {
 			[keys.newGame]: KeyActions.NewGame,
+			[keys.newGameOptions]: KeyActions.NewGameOptions,
 			[keys.endGame]: KeyActions.EndGame,
 			[keys.pauseResumeGame]: KeyActions.PauseResumeGame,
 			[keys.undo]: KeyActions.Undo
@@ -150,7 +153,7 @@ class PreferencesStore {
 	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: ActionName): void {
 		if (validKey(e.key)) {
 			let value = this.prefs.keys[name];
-			const keysAllowingModifiers: Array<ActionName> = ['newGame', 'endGame', 'pauseResumeGame', 'undo'];
+			const keysAllowingModifiers: Array<ActionName> = ['newGame', 'newGameOptions', 'endGame', 'pauseResumeGame', 'undo'];
 			const allowModifiers = keysAllowingModifiers.includes(name);
 			let keyStr = allowModifiers ? getModifiedKeyStr(e) : getKeyStr(e);
 			if (keyStr === 'Backspace') {

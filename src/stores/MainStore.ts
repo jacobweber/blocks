@@ -232,6 +232,10 @@ class MainStore {
 		this.newBlock();
 	}
 
+	newGameOptions(): void {
+		this.newGame();
+	}
+
 	endGame(): void {
 		if (this.gameState === GameState.Ended) {
 			this.resetGame();
@@ -730,6 +734,7 @@ class MainStore {
 	getActionName(action: KeyActions): string {
 		switch (action) {
 			case KeyActions.NewGame: return 'newGame';
+			case KeyActions.NewGameOptions: return 'newGameOptions';
 			case KeyActions.EndGame: return 'endGame';
 			case KeyActions.PauseResumeGame: return 'pauseResumeGame';
 			case KeyActions.Undo: return 'undo';
@@ -748,6 +753,7 @@ class MainStore {
 		if (log) console.log('action', this.getActionName(action));
 		switch (action) {
 			case KeyActions.NewGame: this.newGame(); break;
+			case KeyActions.NewGameOptions: this.newGameOptions(); break;
 			case KeyActions.EndGame: this.endGame(); break;
 			case KeyActions.PauseResumeGame: this.pauseResume(); break;
 			case KeyActions.Undo: await this.undo(); break;
@@ -785,7 +791,7 @@ class MainStore {
 
 		e.preventDefault();
 
-		const noRepeat = action === KeyActions.Drop || action === KeyActions.NewGame || action === KeyActions.PauseResumeGame;
+		const noRepeat = action === KeyActions.Drop || action === KeyActions.NewGame || action === KeyActions.NewGameOptions || action === KeyActions.PauseResumeGame;
 		if (noRepeat && e.repeat) return;
 
 		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)

@@ -73,6 +73,10 @@ const Preferences = observer(() => {
 							<Input fluid onKeyDown={onKeyDown('newGame')} name='newGame' value={keys.newGame} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
+							<label>New Game with Options</label>
+							<Input fluid onKeyDown={onKeyDown('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
+						</Form.Field>
+						<Form.Field className={styles.cell}>
 							<label>End Game</label>
 							<Input fluid onKeyDown={onKeyDown('endGame')} name='endGame' value={keys.endGame} />
 						</Form.Field>
