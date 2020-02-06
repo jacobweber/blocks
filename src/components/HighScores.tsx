@@ -32,10 +32,10 @@ const HighScores = observer(() => {
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Name</Table.HeaderCell>
-							<Table.HeaderCell>Score</Table.HeaderCell>
-							<Table.HeaderCell>Lines</Table.HeaderCell>
-							<Table.HeaderCell>LPM</Table.HeaderCell>
-							<Table.HeaderCell>Level</Table.HeaderCell>
+							<Table.HeaderCell textAlign='right'>Score</Table.HeaderCell>
+							<Table.HeaderCell textAlign='right'>Lines</Table.HeaderCell>
+							<Table.HeaderCell textAlign='right'>LPM</Table.HeaderCell>
+							<Table.HeaderCell textAlign='right'>Level</Table.HeaderCell>
 							<Table.HeaderCell>Date</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
@@ -50,10 +50,10 @@ const HighScores = observer(() => {
 										</Form.Field>
 									) : entry.name}
 								</Table.Cell>
-								<Table.Cell>{entry.score.toLocaleString()}</Table.Cell>
-								<Table.Cell>{entry.rows}</Table.Cell>
-								<Table.Cell>{(entry.rows / (entry.totalTime / 1000 / 60)).toFixed(1)}</Table.Cell>
-								<Table.Cell>{entry.endLevel}</Table.Cell>
+								<Table.Cell textAlign='right'>{entry.score.toLocaleString()}</Table.Cell>
+								<Table.Cell textAlign='right'>{entry.rows}</Table.Cell>
+								<Table.Cell textAlign='right'>{(entry.rows / (entry.totalTime / 1000 / 60)).toFixed(1)}</Table.Cell>
+								<Table.Cell textAlign='right'>{entry.startLevel}-{entry.endLevel}</Table.Cell>
 								<Table.Cell>{new Date(entry.time).toLocaleString()}</Table.Cell>
 							</Table.Row>
 						))}
