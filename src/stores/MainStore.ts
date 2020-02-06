@@ -156,7 +156,7 @@ class MainStore {
 	constructor() {
 		this.preferencesStore.load();
 		this.highScoresStore.load();
-		this.resetGame();
+		this.resetGameCompletely();
 	}
 
 	initWindowEvents() {
@@ -221,7 +221,7 @@ class MainStore {
 		this.unpausedStart = 0;
 	}
 
-	resetGame() {
+	resetGameCompletely() {
 		this.resetGameLeavingBoard();
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.score = 0;
@@ -231,7 +231,7 @@ class MainStore {
 
 	newGame(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
-		this.resetGame();
+		this.resetGameCompletely();
 
 		this.startLevel = this.prefs.startLevel;
 		this.fillRowsWithJunk();
@@ -271,7 +271,7 @@ class MainStore {
 	endGame(): void {
 		if (this.gameState === GameState.Ended) {
 			this.gameState = GameState.Reset;
-			this.resetGame();
+			this.resetGameCompletely();
 			return;
 		}
 
@@ -911,7 +911,7 @@ decorate(MainStore, {
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
 	resetGameLeavingBoard: action,
-	resetGame: action,
+	resetGameCompletely: action,
 	newGame: action,
 	fillRowsWithJunk: action,
 	endGame: action,
