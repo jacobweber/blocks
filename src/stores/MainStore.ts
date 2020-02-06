@@ -3,8 +3,7 @@ import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
 import { NewGameStore } from './NewGameStore';
 import { HighScoresStore, HighScore } from './HighScoresStore';
-import { GameState, Actions } from '../utils/types';
-import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
+import { GameState, Actions, getActionName, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from '../utils/helpers';
 import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs } from '../utils/blocks';
 
 const log = false;
@@ -100,16 +99,7 @@ class MainStore {
 	}
 
 	get downDelayMS(): number {
-		if (this.level === 1) return 800;
-		if (this.level === 2) return 600;
-		if (this.level === 3) return 480;
-		if (this.level === 4) return 350;
-		if (this.level === 5) return 250;
-		if (this.level === 6) return 180;
-		if (this.level === 7) return 140;
-		if (this.level === 8) return 100;
-		if (this.level === 9) return 80;
-		return 60;
+		return getDownDelayMS(this.level);
 	}
 
 	get nextBlockDef(): BlockDef | null {
@@ -439,21 +429,8 @@ class MainStore {
 		this.startDownTimer();
 	}
 
-	levelCalculated(): number {
-		if (this.rows < 10) return 1;
-		if (this.rows < 30) return 2;
-		if (this.rows < 60) return 3;
-		if (this.rows < 100) return 4;
-		if (this.rows < 150) return 5;
-		if (this.rows < 210) return 6;
-		if (this.rows < 280) return 7;
-		if (this.rows < 360) return 8;
-		if (this.rows < 450) return 9;
-		return 10;
-	}
-
 	get level(): number {
-		return Math.max(this.startLevel, this.levelCalculated());
+		return Math.max(this.startLevel, getLevel(this.rows));
 	}
 
 	checkAboveBlockedSpace(): void {
@@ -636,9 +613,9 @@ class MainStore {
 	async startTrackingKey(action: Actions): Promise<void> {
 		this.heldAction = action;
 
-		if (log) console.log('press', this.getActionName(action));
+		if (log) console.log('press', getActionName(action));
 		this.heldTimeout = window.setTimeout(() => {
-			if (log) console.log('accel', this.getActionName(action));
+			if (log) console.log('accel', getActionName(action));
 			this.heldAction = null;
 			const accelAction = action === Actions.Left ? Actions.LeftAccel : Actions.RightAccel;
 			if (this.animating) {
@@ -663,7 +640,7 @@ class MainStore {
 
 	stopTrackingKey(): void {
 		// TODO: if queued, keyup happens before we start tracking, so ignored
-		if (log && this.heldAction) console.log('release', this.getActionName(this.heldAction));
+		if (log && this.heldAction) console.log('release', getActionName(this.heldAction));
 		window.clearTimeout(this.heldTimeout);
 		this.heldAction = null;
 		this.handleQueuedAction();
@@ -673,31 +650,13 @@ class MainStore {
 		if (this.animating) return;
 		const queuedAction = this.actionQueue.shift();
 		if (queuedAction) {
-			if (log) console.log('unqueue', this.getActionName(queuedAction));
+			if (log) console.log('unqueue', getActionName(queuedAction));
 			this.handleAction(queuedAction);
 		}
 	}
 
-	getActionName(action: Actions): string {
-		switch (action) {
-			case Actions.NewGame: return 'newGame';
-			case Actions.NewGameOptions: return 'newGameOptions';
-			case Actions.EndGame: return 'endGame';
-			case Actions.PauseResumeGame: return 'pauseResumeGame';
-			case Actions.Undo: return 'undo';
-			case Actions.Left: return 'left';
-			case Actions.LeftAccel: return 'leftAccel';
-			case Actions.Right: return 'right';
-			case Actions.RightAccel: return 'rightAccel';
-			case Actions.Down: return 'down';
-			case Actions.Drop: return 'drop';
-			case Actions.RotateCCW: return 'rotateCCW';
-			case Actions.RotateCW: return 'rotateCW';
-		}
-	}
-
 	async handleAction(action: Actions) {
-		if (log) console.log('action', this.getActionName(action));
+		if (log) console.log('action', getActionName(action));
 		switch (action) {
 			case Actions.NewGame: this.newGame(); break;
 			case Actions.NewGameOptions: this.newGameOptions(); break;
@@ -748,7 +707,7 @@ class MainStore {
 		if (canHoldKey && e.repeat) return;
 
 		if (this.animating || this.heldAction) {
-			if (log) console.log('queue', this.getActionName(action));
+			if (log) console.log('queue', getActionName(action));
 			this.actionQueue.push(action);
 		} else {
 			this.handleAction(action);

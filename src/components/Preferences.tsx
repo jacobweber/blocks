@@ -4,7 +4,7 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'sem
 import { useStore } from '../stores/MainStore';
 
 import styles from './Preferences.module.css';
-import { ActionName } from '../utils/types';
+import { ActionName } from '../utils/helpers';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
-import { GameState } from '../utils/types';
+import { GameState } from '../utils/helpers';
 
 import styles from './ScoreBoard.module.css';
 

@@ -8,8 +8,7 @@ import { PointDefs } from './points/Standard';
 import { Points } from './Points';
 import { PositionedBlock } from './PositionedBlock';
 import { StatusOverlay } from './StatusOverlay';
-import { GameState } from '../utils/types';
-import { pointSize } from '../utils/helpers';
+import { GameState, pointSize } from '../utils/helpers';
 
 const lineOffset = 0.5; // seems to help with antialiasing on small sizes
 
