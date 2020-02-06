@@ -6,7 +6,7 @@ import { Button } from 'semantic-ui-react'
 import styles from './App.module.css';
 import { Board } from './Board';
 import { NextBlock } from './NextBlock';
-import { GameState } from './GameState';
+import { ScoreBoard } from './ScoreBoard';
 import { Preferences } from './Preferences';
 import { HighScores } from './HighScores';
 
@@ -25,8 +25,8 @@ const App = observer(() => {
 					<div className={styles.nextBlock}>
 						<NextBlock />
 					</div>
-					<div className={styles.gameState}>
-						<GameState />
+					<div className={styles.scoreBoard}>
+						<ScoreBoard />
 					</div>
 					<div className={styles.highScores}>
 						<Button onClick={e => mainStore.showHighScores()}>High Scores</Button>

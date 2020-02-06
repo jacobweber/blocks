@@ -1,11 +1,11 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
-import { GameState as State } from '../utils/types';
+import { GameState } from '../utils/types';
 
-import styles from './GameState.module.css';
+import styles from './ScoreBoard.module.css';
 
-const GameState = observer(() => {
+const ScoreBoard = observer(() => {
 	const mainStore = useStore();
  	const prefsStyles = mainStore.preferencesStore.styles;
 
@@ -13,7 +13,7 @@ const GameState = observer(() => {
 		<div className={styles.root} style={{ color: prefsStyles.textColor }}>
 			<table className={styles.score} style={{ borderColor: prefsStyles.outlineColor }}>
 				<tbody>
-					{mainStore.gameState !== State.Reset && (<>
+					{mainStore.gameState !== GameState.Reset && (<>
 						<tr><td>Score</td><td>{mainStore.score.toLocaleString()}</td></tr>
 						<tr><td>Lines</td><td>{mainStore.rows}</td></tr>
 						<tr><td>Level</td><td>{mainStore.level}</td></tr>
@@ -24,4 +24,4 @@ const GameState = observer(() => {
 	);
 });
 
-export { GameState };
+export { ScoreBoard };

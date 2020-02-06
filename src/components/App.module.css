@@ -28,7 +28,7 @@
 .nextBlock {
 	width: 120px;
 }
-.gameState {
+.scoreBoard {
 	margin-top: 30px;
 	flex: 1;
 	align-self: stretch;
