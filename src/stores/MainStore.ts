@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from './PreferencesStore';
 import { NewGameStore } from './NewGameStore';
 import { HighScoresStore, HighScore } from './HighScoresStore';
-import { GameState, KeyActions } from '../utils/types';
+import { GameState, Actions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs } from '../utils/blocks';
 
@@ -40,8 +40,8 @@ class MainStore {
 	undoStack: Array<UndoFrame> = [];
 	nextBlockTypes: Array<BlockType> = [];
 
-	actionQueue: Array<KeyActions> = [];
-	heldAction: KeyActions | null = null;
+	actionQueue: Array<Actions> = [];
+	heldAction: Actions | null = null;
 	heldTimeout: number | undefined = undefined;
 
 	gameState: GameState = GameState.Reset;
@@ -633,14 +633,14 @@ class MainStore {
 		});
 	}
 
-	async startTrackingKey(action: KeyActions): Promise<void> {
+	async startTrackingKey(action: Actions): Promise<void> {
 		this.heldAction = action;
 
 		if (log) console.log('press', this.getActionName(action));
 		this.heldTimeout = window.setTimeout(() => {
 			if (log) console.log('accel', this.getActionName(action));
 			this.heldAction = null;
-			const accelAction = action === KeyActions.Left ? KeyActions.LeftAccel : KeyActions.RightAccel;
+			const accelAction = action === Actions.Left ? Actions.LeftAccel : Actions.RightAccel;
 			if (this.animating) {
 				this.accelLastQueuedAction(accelAction);
 			} else {
@@ -649,12 +649,12 @@ class MainStore {
 		}, this.prefs.leftRightAccelAfterMS);
 	}
 
-	accelLastQueuedAction(action: KeyActions.LeftAccel | KeyActions.RightAccel): void {
+	accelLastQueuedAction(action: Actions.LeftAccel | Actions.RightAccel): void {
 		for (let i = this.actionQueue.length - 1; i >= 0; i--) {
-			if (this.actionQueue[i] === KeyActions.Left && action === KeyActions.LeftAccel) {
+			if (this.actionQueue[i] === Actions.Left && action === Actions.LeftAccel) {
 				this.actionQueue[i] = action;
 				return;
-			} else if (this.actionQueue[i] === KeyActions.Right && action === KeyActions.RightAccel) {
+			} else if (this.actionQueue[i] === Actions.Right && action === Actions.RightAccel) {
 				this.actionQueue[i] = action;
 				return;
 			}
@@ -678,40 +678,40 @@ class MainStore {
 		}
 	}
 
-	getActionName(action: KeyActions): string {
+	getActionName(action: Actions): string {
 		switch (action) {
-			case KeyActions.NewGame: return 'newGame';
-			case KeyActions.NewGameOptions: return 'newGameOptions';
-			case KeyActions.EndGame: return 'endGame';
-			case KeyActions.PauseResumeGame: return 'pauseResumeGame';
-			case KeyActions.Undo: return 'undo';
-			case KeyActions.Left: return 'left';
-			case KeyActions.LeftAccel: return 'leftAccel';
-			case KeyActions.Right: return 'right';
-			case KeyActions.RightAccel: return 'rightAccel';
-			case KeyActions.Down: return 'down';
-			case KeyActions.Drop: return 'drop';
-			case KeyActions.RotateCCW: return 'rotateCCW';
-			case KeyActions.RotateCW: return 'rotateCW';
+			case Actions.NewGame: return 'newGame';
+			case Actions.NewGameOptions: return 'newGameOptions';
+			case Actions.EndGame: return 'endGame';
+			case Actions.PauseResumeGame: return 'pauseResumeGame';
+			case Actions.Undo: return 'undo';
+			case Actions.Left: return 'left';
+			case Actions.LeftAccel: return 'leftAccel';
+			case Actions.Right: return 'right';
+			case Actions.RightAccel: return 'rightAccel';
+			case Actions.Down: return 'down';
+			case Actions.Drop: return 'drop';
+			case Actions.RotateCCW: return 'rotateCCW';
+			case Actions.RotateCW: return 'rotateCW';
 		}
 	}
 
-	async handleAction(action: KeyActions) {
+	async handleAction(action: Actions) {
 		if (log) console.log('action', this.getActionName(action));
 		switch (action) {
-			case KeyActions.NewGame: this.newGame(); break;
-			case KeyActions.NewGameOptions: this.newGameOptions(); break;
-			case KeyActions.EndGame: this.endGame(); break;
-			case KeyActions.PauseResumeGame: this.pauseResume(); break;
-			case KeyActions.Undo: await this.undo(); break;
-			case KeyActions.Left: this.left(); break;
-			case KeyActions.LeftAccel: await this.leftAccel(); break;
-			case KeyActions.Right: this.right(); break;
-			case KeyActions.RightAccel: await this.rightAccel(); break;
-			case KeyActions.Down: await this.down(); break;
-			case KeyActions.Drop: await this.drop(); break;
-			case KeyActions.RotateCCW: this.rotateCCW(); break;
-			case KeyActions.RotateCW: this.rotateCW(); break;
+			case Actions.NewGame: this.newGame(); break;
+			case Actions.NewGameOptions: this.newGameOptions(); break;
+			case Actions.EndGame: this.endGame(); break;
+			case Actions.PauseResumeGame: this.pauseResume(); break;
+			case Actions.Undo: await this.undo(); break;
+			case Actions.Left: this.left(); break;
+			case Actions.LeftAccel: await this.leftAccel(); break;
+			case Actions.Right: this.right(); break;
+			case Actions.RightAccel: await this.rightAccel(); break;
+			case Actions.Down: await this.down(); break;
+			case Actions.Drop: await this.drop(); break;
+			case Actions.RotateCCW: this.rotateCCW(); break;
+			case Actions.RotateCW: this.rotateCW(); break;
 		}
 
 		// in case any more actions were queued
@@ -738,10 +738,10 @@ class MainStore {
 
 		e.preventDefault();
 
-		const noRepeat = action === KeyActions.Drop || action === KeyActions.NewGame || action === KeyActions.NewGameOptions || action === KeyActions.PauseResumeGame;
+		const noRepeat = action === Actions.Drop || action === Actions.NewGame || action === Actions.NewGameOptions || action === Actions.PauseResumeGame;
 		if (noRepeat && e.repeat) return;
 
-		const canHoldKey = (action === KeyActions.Left || action === KeyActions.Right)
+		const canHoldKey = (action === Actions.Left || action === Actions.Right)
 			&& this.prefs.leftRightAccelAfterMS !== 0;
 
 		// ignore repeated left/right keys; use tracking instead

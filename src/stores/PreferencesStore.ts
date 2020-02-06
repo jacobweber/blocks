@@ -1,5 +1,5 @@
 import { decorate, observable, action, computed } from 'mobx';
-import { ActionName, KeyActions } from '../utils/types';
+import { ActionName, Actions } from '../utils/types';
 import { validKey, getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 
 export interface Preferences {
@@ -69,26 +69,26 @@ class PreferencesStore {
 		return this.prefs.styles;
 	}
 
-	get gameKeyMap(): { [key: string]: KeyActions } {
+	get gameKeyMap(): { [key: string]: Actions } {
 		const keys = this.prefs.keys;
 		return {
-			[keys.newGame]: KeyActions.NewGame,
-			[keys.newGameOptions]: KeyActions.NewGameOptions,
-			[keys.endGame]: KeyActions.EndGame,
-			[keys.pauseResumeGame]: KeyActions.PauseResumeGame,
-			[keys.undo]: KeyActions.Undo
+			[keys.newGame]: Actions.NewGame,
+			[keys.newGameOptions]: Actions.NewGameOptions,
+			[keys.endGame]: Actions.EndGame,
+			[keys.pauseResumeGame]: Actions.PauseResumeGame,
+			[keys.undo]: Actions.Undo
 		};
 	}
 
-	get moveKeyMap(): { [key: string]: KeyActions } {
+	get moveKeyMap(): { [key: string]: Actions } {
 		const keys = this.prefs.keys;
 		return {
-			[keys.left]: KeyActions.Left,
-			[keys.right]: KeyActions.Right,
-			[keys.drop]: KeyActions.Drop,
-			[keys.down]: KeyActions.Down,
-			[keys.rotateCCW]: KeyActions.RotateCCW,
-			[keys.rotateCW]: KeyActions.RotateCW
+			[keys.left]: Actions.Left,
+			[keys.right]: Actions.Right,
+			[keys.drop]: Actions.Drop,
+			[keys.down]: Actions.Down,
+			[keys.rotateCCW]: Actions.RotateCCW,
+			[keys.rotateCW]: Actions.RotateCW
 		};
 	}
 
