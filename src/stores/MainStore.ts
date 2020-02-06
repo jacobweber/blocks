@@ -9,6 +9,7 @@ import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
 const log = false;
 const numClearRowsBonus = 4;
 const animDelayMS = 5;
+const junkOdds = 3;
 
 type PointXY = [number, number];
 type ExtentLTRB = [ number, number, number, number ];
@@ -232,6 +233,7 @@ class MainStore {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
 		this.resetGame();
 		this.startLevel = this.prefs.startLevel;
+		this.fillRowsWithJunk();
 		this.setGameState(GameState.Active);
 		this.newBlock();
 	}
@@ -247,6 +249,20 @@ class MainStore {
 				}
 			}
 		);
+	}
+
+	fillRowsWithJunk() {
+		if (this.prefs.rowsJunk === 0) return;
+		for (let y = this.height - 1; y >= this.height - this.prefs.rowsJunk; y--) {
+			for (let x = 0; x < this.width; x++) {
+				if (Math.floor(Math.random() * junkOdds) === 0) {
+					const type = this.getRandomBlockType();
+					this.filledPoints[y][x] = {
+						id: this.getBlockDef(type).id
+					};
+				}
+			}
+		}
 	}
 
 	endGame(): void {
@@ -897,6 +913,7 @@ decorate(MainStore, {
 	resetGameLeavingBoard: action,
 	resetGame: action,
 	newGame: action,
+	fillRowsWithJunk: action,
 	endGame: action,
 	pause: action,
 	resume: action,
