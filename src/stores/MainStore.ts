@@ -233,7 +233,13 @@ class MainStore {
 	}
 
 	endGame(): void {
-		if (this.gameState === GameState.Reset || this.gameState === GameState.Ended) return;
+		if (this.gameState === GameState.Ended) {
+			this.resetGame();
+			this.setGameState(GameState.Reset);
+			return;
+		}
+
+		if (this.gameState === GameState.Reset) return;
 		this.resetGameLeavingBoard();
 		this.setGameState(GameState.Ended);
 		const entry: HighScore = {
