@@ -1,4 +1,4 @@
-export enum GameState { Stopped, Active, Paused };
+export enum GameState { Reset, Ended, Active, Paused };
 
 export enum KeyActions { NewGame, EndGame, PauseResumeGame, Left, LeftAccel, Right, RightAccel, Down, Drop, RotateCCW, RotateCW, Undo }
 

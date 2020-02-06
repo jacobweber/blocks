@@ -13,8 +13,8 @@ const StatusOverlay = observer(() => {
 		<div className={styles.root} style={{ color: prefsStyles.textColor }}>
 			{mainStore.gameState === State.Paused ? (
 				<div className={styles.overlay + ' ' + styles.paused} style={{ borderColor: prefsStyles.gridColor }}>Paused</div>
-			) : (mainStore.gameState === State.Stopped ? (
-				<div className={styles.overlay + ' ' + styles.stopped} style={{ borderColor: prefsStyles.gridColor }}>Game Over</div>
+			) : (mainStore.gameState === State.Ended ? (
+				<div className={styles.overlay + ' ' + styles.ended} style={{ borderColor: prefsStyles.gridColor }}>Game Over</div>
 			) : null)}
 		</div>
 	);

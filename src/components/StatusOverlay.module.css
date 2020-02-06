@@ -19,6 +19,6 @@
 .root .overlay.paused {
 	background-color: #e7dd83;
 }
-.root .overlay.stopped {
+.root .overlay.ended {
 	background-color: #e37373;
 }

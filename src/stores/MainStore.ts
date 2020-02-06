@@ -140,7 +140,7 @@ class MainStore {
 	heldAction: KeyActions | null = null;
 	heldTimeout: number | undefined = undefined;
 
-	gameState: GameState = GameState.Stopped;
+	gameState: GameState = GameState.Reset;
 	animating = false;
 	downTimeout: number | undefined = undefined;
 	lastMoveAboveBlockedSpace: Date | null = null;
@@ -201,9 +201,8 @@ class MainStore {
 		return blockDefs.get(type)!;
 	}
 
-	resetGame(): void {
+	resetGameLeavingBoard(): void {
 		if (log) console.clear();
-		this.gameState = GameState.Stopped;
 		window.clearTimeout(this.downTimeout);
 		this.downTimeout = undefined;
 		window.clearTimeout(this.heldTimeout);
@@ -211,27 +210,32 @@ class MainStore {
 		this.actionQueue = [];
 		this.animating = false;
 		this.heldAction = null;
-		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.positionedBlock = null;
 		this.undoStack = [];
 		this.nextBlockTypes = [];
 		this.lastMoveAboveBlockedSpace = null;
-		this.score = 0;
-		this.rows = 0;
-		this.totalTime = 0;
 		this.unpausedStart = 0;
 	}
 
+	resetGame() {
+		this.resetGameLeavingBoard();
+		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
+		this.score = 0;
+		this.rows = 0;
+		this.totalTime = 0;
+	}
+
 	newGame(): void {
-		if (this.gameState !== GameState.Stopped) return;
+		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
 		this.resetGame();
 		this.setGameState(GameState.Active);
 		this.newBlock();
 	}
 
 	endGame(): void {
-		if (this.gameState === GameState.Stopped) return;
-		this.setGameState(GameState.Stopped);
+		if (this.gameState === GameState.Reset || this.gameState === GameState.Ended) return;
+		this.resetGameLeavingBoard();
+		this.setGameState(GameState.Ended);
 		const entry: HighScore = {
 			name: this.prefs.name,
 			score: this.score,
@@ -242,7 +246,6 @@ class MainStore {
 			time: (new Date().getTime())
 		};
 		const newPosition = this.highScoresStore.recordIfHighScore(entry);
-		this.resetGame();
 		if (newPosition !== null) {
 			this.highScoresStore.dialogShow();
 		}
@@ -889,6 +892,7 @@ decorate(MainStore, {
 	nextBlockDef: computed,
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
+	resetGameLeavingBoard: action,
 	resetGame: action,
 	newGame: action,
 	endGame: action,

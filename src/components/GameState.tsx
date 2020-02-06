@@ -13,7 +13,7 @@ const GameState = observer(() => {
 		<div className={styles.root} style={{ color: prefsStyles.textColor }}>
 			<table className={styles.score} style={{ borderColor: prefsStyles.outlineColor }}>
 				<tbody>
-					{mainStore.gameState !== State.Stopped && (<>
+					{mainStore.gameState !== State.Reset && (<>
 						<tr><td>Score</td><td>{mainStore.score.toLocaleString()}</td></tr>
 						<tr><td>Lines</td><td>{mainStore.rows}</td></tr>
 						<tr><td>Level</td><td>{mainStore.level}</td></tr>
