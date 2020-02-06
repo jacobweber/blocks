@@ -94,7 +94,15 @@ class PreferencesStore {
 			} catch (e) {
 			}
 		}
-		this.prefs = Object.assign({}, defaultPrefs, prefs || {});
+		if (!prefs) prefs = {};
+		this.prefs = {
+			keys: {
+				...defaultPrefs.keys,
+				...prefs.keys
+			},
+			...defaultPrefs,
+			...(prefs || {})
+		};
 	}
 
 	save() {
