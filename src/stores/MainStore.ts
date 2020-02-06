@@ -644,7 +644,6 @@ class MainStore {
 	}
 
 	cancelHeldAction(): void {
-		// TODO: if queued, keyup happens before we start tracking, so ignored
 		if (log && this.heldAction) console.log('release', getActionName(this.heldAction));
 		window.clearTimeout(this.heldTimeout);
 		this.heldAction = null;
