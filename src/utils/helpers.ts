@@ -6,7 +6,7 @@ export enum Actions { NewGame, NewGameOptions, EndGame, PauseResumeGame, Left, L
 
 export type ActionName = 'newGame' | 'newGameOptions' | 'endGame' | 'pauseResumeGame' | 'left' | 'right' | 'down' | 'drop' | 'rotateCCW' | 'rotateCW' | 'undo';
 
-export function getActionName(action: Actions): string {
+export function logAction(action: Actions): string {
 	switch (action) {
 		case Actions.NewGame: return 'newGame';
 		case Actions.NewGameOptions: return 'newGameOptions';

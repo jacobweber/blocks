@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
 import { NewGameStore } from 'stores/NewGameStore';
 import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
-import { GameState, Actions, getActionName, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
+import { GameState, Actions, logAction, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
 import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs } from 'utils/blocks';
 
 const log = false;
@@ -617,9 +617,9 @@ class MainStore {
 		this.heldAction = action;
 		this.heldKey = key;
 
-		if (log) console.log('press', getActionName(action));
+		if (log) console.log('press', logAction(action));
 		this.heldTimeout = window.setTimeout(() => {
-			if (log) console.log('accel', getActionName(action));
+			if (log) console.log('accel', logAction(action));
 			this.heldAction = null;
 			this.heldKey = null;
 			const accelAction = action === Actions.Left ? Actions.LeftAccel : Actions.RightAccel;
@@ -644,7 +644,7 @@ class MainStore {
 	}
 
 	cancelHeldAction(): void {
-		if (log && this.heldAction) console.log('release', getActionName(this.heldAction));
+		if (log && this.heldAction) console.log('release', logAction(this.heldAction));
 		window.clearTimeout(this.heldTimeout);
 		this.heldAction = null;
 		this.heldKey = null;
@@ -655,13 +655,13 @@ class MainStore {
 		if (this.animating) return;
 		const queuedAction = this.actionQueue.shift();
 		if (queuedAction) {
-			if (log) console.log('unqueue', getActionName(queuedAction));
+			if (log) console.log('unqueue', logAction(queuedAction));
 			this.handleAction(queuedAction);
 		}
 	}
 
 	async handleAction(action: Actions) {
-		if (log) console.log('action', getActionName(action));
+		if (log) console.log('action', logAction(action));
 		switch (action) {
 			case Actions.NewGame: this.newGame(); break;
 			case Actions.NewGameOptions: this.newGameOptions(); break;
@@ -707,7 +707,7 @@ class MainStore {
 		if (canHoldKey && e.repeat) return;
 
 		if (this.animating || this.heldAction) {
-			if (log) console.log('queue', getActionName(action));
+			if (log) console.log('queue', logAction(action));
 			this.actionQueue.push(action);
 		} else {
 			this.handleAction(action);
