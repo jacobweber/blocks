@@ -1,6 +1,6 @@
 import { decorate, observable, action, computed } from 'mobx';
 
-import { ActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
+import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
 
 export interface Preferences {
 	keys: {
@@ -185,10 +185,10 @@ class PreferencesStore {
 		});
 	}
 
-	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: ActionName): void {
+	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: KeyActionName): void {
 		if (validKey(e.key)) {
 			let value = this.prefs.keys[name];
-			const keysAllowingModifiers: Array<ActionName> = ['newGame', 'newGameOptions', 'endGame', 'pauseResumeGame', 'undo'];
+			const keysAllowingModifiers: Array<KeyActionName> = ['newGame', 'newGameOptions', 'endGame', 'pauseResumeGame', 'undo'];
 			const allowModifiers = keysAllowingModifiers.includes(name);
 			let keyStr = allowModifiers ? getModifiedKeyStr(e) : getKeyStr(e);
 			if (keyStr === 'Backspace') {

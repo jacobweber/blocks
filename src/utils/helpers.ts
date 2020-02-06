@@ -4,7 +4,7 @@ export enum GameState { Reset, Ended, Active, Paused };
 
 export enum Actions { NewGame, NewGameOptions, EndGame, PauseResumeGame, Left, LeftAccel, Right, RightAccel, Down, Drop, RotateCCW, RotateCW, Undo }
 
-export type ActionName = 'newGame' | 'newGameOptions' | 'endGame' | 'pauseResumeGame' | 'left' | 'right' | 'down' | 'drop' | 'rotateCCW' | 'rotateCW' | 'undo';
+export type KeyActionName = 'newGame' | 'newGameOptions' | 'endGame' | 'pauseResumeGame' | 'left' | 'right' | 'down' | 'drop' | 'rotateCCW' | 'rotateCW' | 'undo';
 
 export function logAction(action: Actions): string {
 	switch (action) {

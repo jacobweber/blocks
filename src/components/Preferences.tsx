@@ -4,14 +4,14 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'sem
 
 import styles from 'components/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
-import { ActionName } from 'utils/helpers';
+import { KeyActionName } from 'utils/helpers';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
 	const keys = preferencesStore.prefs.keys;
 	const prefsStyles = preferencesStore.prefs.styles;
 	const save = () => preferencesStore.dialogSave();
-	const handleKeySelectorKeyDown = (name: ActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
+	const handleKeySelectorKeyDown = (name: KeyActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
 		type: 'color',
 		className: styles.colorInput
