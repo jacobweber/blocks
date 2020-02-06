@@ -5,7 +5,7 @@ import { NewGameStore } from './NewGameStore';
 import { HighScoresStore, HighScore } from './HighScoresStore';
 import { GameState, KeyActions } from '../utils/types';
 import { getKeyStr, getModifiedKeyStr } from '../utils/helpers';
-import { PointID, BlockType, BlockDef, PointXY, blockDefs } from '../utils/blocks';
+import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs } from '../utils/blocks';
 
 const log = false;
 const numClearRowsBonus = 4;
@@ -15,7 +15,7 @@ const junkOdds = 3;
 export interface PositionedPoint {
 	x: number;
 	y: number;
-	id: PointID;
+	id: PointSymbolID;
 }
 
 export interface PositionedBlock {
@@ -36,7 +36,7 @@ class MainStore {
 	height: number = 20;
 
 	positionedBlock: PositionedBlock | null = null;
-	filledPoints: Array<Array<PointID | null>> = []; // [y][x]
+	filledPoints: Array<Array<PointSymbolID | null>> = []; // [y][x]
 	undoStack: Array<UndoFrame> = [];
 	nextBlockTypes: Array<BlockType> = [];
 
@@ -376,7 +376,7 @@ class MainStore {
 		const numFlashes = hasBonus ? 1 : 1;
 		let count = 0;
 		const flash = action(() => {
-			const id = count % 2 === 0 ? PointID.FlashOn : PointID.FlashOff;
+			const id = count % 2 === 0 ? PointSymbolID.FlashOn : PointSymbolID.FlashOff;
 			for (let row = 0; row < rows.length; row++) {
 				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => id);
 			}

@@ -3,12 +3,12 @@ export type ExtentLTRB = [ number, number, number, number ];
 export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
 export interface BlockDef {
-	id: PointID;
+	id: PointSymbolID;
 	size: number;
 	rotations: Array<Rotation>; // index is rotation number
 }
 
-export enum PointID {
+export enum PointSymbolID {
 	Line = 'line',
 	Square = 'square',
 	Are = 'are',
@@ -21,7 +21,7 @@ export enum PointID {
 }
 
 const line: BlockDef = {
-	id: PointID.Line,
+	id: PointSymbolID.Line,
 	size: 4,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [3,1]], extent: [0,1,3,1] },
@@ -29,14 +29,14 @@ const line: BlockDef = {
 	]
 };
 const square: BlockDef = {
-	id: PointID.Square,
+	id: PointSymbolID.Square,
 	size: 2,
 	rotations: [
 		{ points: [[0,0], [1,0], [0,1], [1,1]], extent: [0,0,1,1] }
 	]
 };
 const are: BlockDef = {
-	id: PointID.Are,
+	id: PointSymbolID.Are,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [2,2]], extent: [0,1,2,2] },
@@ -46,7 +46,7 @@ const are: BlockDef = {
 	]
 };
 const ell: BlockDef = {
-	id: PointID.Ell,
+	id: PointSymbolID.Ell,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [0,2]], extent: [0,1,2,2] },
@@ -56,7 +56,7 @@ const ell: BlockDef = {
 	]
 };
 const ess: BlockDef = {
-	id: PointID.Ess,
+	id: PointSymbolID.Ess,
 	size: 3,
 	rotations: [
 		{ points: [[1,1], [2,1], [0,2], [1,2]], extent: [0,1,2,2] },
@@ -64,7 +64,7 @@ const ess: BlockDef = {
 	]
 };
 const zee: BlockDef = {
-	id: PointID.Zee,
+	id: PointSymbolID.Zee,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [1,2], [2,2]], extent: [0,1,2,2] },
@@ -72,7 +72,7 @@ const zee: BlockDef = {
 	]
 };
 const tee: BlockDef = {
-	id: PointID.Tee,
+	id: PointSymbolID.Tee,
 	size: 3,
 	rotations: [
 		{ points: [[0,1], [1,1], [2,1], [1,2]], extent: [0,1,2,2] },
