@@ -691,11 +691,6 @@ class MainStore {
 			keyStr = getKeyStr(e);
 			action = this.preferencesStore.moveKeyMap[keyStr];
 			if (action === undefined) {
-				// ignore browser keys
-				if (keyStr === 'Meta+ArrowLeft' || keyStr === 'Meta+ArrowRight' || keyStr === 'Meta+[' || keyStr === 'Meta+]') {
-					if (log) console.log('ignore browser key');
-					e.preventDefault();
-				}
 				return;
 			}
 		}
