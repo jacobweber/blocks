@@ -610,7 +610,7 @@ class MainStore {
 		});
 	}
 
-	async startTrackingKey(action: Actions): Promise<void> {
+	async startHeldAction(action: Actions): Promise<void> {
 		this.heldAction = action;
 
 		if (log) console.log('press', getActionName(action));
@@ -638,7 +638,7 @@ class MainStore {
 		}
 	}
 
-	stopTrackingKey(): void {
+	cancelHeldAction(): void {
 		// TODO: if queued, keyup happens before we start tracking, so ignored
 		if (log && this.heldAction) console.log('release', getActionName(this.heldAction));
 		window.clearTimeout(this.heldTimeout);
@@ -714,7 +714,7 @@ class MainStore {
 		}
 
 		if (canHoldKey && !this.heldAction) {
-			this.startTrackingKey(action);
+			this.startHeldAction(action);
 		}
 	}
 
@@ -723,7 +723,7 @@ class MainStore {
 		const moveAction = this.preferencesStore.moveKeyMap[keyStr];
 		if (moveAction === undefined) return;
 		if (this.heldAction && this.heldAction === moveAction) {
-			this.stopTrackingKey();
+			this.cancelHeldAction();
 		}
 	}
 
