@@ -1,5 +1,5 @@
 import React from 'react';
-import { PointID } from '../stores/MainStore';
+import { PointID } from '../utils/blocks';
 import { pointSize } from '../utils/helpers';
 
 type PointProps = {
