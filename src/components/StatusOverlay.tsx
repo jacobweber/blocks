@@ -1,9 +1,9 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import { useStore } from '../stores/MainStore';
-import { GameState as State } from '../utils/helpers';
 
-import styles from './StatusOverlay.module.css';
+import styles from 'components/StatusOverlay.module.css';
+import { useStore } from 'stores/MainStore';
+import { GameState as State } from 'utils/helpers';
 
 const StatusOverlay = observer(() => {
 	const mainStore = useStore();

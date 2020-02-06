@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
 import { Button, Header, Icon, Modal } from 'semantic-ui-react'
-import { useStore } from '../stores/MainStore';
 
-import styles from './NewGame.module.css';
+import styles from 'components/NewGame.module.css';
+import { useStore } from 'stores/MainStore';
 
 const NewGame = observer(() => {
 	const newGameStore = useStore().newGameStore;

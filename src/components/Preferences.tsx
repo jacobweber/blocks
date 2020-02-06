@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
 import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'semantic-ui-react'
-import { useStore } from '../stores/MainStore';
 
-import styles from './Preferences.module.css';
-import { ActionName } from '../utils/helpers';
+import styles from 'components/Preferences.module.css';
+import { useStore } from 'stores/MainStore';
+import { ActionName } from 'utils/helpers';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;

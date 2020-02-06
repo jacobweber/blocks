@@ -1,6 +1,7 @@
 import React from 'react';
-import { PointSymbolID } from '../utils/blocks';
-import { pointSize } from '../utils/helpers';
+
+import { PointSymbolID } from 'utils/blocks';
+import { pointSize } from 'utils/helpers';
 
 type PointProps = {
 	key: string;

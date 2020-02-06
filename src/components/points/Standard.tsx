@@ -1,5 +1,6 @@
 import React from 'react';
-import { lightenColor } from '../../utils/colors';
+
+import { lightenColor } from 'utils/colors';
 
 const types = [
 	{ id: 'line', color: '#ADFF2F' },

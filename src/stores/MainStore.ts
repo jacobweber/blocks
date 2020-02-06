@@ -1,10 +1,11 @@
 import { decorate, observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
-import { PreferencesStore, Preferences } from './PreferencesStore';
-import { NewGameStore } from './NewGameStore';
-import { HighScoresStore, HighScore } from './HighScoresStore';
-import { GameState, Actions, getActionName, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from '../utils/helpers';
-import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs } from '../utils/blocks';
+
+import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
+import { NewGameStore } from 'stores/NewGameStore';
+import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
+import { GameState, Actions, getActionName, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
+import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs } from 'utils/blocks';
 
 const log = false;
 const numClearRowsBonus = 4;

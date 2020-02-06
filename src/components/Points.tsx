@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import { useStore } from '../stores/MainStore';
 
-import { Point } from './Point';
+import { useStore } from 'stores/MainStore';
+import { Point } from 'components/Point';
 
 const Points = observer(() => {
 	const mainStore = useStore();

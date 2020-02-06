@@ -1,10 +1,10 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import { useStore } from '../stores/MainStore';
 
-import styles from './NextBlock.module.css';
-import { Point } from './Point';
-import { pointSize } from '../utils/helpers';
+import styles from 'components/NextBlock.module.css';
+import { useStore } from 'stores/MainStore';
+import { Point } from 'components/Point';
+import { pointSize } from 'utils/helpers';
 
 const NextBlock = observer(() => {
 	const mainStore = useStore();

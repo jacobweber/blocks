@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
 import { Button, Header, Icon, Modal, Table, Confirm, Form, Input } from 'semantic-ui-react'
-import { useStore } from '../stores/MainStore';
 
-import styles from './HighScores.module.css';
+import styles from 'components/HighScores.module.css';
+import { useStore } from 'stores/MainStore';
 
 const HighScores = observer(() => {
 	const highScoresStore = useStore().highScoresStore;

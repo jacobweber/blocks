@@ -2,13 +2,13 @@ import React from 'react';
 import { observer } from "mobx-react-lite"
 import { useStore } from '../stores/MainStore';
 
-import styles from './Board.module.css';
-import { BoardDef } from './boards/Black';
-import { PointDefs } from './points/Standard';
-import { Points } from './Points';
-import { PositionedBlock } from './PositionedBlock';
-import { StatusOverlay } from './StatusOverlay';
-import { GameState, pointSize } from '../utils/helpers';
+import styles from 'components/Board.module.css';
+import { BoardDef } from 'components/boards/Black';
+import { PointDefs } from 'components/points/Standard';
+import { Points } from 'components/Points';
+import { PositionedBlock } from 'components/PositionedBlock';
+import { StatusOverlay } from 'components/StatusOverlay';
+import { GameState, pointSize } from 'utils/helpers';
 
 const lineOffset = 0.5; // seems to help with antialiasing on small sizes
 

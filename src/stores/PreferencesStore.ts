@@ -1,5 +1,6 @@
 import { decorate, observable, action, computed } from 'mobx';
-import { ActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from '../utils/helpers';
+
+import { ActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
 
 export interface Preferences {
 	keys: {

@@ -1,15 +1,15 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import { useStore } from '../stores/MainStore';
 import { Button } from 'semantic-ui-react'
 
-import styles from './App.module.css';
-import { Board } from './Board';
-import { NextBlock } from './NextBlock';
-import { ScoreBoard } from './ScoreBoard';
-import { Preferences } from './Preferences';
-import { HighScores } from './HighScores';
-import { NewGame } from './NewGame';
+import styles from 'components/App.module.css';
+import { useStore } from 'stores/MainStore';
+import { Board } from 'components/Board';
+import { NextBlock } from 'components/NextBlock';
+import { ScoreBoard } from 'components/ScoreBoard';
+import { Preferences } from 'components/Preferences';
+import { HighScores } from 'components/HighScores';
+import { NewGame } from 'components/NewGame';
 
 const App = observer(() => {
 	const mainStore = useStore();
