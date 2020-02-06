@@ -208,8 +208,8 @@ class PreferencesStore {
 				}
 			});
 		}
-		e.stopPropagation();
-		e.nativeEvent.stopPropagation();
+		e.preventDefault();
+		e.nativeEvent.preventDefault();
 	}
 
 	handleDialogColorChange(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
