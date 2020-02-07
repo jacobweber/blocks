@@ -1,8 +1,9 @@
 import { decorate, observable, action, computed } from 'mobx';
 
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
-import { PositionedPoint } from './MainStore';
-import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor, defaultEdit } from 'utils/blocks';
+import { PositionedPoint } from 'stores/MainStore';
+import { BlockEditStore } from 'stores/BlockEditStore';
+import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor } from 'utils/blocks';
 
 export interface Preferences {
 	keys: {
@@ -65,6 +66,8 @@ const defaultPrefs: Preferences = {
 type DoneCallbackType = () => void;
 
 class PreferencesStore {
+	blockEditStore: BlockEditStore = new BlockEditStore(this);
+
 	visible: boolean = false;
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
@@ -272,82 +275,10 @@ class PreferencesStore {
 			id: blockDef.id
 		}));
 	}
-
-	addBlockDef(def: BlockDef): void {
-		this.setPrefsEdited({
-			...this.prefsEdited,
-			blockDefs: [
-				...this.prefsEdited.blockDefs,
-				def
-			]
-		});
-	}
-
-	updateBlockDef(type: BlockType, def: BlockDef): void {
-		this.setPrefsEdited({
-			...this.prefsEdited,
-			blockDefs: [
-				...this.prefsEdited.blockDefs.slice(0, type),
-				def,
-				...this.prefsEdited.blockDefs.slice(type + 1)
-			]
-		});
-	}
-
-	deleteBlockDef(type: BlockType): void {
-		this.setPrefsEdited({
-			...this.prefsEdited,
-			blockDefs: [
-				...this.prefsEdited.blockDefs.slice(0, type),
-				...this.prefsEdited.blockDefs.slice(type + 1)
-			]
-		});
-	}
-
-	blockAddShow() {
-		this.blockEditType = this.prefsEdited.blockDefs.length;
-		this.blockEditAdding = true;
-		this.addBlockDef(defaultEdit);
-		this.blockEditVisible = true;
-	}
-
-	blockEditShow(type: BlockType, def: BlockDef) {
-		this.blockEditType = type;
-		this.blockEditAdding = false;
-		this.blockEditVisible = true;
-	}
-
-	blockEditCancel() {
-		this.blockEditVisible = false;
-		if (this.blockEditAdding && this.blockEditType !== null) {
-			this.deleteBlockDef(this.blockEditType);
-		}
-		this.blockEditType = null;
-		this.blockEditAdding = false;
-	}
-
-	blockEditSave(def: BlockDef) {
-		this.blockEditVisible = false;
-		if (this.blockEditType !== null) {
-			this.updateBlockDef(this.blockEditType, def);
-		}
-		this.blockEditType = null;
-		this.blockEditAdding = false;
-	}
-
-	blockEditDelete() {
-		this.blockEditVisible = false;
-		if (this.blockEditType !== null) {
-			this.deleteBlockDef(this.blockEditType);
-		}
-		this.blockEditAdding = false;
-	}
 }
 
 decorate(PreferencesStore, {
 	visible: observable,
-	blockEditVisible: observable,
-	blockEditType: observable,
 	prefs: observable.ref,
 	prefsEdited: observable.ref,
 	blockColors: computed,
@@ -366,12 +297,7 @@ decorate(PreferencesStore, {
 	dialogShow: action,
 	dialogCancel: action,
 	dialogSave: action,
-	dialogReset: action,
-	blockAddShow: action,
-	blockEditShow: action,
-	blockEditCancel: action,
-	blockEditSave: action,
-	blockEditDelete: action
+	dialogReset: action
 });
 
 export { PreferencesStore };

@@ -38,7 +38,7 @@ const Preferences = observer(() => {
 			confirmButton='Reset'
 		/>
 
-		{preferencesStore.blockEditVisible && <BlockEdit />}
+		{preferencesStore.blockEditStore.visible && <BlockEdit />}
 
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
 			<Header icon='setting' content='Preferences' />
@@ -150,13 +150,13 @@ const Preferences = observer(() => {
 					<div className={styles.blocks}>
 						{prefsEdited.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
-								<Button type='button' basic onClick={e => preferencesStore.blockEditShow(idx, def)}>
+								<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowEdit(idx, def)}>
 									<Block def={def} prefix='prefs-' />
 								</Button>
 							</div>
 						))}
 						<div className={styles.block + ' ' + styles.addBlock}>
-							<Button type='button' basic onClick={e => preferencesStore.blockAddShow()}>
+							<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowAdd()}>
 								<Icon size='huge' name='add' />
 								Add...
 							</Button>

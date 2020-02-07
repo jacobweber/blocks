@@ -15,7 +15,8 @@ const fixOdds = function(odds: string): (number | '') {
 
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
-	const origDef = preferencesStore.prefs.blockDefs[preferencesStore.blockEditType!];
+	const blockEditStore = preferencesStore.blockEditStore;
+	const origDef = preferencesStore.prefsEdited.blockDefs[blockEditStore.blockType!];
 
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
 		type: 'color',
@@ -31,9 +32,9 @@ const BlockEdit = observer(() => {
 	const [ rotate270, setRotate270 ] = useState(origDef.rotate270);
 	const [ points, setPoints ] = useState<PointBitmap>(pointsXYToBitmap(origDef.points));
 
-	const cancel = () => preferencesStore.blockEditCancel();
-	const del = () => preferencesStore.blockEditDelete();
-	const ok = () => preferencesStore.blockEditSave({
+	const cancel = () => blockEditStore.dialogCancel();
+	const del = () => blockEditStore.dialogDelete();
+	const ok = () => blockEditStore.dialogSave({
 		id: name,
 		color,
 		odds: odds || 0,
