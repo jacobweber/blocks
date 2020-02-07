@@ -2,7 +2,7 @@ import { decorate, observable, action, computed } from 'mobx';
 
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
 import { PositionedPoint } from './MainStore';
-import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor } from 'utils/blocks';
+import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor, defaultEdit } from 'utils/blocks';
 
 export interface Preferences {
 	keys: {
@@ -302,14 +302,7 @@ class PreferencesStore {
 	blockAddShow() {
 		this.blockEditType = this.prefs.blockDefs.length;
 		this.blockEditAdding = true;
-		this.addBlockDef({
-			id: 'sample',
-			color: '#AA0000',
-			odds: 1,
-			size: 3,
-			canRotate: [ true, true, true ],
-			points: []
-		});
+		this.addBlockDef(defaultEdit);
 		this.blockEditVisible = true;
 	}
 

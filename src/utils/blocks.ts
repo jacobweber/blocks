@@ -19,6 +19,15 @@ export interface BlockColor {
 
 export type PointSymbolID = string;
 
+export const defaultEdit: BlockDef = {
+	id: 'sample',
+	color: '#AA0000',
+	odds: 1,
+	size: 3,
+	canRotate: [ true, true, true ],
+	points: []
+};
+
 const line: BlockDef = {
 	id: 'line',
 	color: '#ADFF2F',
