@@ -12,6 +12,11 @@ export interface BlockDef {
 	points: Array<PointXY>;
 }
 
+export interface BlockColor {
+	id: PointSymbolID;
+	color: string;
+}
+
 export type PointSymbolID = string;
 
 const line: BlockDef = {

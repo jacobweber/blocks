@@ -2,7 +2,7 @@ import { decorate, observable, action, computed } from 'mobx';
 
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
 import { PositionedPoint } from './MainStore';
-import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
+import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor } from 'utils/blocks';
 
 export interface Preferences {
 	keys: {
@@ -79,6 +79,14 @@ class PreferencesStore {
 
 	get blockDefs() {
 		return this.prefs.blockDefs;
+	}
+
+	get blockColors(): Array<BlockColor> {
+		return [
+			{ id: 'flashOn', color: '#000000' },
+			{ id: 'flashOff', color: '#FFFFFF' },
+			...this.blockDefs
+		];
 	}
 
 	get blockRotations(): Array<BlockRotations> {
@@ -339,6 +347,7 @@ decorate(PreferencesStore, {
 	blockEditType: observable,
 	prefs: observable.ref,
 	blockDefs: computed,
+	blockColors: computed,
 	blockRotations: computed,
 	weightedBlockTypes: computed,
 	styles: computed,
