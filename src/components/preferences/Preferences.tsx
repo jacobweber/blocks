@@ -10,8 +10,10 @@ import { BlockEdit } from 'components/preferences/BlockEdit';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
-	const keys = preferencesStore.prefs.keys;
-	const prefsStyles = preferencesStore.prefs.styles;
+	const editedPrefs = preferencesStore.editedPrefs;
+	const keys = editedPrefs.keys;
+	const prefsStyles = editedPrefs.styles;
+	const cancel = () => preferencesStore.dialogCancel();
 	const save = () => preferencesStore.dialogSave();
 	const handleKeySelectorKeyDown = (name: KeyActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
@@ -38,14 +40,14 @@ const Preferences = observer(() => {
 
 		{preferencesStore.blockEditVisible && <BlockEdit />}
 
-		<Modal className={styles.root} open={true} closeIcon onClose={save}>
+		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
 			<Header icon='setting' content='Preferences' />
 			<Modal.Content scrolling>
 				<Form>
 					<Form.Group>
 						<Form.Field>
 							<label>Your Name</label>
-							<Input onChange={e => preferencesStore.handleChangeText(e, 'name')} value={preferencesStore.prefs.name} />
+							<Input onChange={e => preferencesStore.handleChangeText(e, 'name')} value={editedPrefs.name} />
 						</Form.Field>
 					</Form.Group>
 
@@ -54,7 +56,7 @@ const Preferences = observer(() => {
 							<Checkbox
 								label='Allow Undo'
 								onChange={e => preferencesStore.handleChangeAllowUndo(e)}
-								checked={preferencesStore.prefs.allowUndo} />
+								checked={editedPrefs.allowUndo} />
 						</Form.Field>
 					</Form.Group>
 
@@ -65,7 +67,7 @@ const Preferences = observer(() => {
 								label={{ basic: true, content: 'ms' }}
 								labelPosition='right'
 								onChange={e => preferencesStore.handleChangeLeftRightAccel(e)}
-								value={preferencesStore.prefs.leftRightAccelAfterMS}
+								value={editedPrefs.leftRightAccelAfterMS}
 							/>
 						</Form.Field>
 					</Form.Group>
@@ -146,7 +148,7 @@ const Preferences = observer(() => {
 
 					<Header as='h3' dividing>Blocks</Header>
 					<div className={styles.blocks}>
-						{preferencesStore.prefs.blockDefs.map((def, idx) => (
+						{editedPrefs.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button type='button' basic onClick={e => preferencesStore.blockEditShow(idx, def)}>
 									<Block def={def} prefix='prefs-' />
@@ -163,7 +165,10 @@ const Preferences = observer(() => {
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
-				<Button onClick={reset} color='red'>
+				<Button onClick={cancel} color='red'>
+					<Icon name='cancel' /> Cancel
+				</Button>
+				<Button onClick={reset} color='black'>
 					<Icon name='undo' /> Reset
 				</Button>
 				<Button onClick={save} color='green'>

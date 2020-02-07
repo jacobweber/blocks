@@ -68,6 +68,7 @@ class PreferencesStore {
 	visible: boolean = false;
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
+	editedPrefs: Preferences = this.prefs;
 	gameBlockDefs: Array<BlockDef> = [];
 	prefsSymbolPrefix = 'prefs-'; // will need to be blank if using static SVG for pieces
 
@@ -154,6 +155,7 @@ class PreferencesStore {
 
 	dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
+		this.editedPrefs = this.prefs;
 		if (doneCallback) {
 			this.doneCallback = doneCallback;
 		}
@@ -161,7 +163,7 @@ class PreferencesStore {
 
 	dialogCancel() {
 		this.visible = false;
-		this.load();
+		this.editedPrefs = this.prefs;
 		if (this.doneCallback) {
 			this.doneCallback();
 			delete this.doneCallback;
@@ -170,6 +172,8 @@ class PreferencesStore {
 
 	dialogSave() {
 		this.visible = false;
+		this.prefs = this.editedPrefs;
+		this.editedPrefs = this.prefs;
 		this.save();
 		if (this.doneCallback) {
 			this.doneCallback();
@@ -178,11 +182,11 @@ class PreferencesStore {
 	}
 
 	dialogReset() {
-		this.prefs = defaultPrefs;
+		this.editedPrefs = defaultPrefs;
 	}
 
-	setPrefs(prefs: Preferences): void {
-		this.prefs = prefs;
+	setEditedPrefs(prefs: Preferences): void {
+		this.editedPrefs = prefs;
 	}
 
 	lockGamePrefs() {
@@ -190,11 +194,11 @@ class PreferencesStore {
 	}
 
 	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
-		this.setPrefs({
+		this.prefs = {
 			...this.prefs,
 			startLevel,
 			rowsJunk
-		});
+		};
 		this.save();
 	}
 
@@ -204,29 +208,29 @@ class PreferencesStore {
 			value = parseInt(e.target.value, 10);
 			if (isNaN(value)) return;
 		}
-		this.setPrefs({
-			...this.prefs,
+		this.setEditedPrefs({
+			...this.editedPrefs,
 			leftRightAccelAfterMS: value
 		});
 	}
 
 	handleChangeText(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
-		this.setPrefs({
-			...this.prefs,
+		this.setEditedPrefs({
+			...this.editedPrefs,
 			[name]: e.target.value
 		});
 	}
 
 	handleChangeAllowUndo(e: React.FormEvent<HTMLInputElement>): void {
-		this.setPrefs({
-			...this.prefs,
-			allowUndo: !this.prefs.allowUndo
+		this.setEditedPrefs({
+			...this.editedPrefs,
+			allowUndo: !this.editedPrefs.allowUndo
 		});
 	}
 
 	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: KeyActionName): void {
 		if (validKey(e.key)) {
-			let value = this.prefs.keys[name];
+			let value = this.editedPrefs.keys[name];
 			const keysAllowingModifiers: Array<KeyActionName> = ['newGame', 'newGameOptions', 'endGame', 'pauseResumeGame', 'undo'];
 			const allowModifiers = keysAllowingModifiers.includes(name);
 			let keyStr = allowModifiers ? getModifiedKeyStr(e) : getKeyStr(e);
@@ -239,10 +243,10 @@ class PreferencesStore {
 			} else {
 				value = keyStr;
 			}
-			this.setPrefs({
-				...this.prefs,
+			this.setEditedPrefs({
+				...this.editedPrefs,
 				keys: {
-					...this.prefs.keys,
+					...this.editedPrefs.keys,
 					[name]: value
 				}
 			});
@@ -252,10 +256,10 @@ class PreferencesStore {
 	}
 
 	handleDialogColorChange(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
-		this.setPrefs({
-			...this.prefs,
+		this.setEditedPrefs({
+			...this.editedPrefs,
 			styles: {
-				...this.prefs.styles,
+				...this.editedPrefs.styles,
 				[name]: e.target.value
 			}
 		});
@@ -270,38 +274,38 @@ class PreferencesStore {
 	}
 
 	addBlockDef(def: BlockDef): void {
-		this.setPrefs({
-			...this.prefs,
+		this.setEditedPrefs({
+			...this.editedPrefs,
 			blockDefs: [
-				...this.prefs.blockDefs,
+				...this.editedPrefs.blockDefs,
 				def
 			]
 		});
 	}
 
 	updateBlockDef(type: BlockType, def: BlockDef): void {
-		this.setPrefs({
-			...this.prefs,
+		this.setEditedPrefs({
+			...this.editedPrefs,
 			blockDefs: [
-				...this.prefs.blockDefs.slice(0, type),
+				...this.editedPrefs.blockDefs.slice(0, type),
 				def,
-				...this.prefs.blockDefs.slice(type + 1)
+				...this.editedPrefs.blockDefs.slice(type + 1)
 			]
 		});
 	}
 
 	deleteBlockDef(type: BlockType): void {
-		this.setPrefs({
-			...this.prefs,
+		this.setEditedPrefs({
+			...this.editedPrefs,
 			blockDefs: [
-				...this.prefs.blockDefs.slice(0, type),
-				...this.prefs.blockDefs.slice(type + 1)
+				...this.editedPrefs.blockDefs.slice(0, type),
+				...this.editedPrefs.blockDefs.slice(type + 1)
 			]
 		});
 	}
 
 	blockAddShow() {
-		this.blockEditType = this.prefs.blockDefs.length;
+		this.blockEditType = this.editedPrefs.blockDefs.length;
 		this.blockEditAdding = true;
 		this.addBlockDef(defaultEdit);
 		this.blockEditVisible = true;
@@ -345,6 +349,7 @@ decorate(PreferencesStore, {
 	blockEditVisible: observable,
 	blockEditType: observable,
 	prefs: observable.ref,
+	editedPrefs: observable.ref,
 	blockColors: computed,
 	gameBlockDefs: observable,
 	prefsSymbolPrefix: observable,
@@ -355,8 +360,9 @@ decorate(PreferencesStore, {
 	moveKeyMap: computed,
 	load: action,
 	save: action,
-	setPrefs: action,
+	setEditedPrefs: action,
 	lockGamePrefs: action,
+	saveNewGameOptions: action,
 	dialogShow: action,
 	dialogCancel: action,
 	dialogSave: action,
