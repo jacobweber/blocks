@@ -764,7 +764,7 @@ class MainStore {
 	}
 
 	getNextBlockPoints(): Array<PositionedPoint> {
-		if (!this.nextBlockType) return [];
+		if (this.nextBlockType === null) return [];
 		const rotation = this.getBlockRotations(this.nextBlockType)[0];
 		const top = rotation.extent[1];
 		const id = this.getBlockDef(this.nextBlockType).id;
