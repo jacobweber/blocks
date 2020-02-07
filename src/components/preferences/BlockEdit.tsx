@@ -26,9 +26,9 @@ const BlockEdit = observer(() => {
 	const [ odds, setOdds ] = useState<number|''>(origDef.odds);
 	const [ size, setSize ] = useState(origDef.size);
 	const [ color, setColor ] = useState(origDef.color);
-	const [ rotate90, setRotate90 ] = useState(origDef.canRotate[0]);
-	const [ rotate180, setRotate180 ] = useState(origDef.canRotate[1]);
-	const [ rotate270, setRotate270 ] = useState(origDef.canRotate[2]);
+	const [ rotate90, setRotate90 ] = useState(origDef.rotate90);
+	const [ rotate180, setRotate180 ] = useState(origDef.rotate180);
+	const [ rotate270, setRotate270 ] = useState(origDef.rotate270);
 	const [ points, setPoints ] = useState<PointBitmap>(pointsXYToBitmap(origDef.points));
 
 	const cancel = () => preferencesStore.blockEditCancel();
@@ -38,7 +38,9 @@ const BlockEdit = observer(() => {
 		color,
 		odds: odds || 0,
 		size,
-		canRotate: [ rotate90, rotate180, rotate270 ],
+		rotate90,
+		rotate180,
+		rotate270,
 		points: pointBitmapToXY(points)
 	});
 

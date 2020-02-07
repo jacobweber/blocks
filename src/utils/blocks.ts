@@ -8,7 +8,9 @@ export interface BlockDef {
 	color: string;
 	odds: number;
 	size: number;
-	canRotate: [ boolean, boolean, boolean ]; // 90, 180, 270
+	rotate90: boolean;
+	rotate180: boolean;
+	rotate270: boolean;
 	points: Array<PointXY>;
 }
 
@@ -25,7 +27,9 @@ export const defaultEdit: BlockDef = {
 	odds: 10,
 	size: 3,
 	points: [],
-	canRotate: [ true, true, true ]
+	rotate90: true,
+	rotate180: true,
+	rotate270: true
 };
 
 const line: BlockDef = {
@@ -34,7 +38,9 @@ const line: BlockDef = {
 	odds: 10,
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
-	canRotate: [ true, false, false ]
+	rotate90: true,
+	rotate180: false,
+	rotate270: false
 };
 const square: BlockDef = {
 	id: 'square',
@@ -42,7 +48,9 @@ const square: BlockDef = {
 	odds: 10,
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
-	canRotate: [ false, false, false ]
+	rotate90: false,
+	rotate180: false,
+	rotate270: false
 };
 const are: BlockDef = {
 	id: 'are',
@@ -50,7 +58,9 @@ const are: BlockDef = {
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
-	canRotate: [ true, true, true ]
+	rotate90: true,
+	rotate180: true,
+	rotate270: true
 };
 const ell: BlockDef = {
 	id: 'ell',
@@ -58,7 +68,9 @@ const ell: BlockDef = {
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
-	canRotate: [ true, true, true ]
+	rotate90: true,
+	rotate180: true,
+	rotate270: true
 };
 const ess: BlockDef = {
 	id: 'ess',
@@ -66,7 +78,9 @@ const ess: BlockDef = {
 	odds: 10,
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
-	canRotate: [ false, false, true ]
+	rotate90: false,
+	rotate180: false,
+	rotate270: true
 };
 const zee: BlockDef = {
 	id: 'zee',
@@ -74,7 +88,9 @@ const zee: BlockDef = {
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
-	canRotate: [ false, false, true ]
+	rotate90: false,
+	rotate180: false,
+	rotate270: true
 };
 const tee: BlockDef = {
 	id: 'tee',
@@ -82,7 +98,9 @@ const tee: BlockDef = {
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],
-	canRotate: [ true, true, true ]
+	rotate90: true,
+	rotate180: true,
+	rotate270: true
 };
 
 export type BlockType = number;
@@ -136,7 +154,7 @@ export function calculateBlockRotations(def: BlockDef): BlockRotations {
 	const points90: Array<PointXY> = points0.map(([ x, y ]) => {
 		return [def.size - 1 - y, x];
 	});
-	if (def.canRotate[0]) {
+	if (def.rotate90) {
 		rotations.push({
 			points: points90,
 			extent: calculateBlockExtent(points90)
@@ -146,7 +164,7 @@ export function calculateBlockRotations(def: BlockDef): BlockRotations {
 	const points180: Array<PointXY> = points90.map(([ x, y ]) => {
 		return [def.size - 1 - y, x];
 	});
-	if (def.canRotate[1]) {
+	if (def.rotate180) {
 		rotations.push({
 			points: points180,
 			extent: calculateBlockExtent(points180)
@@ -156,7 +174,7 @@ export function calculateBlockRotations(def: BlockDef): BlockRotations {
 	const points270: Array<PointXY> = points180.map(([ x, y ]) => {
 		return [def.size - 1 - y, x];
 	});
-	if (def.canRotate[2]) {
+	if (def.rotate270) {
 		rotations.push({
 			points: points270,
 			extent: calculateBlockExtent(points270)
