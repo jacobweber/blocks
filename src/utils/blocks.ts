@@ -21,15 +21,15 @@ export interface BlockColor {
 
 export type PointSymbolID = string;
 
-export const defaultEdit: BlockDef = {
+export const defaultBlockDef: BlockDef = {
 	id: 'sample',
-	color: '#AA0000',
+	color: '#FF0000',
 	odds: 10,
 	size: 3,
 	points: [],
-	rotate90: true,
-	rotate180: true,
-	rotate270: true
+	rotate90: false,
+	rotate180: false,
+	rotate270: false
 };
 
 const line: BlockDef = {

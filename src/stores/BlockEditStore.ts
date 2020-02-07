@@ -1,6 +1,6 @@
 import { decorate, observable, action, computed } from 'mobx';
 
-import { BlockDef, BlockType, defaultEdit, PointSymbolID, PointBitmap, pointsXYToBitmap, pointBitmapToXY, BlockColor } from 'utils/blocks';
+import { BlockDef, BlockType, defaultBlockDef, PointSymbolID, PointBitmap, pointsXYToBitmap, pointBitmapToXY, BlockColor } from 'utils/blocks';
 import { PreferencesStore } from './PreferencesStore';
 
 export interface BlockEditForm {
@@ -25,8 +25,8 @@ class BlockEditStore {
 	constructor(preferencesStore: PreferencesStore) {
 		this.preferencesStore = preferencesStore;
 		this.form = {
-			...defaultEdit,
-			points: pointsXYToBitmap(defaultEdit.points)
+			...defaultBlockDef,
+			points: pointsXYToBitmap(defaultBlockDef.points)
 		};
 	}
 
@@ -80,8 +80,8 @@ class BlockEditStore {
 	dialogShowAdd() {
 		this.blockType = null;
 		this.form = {
-			...defaultEdit,
-			points: pointsXYToBitmap(defaultEdit.points)
+			...defaultBlockDef,
+			points: pointsXYToBitmap(defaultBlockDef.points)
 		};
 		this.visible = true;
 	}
