@@ -1,13 +1,12 @@
 export type PointXY = [number, number];
 export type ExtentLTRB = [ number, number, number, number ];
-export type PointsXY = Array<PointXY>;
 export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
 export interface BlockDef {
 	id: PointSymbolID;
 	size: number;
 	canRotate: [ boolean, boolean, boolean ]; // 90, 180, 270
-	points: PointsXY;
+	points: Array<PointXY>;
 	rotations: Array<Rotation>; // 0, 90, 180, 270
 }
 
@@ -110,7 +109,7 @@ export function calculateBlockRotations() {
 			extent: def.points.reduce<ExtentLTRB>(getExtentReducer, [ 0, 0, 0, 0 ])
 		});
 
-		const points90: PointsXY = points0.map(([ x, y ]) => {
+		const points90: Array<PointXY> = points0.map(([ x, y ]) => {
 			return [def.size - 1 - y, x];
 		});
 		if (def.canRotate[0]) {
@@ -120,7 +119,7 @@ export function calculateBlockRotations() {
 			});
 		}
 
-		const points180: PointsXY = points90.map(([ x, y ]) => {
+		const points180: Array<PointXY> = points90.map(([ x, y ]) => {
 			return [def.size - 1 - y, x];
 		});
 		if (def.canRotate[1]) {
@@ -130,7 +129,7 @@ export function calculateBlockRotations() {
 			});
 		}
 
-		const points270: PointsXY = points180.map(([ x, y ]) => {
+		const points270: Array<PointXY> = points180.map(([ x, y ]) => {
 			return [def.size - 1 - y, x];
 		});
 		if (def.canRotate[2]) {
