@@ -6,6 +6,12 @@ import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
 
+const fixOdds = function(odds: string): (number | '') {
+	const val = parseInt(odds, 10);
+	if (isNaN(val)) return '';
+	return val;
+};
+
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
 	const origDef = preferencesStore.blockEditDef!;
@@ -16,6 +22,8 @@ const BlockEdit = observer(() => {
 		className: styles.colorInput
 	}; // breaks on safari
 
+	const [ name, setName ] = useState(origDef.id);
+	const [ odds, setOdds ] = useState<number|''>(origDef.odds);
 	const [ size, setSize ] = useState(origDef.size);
 	const [ color, setColor ] = useState(origDef.color);
 	const [ rotate90, setRotate90 ] = useState(origDef.canRotate[0]);
@@ -29,10 +37,27 @@ const BlockEdit = observer(() => {
 				<Form>
 					<Form.Group>
 						<Form.Field>
+							<label>Name</label>
+							<Input onChange={e => setName(e.target.value)} value={name} />
+						</Form.Field>
+
+						<Form.Field>
+							<label>Frequency</label>
+							<Input onChange={e => setOdds(fixOdds(e.target.value))} value={odds} />
+						</Form.Field>
+
+						<Form.Field>
+							<label>Color</label>
+							<Input {...colorProps} onChange={e => setColor(e.target.value)} value={color} />
+						</Form.Field>
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Field>
 							<label>Size</label>
 							<Button.Group>
 								{[1, 2, 3, 4, 5].map(val => (
-									<Button active={size === val} key={val} onClick={() => setSize(val)}>
+									<Button type='button' active={size === val} key={val} onClick={() => setSize(val)}>
 										{val}
 									</Button>
 								))}
@@ -40,20 +65,15 @@ const BlockEdit = observer(() => {
 						</Form.Field>
 
 						<Form.Field>
-							<label>Color</label>
-							<Input {...colorProps} onChange={e => setColor(e.target.value)} value={color} />
-						</Form.Field>
-
-						<Form.Field>
 							<label>Rotations</label>
 							<Button.Group>
-								<Button active={rotate90} onClick={() => setRotate90(!rotate90)}>
+								<Button type='button' active={rotate90} onClick={() => setRotate90(!rotate90)}>
 									90&deg;
 								</Button>
-								<Button active={rotate180} onClick={() => setRotate180(!rotate180)}>
+								<Button type='button' active={rotate180} onClick={() => setRotate180(!rotate180)}>
 									180&deg;
 								</Button>
-								<Button active={rotate270} onClick={() => setRotate270(!rotate270)}>
+								<Button type='button' active={rotate270} onClick={() => setRotate270(!rotate270)}>
 									270&deg;
 								</Button>
 							</Button.Group>
