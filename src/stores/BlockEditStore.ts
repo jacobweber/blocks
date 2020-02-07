@@ -30,32 +30,32 @@ class BlockEditStore {
 	}
 
 	addBlockDef(def: BlockDef): void {
-		this.preferencesStore.setPrefsEdited({
-			...this.preferencesStore.prefsEdited,
+		this.preferencesStore.setForm({
+			...this.preferencesStore.form,
 			blockDefs: [
-				...this.preferencesStore.prefsEdited.blockDefs,
+				...this.preferencesStore.form.blockDefs,
 				def
 			]
 		});
 	}
 
 	updateBlockDef(type: BlockType, def: BlockDef): void {
-		this.preferencesStore.setPrefsEdited({
-			...this.preferencesStore.prefsEdited,
+		this.preferencesStore.setForm({
+			...this.preferencesStore.form,
 			blockDefs: [
-				...this.preferencesStore.prefsEdited.blockDefs.slice(0, type),
+				...this.preferencesStore.form.blockDefs.slice(0, type),
 				def,
-				...this.preferencesStore.prefsEdited.blockDefs.slice(type + 1)
+				...this.preferencesStore.form.blockDefs.slice(type + 1)
 			]
 		});
 	}
 
 	deleteBlockDef(type: BlockType): void {
-		this.preferencesStore.setPrefsEdited({
-			...this.preferencesStore.prefsEdited,
+		this.preferencesStore.setForm({
+			...this.preferencesStore.form,
 			blockDefs: [
-				...this.preferencesStore.prefsEdited.blockDefs.slice(0, type),
-				...this.preferencesStore.prefsEdited.blockDefs.slice(type + 1)
+				...this.preferencesStore.form.blockDefs.slice(0, type),
+				...this.preferencesStore.form.blockDefs.slice(type + 1)
 			]
 		});
 	}
