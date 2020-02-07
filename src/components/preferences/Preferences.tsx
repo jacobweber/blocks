@@ -151,7 +151,10 @@ const Preferences = observer(() => {
 						</Form.Field>
 					</Form.Group>
 
-					<Header as='h3' dividing>Blocks</Header>
+					<Header as='h3' dividing>
+						Blocks
+						<Header.Subheader>Changes will apply to next game.</Header.Subheader>
+					</Header>
 					<div className={styles.blocks}>
 						{form.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
