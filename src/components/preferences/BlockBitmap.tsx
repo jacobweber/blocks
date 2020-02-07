@@ -34,13 +34,14 @@ const BlockBitmap = observer(({ origPoints, id, size }: BlockBitmapProps) => {
 		yLines.push(<line key={i} stroke='black' strokeWidth='1' x1={pointSize * i} y1='0' x2={pointSize * i} y2='100%' />);
 	}
 
+	const blankComps = [];
 	const pointComps = [];
 	for (let x = 0; x < size; x++) {
 		for (let y = 0; y < size; y++) {
 			if (points[x][y]) {
 				pointComps.push(<Point onClick={e => setPoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} id={id} />);
 			} else {
-				pointComps.push(<rect onClick={e => setPoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * pointSize} y={y * pointSize} width={pointSize} height={pointSize} fill='white' stroke='none' />);
+				blankComps.push(<rect onClick={e => setPoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * pointSize} y={y * pointSize} width={pointSize} height={pointSize} fill='white' stroke='none' />);
 			}
 		}
 	}
@@ -53,6 +54,7 @@ const BlockBitmap = observer(({ origPoints, id, size }: BlockBitmapProps) => {
 				viewBox={`0 0 ${pointSize * size} ${pointSize * size}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
+				{blankComps}
 				{xLines}
 				{yLines}
 				{pointComps}
