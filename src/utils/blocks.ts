@@ -17,7 +17,7 @@ export type PointSymbolID = string;
 const line: BlockDef = {
 	id: 'line',
 	color: '#ADFF2F',
-	odds: 1,
+	odds: 10,
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
 	canRotate: [ true, false, false ]
@@ -25,7 +25,7 @@ const line: BlockDef = {
 const square: BlockDef = {
 	id: 'square',
 	color: '#F08080',
-	odds: 1,
+	odds: 10,
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
 	canRotate: [ false, false, false ]
@@ -33,7 +33,7 @@ const square: BlockDef = {
 const are: BlockDef = {
 	id: 'are',
 	color: '#F0E68C',
-	odds: 1,
+	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
 	canRotate: [ true, true, true ]
@@ -41,7 +41,7 @@ const are: BlockDef = {
 const ell: BlockDef = {
 	id: 'ell',
 	color: '#DEB887',
-	odds: 1,
+	odds: 10,
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
 	canRotate: [ true, true, true ]
@@ -49,7 +49,7 @@ const ell: BlockDef = {
 const ess: BlockDef = {
 	id: 'ess',
 	color: '#6495ED',
-	odds: 1,
+	odds: 10,
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
 	canRotate: [ false, false, true ]
@@ -57,7 +57,7 @@ const ess: BlockDef = {
 const zee: BlockDef = {
 	id: 'zee',
 	color: '#FFB6C1',
-	odds: 1,
+	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
 	canRotate: [ false, false, true ]
@@ -65,7 +65,7 @@ const zee: BlockDef = {
 const tee: BlockDef = {
 	id: 'tee',
 	color: '#7FFFD4',
-	odds: 1,
+	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],
 	canRotate: [ true, true, true ]
