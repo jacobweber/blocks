@@ -115,11 +115,11 @@ class MainStore {
 	}
 
 	getRandomBlockType(): BlockType {
-		return Math.floor(Math.random() * blockDefs.size);
+		return Math.floor(Math.random() * blockDefs.length);
 	}
 
 	getBlockDef(type: BlockType): BlockDef {
-		return blockDefs.get(type)!;
+		return blockDefs[type]!;
 	}
 
 	resetGameLeavingBoard(): void {
@@ -378,7 +378,7 @@ class MainStore {
 		const numFlashes = hasBonus ? 1 : 1;
 		let count = 0;
 		const flash = action(() => {
-			const id = count % 2 === 0 ? PointSymbolID.FlashOn : PointSymbolID.FlashOff;
+			const id = count % 2 === 0 ? 'flashOn' : 'flashOff';
 			for (let row = 0; row < rows.length; row++) {
 				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
 					id: id

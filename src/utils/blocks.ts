@@ -10,79 +10,69 @@ export interface BlockDef {
 	rotations: Array<Rotation>; // 0, 90, 180, 270
 }
 
-export enum PointSymbolID {
-	Line = 'line',
-	Square = 'square',
-	Are = 'are',
-	Ell = 'ell',
-	Ess = 'ess',
-	Zee = 'zee',
-	Tee = 'tee',
-	FlashOn = 'flashOn',
-	FlashOff = 'flashOff'
-}
+export type PointSymbolID = string;
 
 const line: BlockDef = {
-	id: PointSymbolID.Line,
+	id: 'line',
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
 	canRotate: [ true, false, false ],
 	rotations: []
 };
 const square: BlockDef = {
-	id: PointSymbolID.Square,
+	id: 'square',
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
 	canRotate: [ false, false, false ],
 	rotations: []
 };
 const are: BlockDef = {
-	id: PointSymbolID.Are,
+	id: 'are',
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
 	canRotate: [ true, true, true ],
 	rotations: []
 };
 const ell: BlockDef = {
-	id: PointSymbolID.Ell,
+	id: 'ell',
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
 	canRotate: [ true, true, true ],
 	rotations: []
 };
 const ess: BlockDef = {
-	id: PointSymbolID.Ess,
+	id: 'ess',
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
 	canRotate: [ false, false, true ],
 	rotations: []
 };
 const zee: BlockDef = {
-	id: PointSymbolID.Zee,
+	id: 'zee',
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
 	canRotate: [ false, false, true ],
 	rotations: []
 };
 const tee: BlockDef = {
-	id: PointSymbolID.Tee,
+	id: 'tee',
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],
 	canRotate: [ true, true, true ],
 	rotations: []
 };
 
-export enum BlockType { Line, Square, Are, Ell, Ess, Zee, Tee }
+export type BlockType = number;
 
-export const blockDefs = new Map<BlockType, BlockDef>([
-	[BlockType.Line, line],
-	[BlockType.Square, square],
-	[BlockType.Are, are],
-	[BlockType.Ell, ell],
-	[BlockType.Ess, ess],
-	[BlockType.Zee, zee],
-	[BlockType.Tee, tee]
-]);
+export const blockDefs: Array<BlockDef> = [
+	line,
+	square,
+	are,
+	ell,
+	ess,
+	zee,
+	tee
+];
 
 const getExtentReducer = (prev: ExtentLTRB, cur: PointXY, idx: number, arr: Array<PointXY>): ExtentLTRB => {
 	if (idx === 0) {
