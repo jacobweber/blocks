@@ -5,7 +5,7 @@ import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
 import { NewGameStore } from 'stores/NewGameStore';
 import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
 import { GameState, Actions, logAction, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
-import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs } from 'utils/blocks';
+import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs, calculateBlockRotations } from 'utils/blocks';
 
 const log = false;
 const numClearRowsBonus = 4;
@@ -56,6 +56,7 @@ class MainStore {
 	unpausedStart = 0;
 
 	constructor() {
+		calculateBlockRotations();
 		this.preferencesStore.load();
 		this.highScoresStore.load();
 		this.resetGameCompletely();
