@@ -68,6 +68,7 @@ class PreferencesStore {
 	visible: boolean = false;
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
+	gameBlockDefs: Array<BlockDef> = [];
 
 	blockEditVisible: boolean = false;
 	blockEditType: BlockType | null = null;
@@ -77,24 +78,20 @@ class PreferencesStore {
 		return this.prefs.styles;
 	}
 
-	get blockDefs() {
-		return this.prefs.blockDefs;
-	}
-
-	get blockColors(): Array<BlockColor> {
+	get gameBlockColors(): Array<BlockColor> {
 		return [
 			{ id: 'flashOn', color: '#000000' },
 			{ id: 'flashOff', color: '#FFFFFF' },
-			...this.blockDefs
+			...this.gameBlockDefs
 		];
 	}
 
-	get blockRotations(): Array<BlockRotations> {
-		return this.prefs.blockDefs.map(def => calculateBlockRotations(def));
+	get gameBlockRotations(): Array<BlockRotations> {
+		return this.gameBlockDefs.map(def => calculateBlockRotations(def));
 	}
 
 	get weightedBlockTypes() {
-		return calculateBlockWeights(this.blockDefs);
+		return calculateBlockWeights(this.gameBlockDefs);
 	}
 
 	getRandomBlockType(): BlockType {
@@ -181,6 +178,10 @@ class PreferencesStore {
 
 	setPrefs(prefs: Preferences): void {
 		this.prefs = prefs;
+	}
+
+	lockGamePrefs() {
+		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
 	}
 
 	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
@@ -346,9 +347,9 @@ decorate(PreferencesStore, {
 	blockEditVisible: observable,
 	blockEditType: observable,
 	prefs: observable.ref,
-	blockDefs: computed,
-	blockColors: computed,
-	blockRotations: computed,
+	gameBlockDefs: observable,
+	gameBlockColors: computed,
+	gameBlockRotations: computed,
 	weightedBlockTypes: computed,
 	styles: computed,
 	gameKeyMap: computed,
@@ -356,6 +357,7 @@ decorate(PreferencesStore, {
 	load: action,
 	save: action,
 	setPrefs: action,
+	lockGamePrefs: action,
 	dialogShow: action,
 	dialogCancel: action,
 	dialogSave: action,

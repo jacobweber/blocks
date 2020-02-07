@@ -114,11 +114,11 @@ class MainStore {
 	}
 
 	getBlockDef(type: BlockType): BlockDef {
-		return this.preferencesStore.blockDefs[type]!;
+		return this.preferencesStore.gameBlockDefs[type]!;
 	}
 
 	getBlockRotations(type: BlockType): BlockRotations {
-		return this.preferencesStore.blockRotations[type]!;
+		return this.preferencesStore.gameBlockRotations[type]!;
 	}
 
 	resetGameLeavingBoard(): void {
@@ -149,6 +149,7 @@ class MainStore {
 	newGame(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
 		this.resetGameCompletely();
+		this.preferencesStore.lockGamePrefs();
 
 		this.startLevel = this.prefs.startLevel;
 		this.fillRowsWithJunk();
