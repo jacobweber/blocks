@@ -237,13 +237,14 @@ class PreferencesStore {
 		}));
 	}
 
-	blockEditShow(def?: BlockDef) {
+	blockAddShow() {
 		this.blockEditVisible = true;
-		if (def) {
-			this.blockEditDef = def;
-		} else {
-			this.blockEditDef = null;
-		}
+		this.blockEditDef = null;
+	}
+
+	blockEditShow(def: BlockDef) {
+		this.blockEditVisible = true;
+		this.blockEditDef = def;
 	}
 
 	blockEditCancel() {
@@ -272,6 +273,7 @@ decorate(PreferencesStore, {
 	dialogCancel: action,
 	dialogSave: action,
 	dialogReset: action,
+	blockAddShow: action,
 	blockEditShow: action,
 	blockEditCancel: action,
 	blockEditSave: action

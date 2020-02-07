@@ -155,7 +155,7 @@ const Preferences = observer(() => {
 							</div>
 						))}
 						<div className={styles.block + ' ' + styles.addBlock}>
-							<Button type='button' basic onClick={e => preferencesStore.blockEditShow()}>
+							<Button type='button' basic onClick={e => preferencesStore.blockAddShow()}>
 								<Icon size='huge' name='add' />
 								Add...
 							</Button>
