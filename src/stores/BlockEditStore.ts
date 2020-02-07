@@ -1,6 +1,6 @@
-import { decorate, observable, action } from 'mobx';
+import { decorate, observable, action, computed } from 'mobx';
 
-import { BlockDef, BlockType, defaultEdit, PointSymbolID, PointBitmap, pointsXYToBitmap, pointBitmapToXY } from 'utils/blocks';
+import { BlockDef, BlockType, defaultEdit, PointSymbolID, PointBitmap, pointsXYToBitmap, pointBitmapToXY, BlockColor } from 'utils/blocks';
 import { PreferencesStore } from './PreferencesStore';
 
 export interface BlockEditForm {
@@ -18,6 +18,7 @@ class BlockEditStore {
 	visible: boolean = false;
 	form: BlockEditForm;
 	blockType: BlockType | null = null;
+	symbolPrefix = 'edit-'; // will need to be blank if using static SVG for pieces
 
 	preferencesStore: PreferencesStore;
 
@@ -27,6 +28,15 @@ class BlockEditStore {
 			...defaultEdit,
 			points: pointsXYToBitmap(defaultEdit.points)
 		};
+	}
+
+	get formBlockColors(): Array<BlockColor> {
+		return [
+			{
+				id: this.form.id,
+				color: this.form.color
+			}
+		];
 	}
 
 	addBlockDef(def: BlockDef): void {
@@ -119,6 +129,8 @@ decorate(BlockEditStore, {
 	visible: observable,
 	form: observable.ref,
 	blockType: observable,
+	symbolPrefix: observable,
+	formBlockColors: computed,
 	updateForm: action,
 	dialogShowAdd: action,
 	dialogShowEdit: action,

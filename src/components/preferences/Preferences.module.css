@@ -1,5 +1,10 @@
 .root {
 }
+.pointDefs {
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}
 .colorInput {
 	width: 150px !important;
 }

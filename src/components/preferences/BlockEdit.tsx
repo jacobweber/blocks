@@ -5,6 +5,7 @@ import { Button, Header, Icon, Modal, Form, Input } from 'semantic-ui-react'
 import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
+import { PointDefs } from 'components/points/Standard';
 
 const fixOdds = function(odds: string): (number | '') {
 	const val = parseInt(odds, 10);
@@ -13,8 +14,7 @@ const fixOdds = function(odds: string): (number | '') {
 };
 
 const BlockEdit = observer(() => {
-	const preferencesStore = useStore().preferencesStore;
-	const blockEditStore = preferencesStore.blockEditStore;
+	const blockEditStore = useStore().preferencesStore.blockEditStore;
 	const { form, updateForm } = blockEditStore;
 
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
@@ -27,6 +27,10 @@ const BlockEdit = observer(() => {
 	const ok = () => blockEditStore.dialogSave();
 
 	return (<>
+		<div className={styles.pointDefs}>
+			<PointDefs prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
+		</div>
+
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
 			<Header icon='setting' content='Edit Block' />
 			<Modal.Content>
@@ -76,7 +80,7 @@ const BlockEdit = observer(() => {
 						</Form.Field>
 					</Form.Group>
 
-					<BlockBitmap prefix={preferencesStore.prefsSymbolPrefix} size={form.size} id={form.id} points={form.points} onChangePoints={points => updateForm({ points })} />
+					<BlockBitmap prefix={blockEditStore.symbolPrefix} size={form.size} id={form.id} points={form.points} onChangePoints={points => updateForm({ points })} />
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>

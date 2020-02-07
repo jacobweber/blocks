@@ -73,7 +73,7 @@ class PreferencesStore {
 	prefs: Preferences = defaultPrefs;
 	form: Preferences = this.prefs;
 	gameBlockDefs: Array<BlockDef> = [];
-	prefsSymbolPrefix = 'prefs-'; // will need to be blank if using static SVG for pieces
+	symbolPrefix = 'prefs-'; // will need to be blank if using static SVG for pieces
 
 	blockEditVisible: boolean = false;
 	blockEditType: BlockType | null = null;
@@ -87,9 +87,14 @@ class PreferencesStore {
 		return [
 			{ id: 'flashOn', color: '#000000' },
 			{ id: 'flashOff', color: '#FFFFFF' },
-			...this.gameBlockDefs,
-			...this.prefs.blockDefs.map(def => ({
-				id: this.prefsSymbolPrefix + def.id,
+			...this.gameBlockDefs
+		];
+	}
+
+	get formBlockColors(): Array<BlockColor> {
+		return [
+			...this.form.blockDefs.map(def => ({
+				id: def.id,
 				color: def.color
 			}))
 		];
@@ -282,8 +287,9 @@ decorate(PreferencesStore, {
 	prefs: observable.ref,
 	form: observable.ref,
 	blockColors: computed,
+	formBlockColors: computed,
 	gameBlockDefs: observable,
-	prefsSymbolPrefix: observable,
+	symbolPrefix: observable,
 	gameBlockRotations: computed,
 	weightedBlockTypes: computed,
 	styles: computed,

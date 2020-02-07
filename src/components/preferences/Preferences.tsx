@@ -7,6 +7,7 @@ import { useStore } from 'stores/MainStore';
 import { KeyActionName } from 'utils/helpers';
 import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
+import { PointDefs } from 'components/points/Standard';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -37,6 +38,10 @@ const Preferences = observer(() => {
 			onConfirm={confirmReset}
 			confirmButton='Reset'
 		/>
+
+		<div className={styles.pointDefs}>
+			<PointDefs prefix={preferencesStore.symbolPrefix} blockColors={preferencesStore.formBlockColors} />
+		</div>
 
 		{preferencesStore.blockEditStore.visible && <BlockEdit />}
 
