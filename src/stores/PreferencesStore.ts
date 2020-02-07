@@ -308,7 +308,7 @@ class PreferencesStore {
 
 	blockEditCancel() {
 		this.blockEditVisible = false;
-		if (this.blockEditAdding && this.blockEditType) {
+		if (this.blockEditAdding && this.blockEditType !== null) {
 			this.deleteBlockDef(this.blockEditType);
 		}
 		this.blockEditType = null;
@@ -317,7 +317,7 @@ class PreferencesStore {
 
 	blockEditSave(def: BlockDef) {
 		this.blockEditVisible = false;
-		if (this.blockEditType) {
+		if (this.blockEditType !== null) {
 			this.updateBlockDef(this.blockEditType, def);
 		}
 		this.blockEditType = null;
