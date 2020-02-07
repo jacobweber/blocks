@@ -12,7 +12,7 @@ type PointProps = {
 };
 
 const Point = React.memo(({ id, x, y, onClick }: PointProps) => {
-	return <use x={x * pointSize} y={y * pointSize} onClick={onClick} width={pointSize} height={pointSize} xlinkHref={'#' + id} />;
+	return <use x={x * pointSize} y={y * pointSize} onClick={onClick} width={pointSize} height={pointSize} href={'#' + id} />;
 });
 
 export { Point };

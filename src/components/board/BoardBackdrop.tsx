@@ -21,7 +21,7 @@ const BoardBackdrop = React.memo(({ gridColor, height, width }: BoardBackdropPro
 	}
 
 	return (<>
-		<use x='0' y='0' width='100%' height='100%' xlinkHref='#board' />
+		<use x='0' y='0' width='100%' height='100%' href='#board' />
 		{xLines}
 		{yLines}
 	</>);

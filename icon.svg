@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" baseProfile="full" version="1.1" viewBox="0 0 240 240">
+<svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" version="1.1" viewBox="0 0 240 240">
 	<defs>
 		<symbol id="line">
 			<linearGradient id="g0" x1="0%" x2="100%" y1="0%" y2="100%">
@@ -65,20 +65,20 @@
 			<rect fill="url(#g8)" height="100%" stroke="black" stroke-width="1" width="100%"/>
 		</symbol>
 	</defs>
-	<use height="60" xlink:href="#ell" width="60" x="0" y="0"/>
-	<use height="60" xlink:href="#ell" width="60" x="60" y="0"/>
-	<use height="60" xlink:href="#ell" width="60" x="120" y="0"/>
-	<use height="60" xlink:href="#ell" width="60" x="0" y="60"/>
-	<use height="60" xlink:href="#square" width="60" x="60" y="60"/>
-	<use height="60" xlink:href="#square" width="60" x="120" y="60"/>
-	<use height="60" xlink:href="#square" width="60" x="60" y="120"/>
-	<use height="60" xlink:href="#square" width="60" x="120" y="120"/>
-	<use height="60" xlink:href="#line" width="60" x="180" y="0"/>
-	<use height="60" xlink:href="#line" width="60" x="180" y="60"/>
-	<use height="60" xlink:href="#line" width="60" x="180" y="120"/>
-	<use height="60" xlink:href="#line" width="60" x="180" y="180"/>
-	<use height="60" xlink:href="#are" width="60" x="0" y="120"/>
-	<use height="60" xlink:href="#are" width="60" x="0" y="180"/>
-	<use height="60" xlink:href="#are" width="60" x="60" y="180"/>
-	<use height="60" xlink:href="#are" width="60" x="120" y="180"/>
+	<use height="60" href="#ell" width="60" x="0" y="0"/>
+	<use height="60" href="#ell" width="60" x="60" y="0"/>
+	<use height="60" href="#ell" width="60" x="120" y="0"/>
+	<use height="60" href="#ell" width="60" x="0" y="60"/>
+	<use height="60" href="#square" width="60" x="60" y="60"/>
+	<use height="60" href="#square" width="60" x="120" y="60"/>
+	<use height="60" href="#square" width="60" x="60" y="120"/>
+	<use height="60" href="#square" width="60" x="120" y="120"/>
+	<use height="60" href="#line" width="60" x="180" y="0"/>
+	<use height="60" href="#line" width="60" x="180" y="60"/>
+	<use height="60" href="#line" width="60" x="180" y="120"/>
+	<use height="60" href="#line" width="60" x="180" y="180"/>
+	<use height="60" href="#are" width="60" x="0" y="120"/>
+	<use height="60" href="#are" width="60" x="0" y="180"/>
+	<use height="60" href="#are" width="60" x="60" y="180"/>
+	<use height="60" href="#are" width="60" x="120" y="180"/>
 </svg>

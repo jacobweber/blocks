@@ -27,7 +27,6 @@ const Board = observer(() => {
 				baseProfile="full"
 				viewBox={`0 0 ${pointSize * mainStore.width} ${pointSize * mainStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
-				xmlnsXlink="http://www.w3.org/1999/xlink"
 			>
 				<BoardBackdrop
 					gridColor={prefsStyles.gridColor}
