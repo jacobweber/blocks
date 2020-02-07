@@ -1,13 +1,13 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
 
-import styles from 'components/Board.module.css';
+import styles from 'components/board/Board.module.css';
 import { useStore } from 'stores/MainStore';
 import { BoardDef } from 'components/boards/Black';
 import { PointDefs } from 'components/points/Standard';
-import { Points } from 'components/Points';
-import { PositionedBlock } from 'components/PositionedBlock';
-import { StatusOverlay } from 'components/StatusOverlay';
+import { Points } from 'components/board/Points';
+import { PositionedBlock } from 'components/board/PositionedBlock';
+import { StatusOverlay } from 'components/board/StatusOverlay';
 import { GameState, pointSize } from 'utils/helpers';
 import { BoardBackdrop } from './BoardBackdrop';
 

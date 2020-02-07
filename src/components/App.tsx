@@ -4,7 +4,7 @@ import { Button } from 'semantic-ui-react'
 
 import styles from 'components/App.module.css';
 import { useStore } from 'stores/MainStore';
-import { Board } from 'components/Board';
+import { Board } from 'components/board/Board';
 import { NextBlock } from 'components/NextBlock';
 import { ScoreBoard } from 'components/ScoreBoard';
 import { Preferences } from 'components/preferences/Preferences';
