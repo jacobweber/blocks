@@ -5,6 +5,7 @@ import { Button, Header, Icon, Modal, Form, Input } from 'semantic-ui-react'
 import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
+import { pointBitmapToXY, PointBitmap, pointsXYToBitmap } from 'utils/blocks';
 
 const fixOdds = function(odds: string): (number | '') {
 	const val = parseInt(odds, 10);
@@ -14,9 +15,8 @@ const fixOdds = function(odds: string): (number | '') {
 
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
-	const origDef = preferencesStore.blockEditDef!;
-	const cancel = () => preferencesStore.blockEditCancel();
-	const ok = () => preferencesStore.blockEditSave();
+	const origDef = preferencesStore.prefs.blockDefs[preferencesStore.blockEditType!];
+
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
 		type: 'color',
 		className: styles.colorInput
@@ -29,6 +29,18 @@ const BlockEdit = observer(() => {
 	const [ rotate90, setRotate90 ] = useState(origDef.canRotate[0]);
 	const [ rotate180, setRotate180 ] = useState(origDef.canRotate[1]);
 	const [ rotate270, setRotate270 ] = useState(origDef.canRotate[2]);
+	const [ points, setPoints ] = useState<PointBitmap>(pointsXYToBitmap(origDef.points));
+
+	const cancel = () => preferencesStore.blockEditCancel();
+	const del = () => preferencesStore.blockEditDelete();
+	const ok = () => preferencesStore.blockEditSave({
+		id: name,
+		color,
+		odds: odds || 0,
+		size,
+		canRotate: [ rotate90, rotate180, rotate270 ],
+		points: pointBitmapToXY(points)
+	});
 
 	return (<>
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
@@ -80,14 +92,14 @@ const BlockEdit = observer(() => {
 						</Form.Field>
 					</Form.Group>
 
-					<BlockBitmap size={size} id={origDef.id} origPoints={origDef.points} />
+					<BlockBitmap size={size} id={origDef.id} points={points} onChangePoints={setPoints} />
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
 				<Button onClick={cancel} color='red'>
 					<Icon name='cancel' /> Cancel
 				</Button>
-				<Button onClick={cancel} color='black'>
+				<Button onClick={del} color='black'>
 					<Icon name='trash' /> Delete Block
 				</Button>
 				<Button onClick={ok} color='green'>

@@ -2,7 +2,7 @@ import { decorate, observable, action, computed } from 'mobx';
 
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
 import { PositionedPoint } from './MainStore';
-import { BlockDef } from 'utils/blocks';
+import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
 
 export interface Preferences {
 	keys: {
@@ -23,7 +23,8 @@ export interface Preferences {
 		textColor: string;
 		gridColor: string;
 		outlineColor: string;
-	}
+	},
+	blockDefs: Array<BlockDef>;
 	name: string;
 	leftRightAccelAfterMS: number;
 	downTimerPauseWhenMovingMS: number;
@@ -52,6 +53,7 @@ const defaultPrefs: Preferences = {
 		gridColor: '#FFFFFF',
 		outlineColor: '#FFFFFF'
 	},
+	blockDefs: defaultBlockDefs,
 	name: 'Anonymous',
 	leftRightAccelAfterMS: 200,
 	downTimerPauseWhenMovingMS: 500,
@@ -68,10 +70,28 @@ class PreferencesStore {
 	prefs: Preferences = defaultPrefs;
 
 	blockEditVisible: boolean = false;
-	blockEditDef: BlockDef | null = null;
+	blockEditType: BlockType | null = null;
+	blockEditAdding: boolean = false;
 
 	get styles() {
 		return this.prefs.styles;
+	}
+
+	get blockDefs() {
+		return this.prefs.blockDefs;
+	}
+
+	get blockRotations(): Array<BlockRotations> {
+		return this.prefs.blockDefs.map(def => calculateBlockRotations(def));
+	}
+
+	get weightedBlockTypes() {
+		return calculateBlockWeights(this.blockDefs);
+	}
+
+	getRandomBlockType(): BlockType {
+		const index = Math.floor(Math.random() * this.weightedBlockTypes.length);
+		return this.weightedBlockTypes[index];
 	}
 
 	get gameKeyMap(): { [key: string]: Actions } {
@@ -228,41 +248,100 @@ class PreferencesStore {
 	}
 
 	getBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
-		const rotation = blockDef.rotations[0];
-		const id = blockDef.id;
-		return rotation.points.map(point => ({
+		return blockDef.points.map(point => ({
 			x: point[0],
 			y: point[1],
-			id: id
+			id: blockDef.id
 		}));
 	}
 
-	blockAddShow() {
-		this.blockEditVisible = true;
-		this.blockEditDef = null;
+	addBlockDef(def: BlockDef): void {
+		this.setPrefs({
+			...this.prefs,
+			blockDefs: [
+				...this.prefs.blockDefs,
+				def
+			]
+		});
 	}
 
-	blockEditShow(def: BlockDef) {
+	updateBlockDef(type: BlockType, def: BlockDef): void {
+		this.setPrefs({
+			...this.prefs,
+			blockDefs: [
+				...this.prefs.blockDefs.slice(0, type),
+				def,
+				...this.prefs.blockDefs.slice(type + 1)
+			]
+		});
+	}
+
+	deleteBlockDef(type: BlockType): void {
+		this.setPrefs({
+			...this.prefs,
+			blockDefs: [
+				...this.prefs.blockDefs.slice(0, type),
+				...this.prefs.blockDefs.slice(type + 1)
+			]
+		});
+	}
+
+	blockAddShow() {
+		this.blockEditType = this.prefs.blockDefs.length;
+		this.blockEditAdding = true;
+		this.addBlockDef({
+			id: 'sample',
+			color: '#AA0000',
+			odds: 1,
+			size: 3,
+			canRotate: [ true, true, true ],
+			points: []
+		});
 		this.blockEditVisible = true;
-		this.blockEditDef = def;
+	}
+
+	blockEditShow(type: BlockType, def: BlockDef) {
+		this.blockEditType = type;
+		this.blockEditAdding = false;
+		this.blockEditVisible = true;
 	}
 
 	blockEditCancel() {
 		this.blockEditVisible = false;
-		this.blockEditDef = null;
+		if (this.blockEditAdding && this.blockEditType) {
+			this.deleteBlockDef(this.blockEditType);
+		}
+		this.blockEditType = null;
+		this.blockEditAdding = false;
 	}
 
-	blockEditSave() {
+	blockEditSave(def: BlockDef) {
+		console.log(def);
 		this.blockEditVisible = false;
-		this.blockEditDef = null;
+		if (this.blockEditType) {
+			this.updateBlockDef(this.blockEditType, def);
+		}
+		this.blockEditType = null;
+		this.blockEditAdding = false;
+	}
+
+	blockEditDelete() {
+		this.blockEditVisible = false;
+		if (this.blockEditType !== null) {
+			this.deleteBlockDef(this.blockEditType);
+		}
+		this.blockEditAdding = false;
 	}
 }
 
 decorate(PreferencesStore, {
 	visible: observable,
 	blockEditVisible: observable,
-	blockEditDef: observable,
+	blockEditType: observable,
 	prefs: observable.ref,
+	blockDefs: computed,
+	blockRotations: computed,
+	weightedBlockTypes: computed,
 	styles: computed,
 	gameKeyMap: computed,
 	moveKeyMap: computed,
@@ -276,7 +355,8 @@ decorate(PreferencesStore, {
 	blockAddShow: action,
 	blockEditShow: action,
 	blockEditCancel: action,
-	blockEditSave: action
+	blockEditSave: action,
+	blockEditDelete: action
 });
 
 export { PreferencesStore };

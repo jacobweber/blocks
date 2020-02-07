@@ -1,6 +1,7 @@
 export type PointXY = [number, number];
 export type ExtentLTRB = [ number, number, number, number ];
 export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
+export type BlockRotations = Array<Rotation>; // 0, 90, 180, 270
 
 export interface BlockDef {
 	id: PointSymbolID;
@@ -9,7 +10,6 @@ export interface BlockDef {
 	size: number;
 	canRotate: [ boolean, boolean, boolean ]; // 90, 180, 270
 	points: Array<PointXY>;
-	rotations: Array<Rotation>; // 0, 90, 180, 270
 }
 
 export type PointSymbolID = string;
@@ -20,8 +20,7 @@ const line: BlockDef = {
 	odds: 1,
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
-	canRotate: [ true, false, false ],
-	rotations: []
+	canRotate: [ true, false, false ]
 };
 const square: BlockDef = {
 	id: 'square',
@@ -29,8 +28,7 @@ const square: BlockDef = {
 	odds: 1,
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
-	canRotate: [ false, false, false ],
-	rotations: []
+	canRotate: [ false, false, false ]
 };
 const are: BlockDef = {
 	id: 'are',
@@ -38,8 +36,7 @@ const are: BlockDef = {
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
-	canRotate: [ true, true, true ],
-	rotations: []
+	canRotate: [ true, true, true ]
 };
 const ell: BlockDef = {
 	id: 'ell',
@@ -47,8 +44,7 @@ const ell: BlockDef = {
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
-	canRotate: [ true, true, true ],
-	rotations: []
+	canRotate: [ true, true, true ]
 };
 const ess: BlockDef = {
 	id: 'ess',
@@ -56,8 +52,7 @@ const ess: BlockDef = {
 	odds: 1,
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
-	canRotate: [ false, false, true ],
-	rotations: []
+	canRotate: [ false, false, true ]
 };
 const zee: BlockDef = {
 	id: 'zee',
@@ -65,8 +60,7 @@ const zee: BlockDef = {
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
-	canRotate: [ false, false, true ],
-	rotations: []
+	canRotate: [ false, false, true ]
 };
 const tee: BlockDef = {
 	id: 'tee',
@@ -74,13 +68,12 @@ const tee: BlockDef = {
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],
-	canRotate: [ true, true, true ],
-	rotations: []
+	canRotate: [ true, true, true ]
 };
 
 export type BlockType = number;
 
-export const blockDefs: Array<BlockDef> = [
+export const defaultBlockDefs: Array<BlockDef> = [
 	line,
 	square,
 	are,
@@ -89,6 +82,14 @@ export const blockDefs: Array<BlockDef> = [
 	zee,
 	tee
 ];
+
+export function calculateBlockWeights(blockDefs: Array<BlockDef>): Array<BlockType> {
+	const weightedBlockTypes: Array<BlockType> = [];
+	blockDefs.forEach((def, index) => {
+		weightedBlockTypes.push( ...Array.from({ length: def.odds }, () => index) );
+	});
+	return weightedBlockTypes;
+};
 
 const getExtentReducer = (prev: ExtentLTRB, cur: PointXY, idx: number, arr: Array<PointXY>): ExtentLTRB => {
 	if (idx === 0) {
@@ -106,59 +107,49 @@ const getExtentReducer = (prev: ExtentLTRB, cur: PointXY, idx: number, arr: Arra
 	}
 };
 
-let weightedBlockTypes: Array<BlockType> = [];
-
-export function calculateBlockWeights(): void {
-	weightedBlockTypes = [];
-	blockDefs.forEach((def, index) => {
-		weightedBlockTypes.push( ...Array.from({ length: def.odds }, () => index) );
-	});
-};
-
-export function getRandomBlockType(): BlockType {
-	const index = Math.floor(Math.random() * weightedBlockTypes.length);
-	return weightedBlockTypes[index];
+export function calculateBlockExtent(points: Array<PointXY>): ExtentLTRB {
+	return points.reduce<ExtentLTRB>(getExtentReducer, [ 0, 0, 0, 0 ])
 }
 
-export function calculateBlockRotations() {
-	blockDefs.forEach((def: BlockDef) => {
-		def.rotations = [];
-		const points0 = [ ...def.points ];
-		def.rotations.push({
-			points: def.points,
-			extent: def.points.reduce<ExtentLTRB>(getExtentReducer, [ 0, 0, 0, 0 ])
-		});
-
-		const points90: Array<PointXY> = points0.map(([ x, y ]) => {
-			return [def.size - 1 - y, x];
-		});
-		if (def.canRotate[0]) {
-			def.rotations.push({
-				points: points90,
-				extent: points90.reduce<ExtentLTRB>(getExtentReducer, [ 0, 0, 0, 0 ])
-			});
-		}
-
-		const points180: Array<PointXY> = points90.map(([ x, y ]) => {
-			return [def.size - 1 - y, x];
-		});
-		if (def.canRotate[1]) {
-			def.rotations.push({
-				points: points180,
-				extent: points180.reduce<ExtentLTRB>(getExtentReducer, [ 0, 0, 0, 0 ])
-			});
-		}
-
-		const points270: Array<PointXY> = points180.map(([ x, y ]) => {
-			return [def.size - 1 - y, x];
-		});
-		if (def.canRotate[2]) {
-			def.rotations.push({
-				points: points270,
-				extent: points270.reduce<ExtentLTRB>(getExtentReducer, [ 0, 0, 0, 0 ])
-			});
-		}
+export function calculateBlockRotations(def: BlockDef): BlockRotations {
+	const rotations: BlockRotations = [];
+	const points0 = [ ...def.points ];
+	rotations.push({
+		points: def.points,
+		extent: calculateBlockExtent(def.points)
 	});
+
+	const points90: Array<PointXY> = points0.map(([ x, y ]) => {
+		return [def.size - 1 - y, x];
+	});
+	if (def.canRotate[0]) {
+		rotations.push({
+			points: points90,
+			extent: calculateBlockExtent(points90)
+		});
+	}
+
+	const points180: Array<PointXY> = points90.map(([ x, y ]) => {
+		return [def.size - 1 - y, x];
+	});
+	if (def.canRotate[1]) {
+		rotations.push({
+			points: points180,
+			extent: calculateBlockExtent(points180)
+		});
+	}
+
+	const points270: Array<PointXY> = points180.map(([ x, y ]) => {
+		return [def.size - 1 - y, x];
+	});
+	if (def.canRotate[2]) {
+		rotations.push({
+			points: points270,
+			extent: calculateBlockExtent(points270)
+		});
+	}
+
+	return rotations;
 }
 
 export type PointBitmap = Array<Array<boolean>>;

@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { observer } from "mobx-react-lite"
 
 import styles from 'components/preferences/BlockBitmap.module.css';
 import { Point } from 'components/Point';
 import { pointSize } from 'utils/helpers';
-import { PointXY, PointSymbolID, pointsXYToBitmap, PointBitmap } from 'utils/blocks';
+import { PointSymbolID, PointBitmap } from 'utils/blocks';
 
 type BlockBitmapProps = {
 	size: number;
 	id: PointSymbolID;
-	origPoints: Array<PointXY>;
+	points: PointBitmap;
+	onChangePoints: (points: PointBitmap) => void;
 };
 
 const togglePoint = function(points: PointBitmap, x: number, y: number): PointBitmap {
-	return {
-		...points,
-       [x]: {
-          ...points[x],
-          [y]: !points[x][y]
-       }
-	};
+	return [
+		...points.slice(0, x),
+		[
+			...points[x].slice(0, y),
+			!points[x][y],
+			...points[x].slice(y + 1)
+		],
+		...points.slice(x + 1)
+	];
 };
 
-const BlockBitmap = observer(({ origPoints, id, size }: BlockBitmapProps) => {
-	const [ points, setPoints ] = useState<PointBitmap>(pointsXYToBitmap(origPoints));
+const BlockBitmap = observer(({ id, size, points, onChangePoints }: BlockBitmapProps) => {
 
 	const xLines = [];
 	for (let i = 0; i < size; i++) {
@@ -39,9 +41,9 @@ const BlockBitmap = observer(({ origPoints, id, size }: BlockBitmapProps) => {
 	for (let x = 0; x < size; x++) {
 		for (let y = 0; y < size; y++) {
 			if (points[x][y]) {
-				pointComps.push(<Point onClick={e => setPoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} id={id} />);
+				pointComps.push(<Point onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} id={id} />);
 			} else {
-				blankComps.push(<rect onClick={e => setPoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * pointSize} y={y * pointSize} width={pointSize} height={pointSize} fill='white' stroke='none' />);
+				blankComps.push(<rect onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * pointSize} y={y * pointSize} width={pointSize} height={pointSize} fill='white' stroke='none' />);
 			}
 		}
 	}

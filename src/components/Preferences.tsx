@@ -5,7 +5,6 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'sem
 import styles from 'components/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
 import { KeyActionName } from 'utils/helpers';
-import { blockDefs } from 'utils/blocks';
 import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
 
@@ -147,9 +146,9 @@ const Preferences = observer(() => {
 
 					<Header as='h3' dividing>Blocks</Header>
 					<div className={styles.blocks}>
-						{blockDefs.map((def, idx) => (
+						{preferencesStore.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
-								<Button type='button' basic onClick={e => preferencesStore.blockEditShow(def)}>
+								<Button type='button' basic onClick={e => preferencesStore.blockEditShow(idx, def)}>
 									<Block def={def} />
 								</Button>
 							</div>
