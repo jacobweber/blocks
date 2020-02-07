@@ -4,6 +4,7 @@ export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
 export interface BlockDef {
 	id: PointSymbolID;
+	color: string;
 	odds: number;
 	size: number;
 	canRotate: [ boolean, boolean, boolean ]; // 90, 180, 270
@@ -15,6 +16,7 @@ export type PointSymbolID = string;
 
 const line: BlockDef = {
 	id: 'line',
+	color: '#ADFF2F',
 	odds: 1,
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
@@ -23,6 +25,7 @@ const line: BlockDef = {
 };
 const square: BlockDef = {
 	id: 'square',
+	color: '#F08080',
 	odds: 1,
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
@@ -31,6 +34,7 @@ const square: BlockDef = {
 };
 const are: BlockDef = {
 	id: 'are',
+	color: '#F0E68C',
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
@@ -39,6 +43,7 @@ const are: BlockDef = {
 };
 const ell: BlockDef = {
 	id: 'ell',
+	color: '#DEB887',
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
@@ -47,6 +52,7 @@ const ell: BlockDef = {
 };
 const ess: BlockDef = {
 	id: 'ess',
+	color: '#6495ED',
 	odds: 1,
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
@@ -55,6 +61,7 @@ const ess: BlockDef = {
 };
 const zee: BlockDef = {
 	id: 'zee',
+	color: '#FFB6C1',
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
@@ -63,6 +70,7 @@ const zee: BlockDef = {
 };
 const tee: BlockDef = {
 	id: 'tee',
+	color: '#7FFFD4',
 	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],
