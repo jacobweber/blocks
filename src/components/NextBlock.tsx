@@ -15,7 +15,7 @@ const NextBlock = observer(() => {
 			<svg
 				version="1.1"
 				baseProfile="full"
-				viewBox={`0 0 ${pointSize * 4} ${pointSize * 2}`}
+				viewBox={`0 0 ${pointSize * 5} ${pointSize * 5}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				{points.map(point => (
