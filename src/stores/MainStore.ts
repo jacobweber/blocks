@@ -27,6 +27,10 @@ export interface PositionedBlock {
 
 type UndoFrame = { block: PositionedBlock; score: number };
 
+export interface FilledPoint {
+	id: PointSymbolID;
+}
+
 class MainStore {
 	preferencesStore: PreferencesStore = new PreferencesStore();
 	highScoresStore: HighScoresStore = new HighScoresStore();
@@ -36,7 +40,7 @@ class MainStore {
 	height: number = 20;
 
 	positionedBlock: PositionedBlock | null = null;
-	filledPoints: Array<Array<PointSymbolID | null>> = []; // [y][x]
+	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
 	undoStack: Array<UndoFrame> = [];
 	nextBlockTypes: Array<BlockType> = [];
 
@@ -174,7 +178,9 @@ class MainStore {
 			for (let x = 0; x < this.width; x++) {
 				if (Math.floor(Math.random() * junkOdds) === 0) {
 					const type = this.getRandomBlockType();
-					this.filledPoints[y][x] = this.getBlockDef(type).id;
+					this.filledPoints[y][x] = {
+						id: this.getBlockDef(type).id
+					};
 				}
 			}
 		}
@@ -304,7 +310,9 @@ class MainStore {
 		const points = this.getPoints(block);
 		points.forEach(point => {
 			if (point[1] >= 0) {
-				this.filledPoints[point[1]][point[0]] = this.getBlockDef(block.type).id;
+				this.filledPoints[point[1]][point[0]] = {
+					id: this.getBlockDef(block.type).id
+				}
 			}
 		});
 	}
@@ -372,7 +380,9 @@ class MainStore {
 		const flash = action(() => {
 			const id = count % 2 === 0 ? PointSymbolID.FlashOn : PointSymbolID.FlashOff;
 			for (let row = 0; row < rows.length; row++) {
-				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => id);
+				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
+					id: id
+				}));
 			}
 			count++;
 		});
@@ -735,7 +745,7 @@ class MainStore {
 					points.push({
 						x,
 						y,
-						id: point
+						id: point.id
 					});
 				}
 			}
