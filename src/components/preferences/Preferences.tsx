@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
 import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'semantic-ui-react'
 
-import styles from 'components/Preferences.module.css';
+import styles from 'components/preferences/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
 import { KeyActionName } from 'utils/helpers';
 import { Block } from 'components/preferences/Block';

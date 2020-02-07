@@ -7,7 +7,7 @@ import { useStore } from 'stores/MainStore';
 import { Board } from 'components/Board';
 import { NextBlock } from 'components/NextBlock';
 import { ScoreBoard } from 'components/ScoreBoard';
-import { Preferences } from 'components/Preferences';
+import { Preferences } from 'components/preferences/Preferences';
 import { HighScores } from 'components/HighScores';
 import { NewGame } from 'components/NewGame';
 
