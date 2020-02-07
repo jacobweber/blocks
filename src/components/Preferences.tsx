@@ -149,13 +149,13 @@ const Preferences = observer(() => {
 					<div className={styles.blocks}>
 						{blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
-								<Button basic onClick={e => preferencesStore.blockEditShow(def)}>
+								<Button type='button' basic onClick={e => preferencesStore.blockEditShow(def)}>
 									<Block def={def} />
 								</Button>
 							</div>
 						))}
 						<div className={styles.block + ' ' + styles.addBlock}>
-							<Button basic onClick={e => preferencesStore.blockEditShow()}>
+							<Button type='button' basic onClick={e => preferencesStore.blockEditShow()}>
 								<Icon size='huge' name='add' />
 								Add...
 							</Button>
