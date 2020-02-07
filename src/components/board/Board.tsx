@@ -19,7 +19,7 @@ const Board = observer(() => {
 	return (
 		<div className={styles.root + (mainStore.gameState === GameState.Active ? ' ' + styles.hideCursor : '')}>
 			<div className={styles.pointDefs}>
-				<PointDefs blockColors={preferencesStore.gameBlockColors} />
+				<PointDefs blockColors={preferencesStore.blockColors} />
 				<BoardDef />
 			</div>
 			<svg

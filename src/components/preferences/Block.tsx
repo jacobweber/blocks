@@ -8,9 +8,10 @@ import { BlockDef } from 'utils/blocks';
 
 type BlockProps = {
 	def: BlockDef;
+	prefix: string;
 };
 
-const Block = observer(({ def }: BlockProps) => {
+const Block = observer(({ def, prefix = '' }: BlockProps) => {
 	const preferencesStore = useStore().preferencesStore;
 	const points = preferencesStore.getBlockPoints(def);
 
@@ -22,7 +23,7 @@ const Block = observer(({ def }: BlockProps) => {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			{points.map(point => (
-				<Point key={point.x + '-' + point.y} x={point.x} y={point.y} id={point.id} />
+				<Point key={point.x + '-' + point.y} x={point.x} y={point.y} id={prefix + point.id} />
 			))}
 		</svg>
 	);

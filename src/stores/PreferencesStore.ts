@@ -78,11 +78,15 @@ class PreferencesStore {
 		return this.prefs.styles;
 	}
 
-	get gameBlockColors(): Array<BlockColor> {
+	get blockColors(): Array<BlockColor> {
 		return [
 			{ id: 'flashOn', color: '#000000' },
 			{ id: 'flashOff', color: '#FFFFFF' },
-			...this.gameBlockDefs
+			...this.gameBlockDefs,
+			...this.prefs.blockDefs.map(def => ({
+				id: 'prefs-' + def.id,
+				color: def.color
+			}))
 		];
 	}
 
@@ -347,8 +351,8 @@ decorate(PreferencesStore, {
 	blockEditVisible: observable,
 	blockEditType: observable,
 	prefs: observable.ref,
+	blockColors: computed,
 	gameBlockDefs: observable,
-	gameBlockColors: computed,
 	gameBlockRotations: computed,
 	weightedBlockTypes: computed,
 	styles: computed,

@@ -149,7 +149,7 @@ const Preferences = observer(() => {
 						{preferencesStore.prefs.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button type='button' basic onClick={e => preferencesStore.blockEditShow(idx, def)}>
-									<Block def={def} />
+									<Block def={def} prefix='prefs-' />
 								</Button>
 							</div>
 						))}
