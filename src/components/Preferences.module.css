@@ -10,3 +10,28 @@
 	width: 200px;
 	flex-shrink: 0 !important;
 }
+.blocks {
+	overflow-x: scroll;
+	overflow-y: hidden;
+	height: 170px;
+	display: flex;
+}
+.block {
+	flex-shrink: 0;
+	width: 150px;
+	height: 150px;
+	margin-right: 10px;
+}
+.block > button {
+	width: 100%;
+	height: 100%;
+}
+.block.addBlock > button {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.block.addBlock > button > i {
+	margin: 0 0 10px 0 !important;
+}

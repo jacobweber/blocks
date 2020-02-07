@@ -1,6 +1,8 @@
 import { decorate, observable, action, computed } from 'mobx';
 
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
+import { PositionedPoint } from './MainStore';
+import { BlockDef } from 'utils/blocks';
 
 export interface Preferences {
 	keys: {
@@ -220,6 +222,17 @@ class PreferencesStore {
 				[name]: e.target.value
 			}
 		});
+	}
+
+	getBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
+		const rotation = blockDef.rotations[0];
+		const top = rotation.extent[1];
+		const id = blockDef.id;
+		return rotation.points.map(point => ({
+			x: point[0],
+			y: point[1] - top,
+			id: id
+		}));
 	}
 }
 

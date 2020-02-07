@@ -5,6 +5,8 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'sem
 import styles from 'components/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
 import { KeyActionName } from 'utils/helpers';
+import { blockDefs } from 'utils/blocks';
+import { Block } from './preferences/Block';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -139,6 +141,23 @@ const Preferences = observer(() => {
 							<Input {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'outlineColor')} value={prefsStyles.outlineColor} />
 						</Form.Field>
 					</Form.Group>
+
+					<Header as='h3' dividing>Blocks</Header>
+					<div className={styles.blocks}>
+						{blockDefs.map(def => (
+							<div className={styles.block}>
+								<Button basic>
+									<Block def={def} />
+								</Button>
+							</div>
+						))}
+						<div className={styles.block + ' ' + styles.addBlock}>
+							<Button basic>
+								<Icon size='huge' name='add' />
+								Add...
+							</Button>
+						</div>
+					</div>
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
