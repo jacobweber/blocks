@@ -316,7 +316,6 @@ class PreferencesStore {
 	}
 
 	blockEditSave(def: BlockDef) {
-		console.log(def);
 		this.blockEditVisible = false;
 		if (this.blockEditType) {
 			this.updateBlockDef(this.blockEditType, def);
