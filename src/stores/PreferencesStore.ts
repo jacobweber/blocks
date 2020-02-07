@@ -67,6 +67,9 @@ class PreferencesStore {
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
 
+	blockEditVisible: boolean = false;
+	blockEditDef: BlockDef | null = null;
+
 	get styles() {
 		return this.prefs.styles;
 	}
@@ -226,18 +229,38 @@ class PreferencesStore {
 
 	getBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
 		const rotation = blockDef.rotations[0];
-		const top = rotation.extent[1];
 		const id = blockDef.id;
 		return rotation.points.map(point => ({
 			x: point[0],
-			y: point[1] - top,
+			y: point[1],
 			id: id
 		}));
+	}
+
+	blockEditShow(def?: BlockDef) {
+		this.blockEditVisible = true;
+		if (def) {
+			this.blockEditDef = def;
+		} else {
+			this.blockEditDef = null;
+		}
+	}
+
+	blockEditCancel() {
+		this.blockEditVisible = false;
+		this.blockEditDef = null;
+	}
+
+	blockEditSave() {
+		this.blockEditVisible = false;
+		this.blockEditDef = null;
 	}
 }
 
 decorate(PreferencesStore, {
 	visible: observable,
+	blockEditVisible: observable,
+	blockEditDef: observable,
 	prefs: observable.ref,
 	styles: computed,
 	gameKeyMap: computed,
@@ -248,7 +271,10 @@ decorate(PreferencesStore, {
 	dialogShow: action,
 	dialogCancel: action,
 	dialogSave: action,
-	dialogReset: action
+	dialogReset: action,
+	blockEditShow: action,
+	blockEditCancel: action,
+	blockEditSave: action
 });
 
 export { PreferencesStore };

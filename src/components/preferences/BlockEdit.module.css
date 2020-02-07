@@ -1,0 +1,8 @@
+.root {
+}
+.colorInput {
+	width: 150px !important;
+}
+.colorInput input {
+	padding: initial !important;
+}

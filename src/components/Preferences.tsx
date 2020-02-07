@@ -6,7 +6,8 @@ import styles from 'components/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
 import { KeyActionName } from 'utils/helpers';
 import { blockDefs } from 'utils/blocks';
-import { Block } from './preferences/Block';
+import { Block } from 'components/preferences/Block';
+import { BlockEdit } from 'components/preferences/BlockEdit';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -35,6 +36,8 @@ const Preferences = observer(() => {
 			onConfirm={confirmReset}
 			confirmButton='Reset'
 		/>
+
+		{preferencesStore.blockEditVisible && <BlockEdit />}
 
 		<Modal className={styles.root} open={true} closeIcon onClose={save}>
 			<Header icon='setting' content='Preferences' />
@@ -144,15 +147,15 @@ const Preferences = observer(() => {
 
 					<Header as='h3' dividing>Blocks</Header>
 					<div className={styles.blocks}>
-						{blockDefs.map(def => (
-							<div className={styles.block}>
-								<Button basic>
+						{blockDefs.map((def, idx) => (
+							<div key={idx} className={styles.block}>
+								<Button basic onClick={e => preferencesStore.blockEditShow(def)}>
 									<Block def={def} />
 								</Button>
 							</div>
 						))}
 						<div className={styles.block + ' ' + styles.addBlock}>
-							<Button basic>
+							<Button basic onClick={e => preferencesStore.blockEditShow()}>
 								<Icon size='huge' name='add' />
 								Add...
 							</Button>
