@@ -22,10 +22,10 @@ export type PointSymbolID = string;
 export const defaultEdit: BlockDef = {
 	id: 'sample',
 	color: '#AA0000',
-	odds: 1,
+	odds: 10,
 	size: 3,
-	canRotate: [ true, true, true ],
-	points: []
+	points: [],
+	canRotate: [ true, true, true ]
 };
 
 const line: BlockDef = {
