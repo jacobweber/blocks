@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { observer } from "mobx-react-lite"
 import { Button, Header, Icon, Modal, Form, Input } from 'semantic-ui-react'
 
 import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
-import { pointBitmapToXY, PointBitmap, pointsXYToBitmap } from 'utils/blocks';
 
 const fixOdds = function(odds: string): (number | '') {
 	const val = parseInt(odds, 10);
@@ -16,34 +15,16 @@ const fixOdds = function(odds: string): (number | '') {
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
 	const blockEditStore = preferencesStore.blockEditStore;
-	const origDef = preferencesStore.prefsEdited.blockDefs[blockEditStore.blockType!];
+	const { form, updateForm } = blockEditStore;
 
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
 		type: 'color',
 		className: styles.colorInput
 	}; // breaks on safari
 
-	const [ name, setName ] = useState(origDef.id);
-	const [ odds, setOdds ] = useState<number|''>(origDef.odds);
-	const [ size, setSize ] = useState(origDef.size);
-	const [ color, setColor ] = useState(origDef.color);
-	const [ rotate90, setRotate90 ] = useState(origDef.rotate90);
-	const [ rotate180, setRotate180 ] = useState(origDef.rotate180);
-	const [ rotate270, setRotate270 ] = useState(origDef.rotate270);
-	const [ points, setPoints ] = useState<PointBitmap>(pointsXYToBitmap(origDef.points));
-
 	const cancel = () => blockEditStore.dialogCancel();
 	const del = () => blockEditStore.dialogDelete();
-	const ok = () => blockEditStore.dialogSave({
-		id: name,
-		color,
-		odds: odds || 0,
-		size,
-		rotate90,
-		rotate180,
-		rotate270,
-		points: pointBitmapToXY(points)
-	});
+	const ok = () => blockEditStore.dialogSave();
 
 	return (<>
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
@@ -53,17 +34,17 @@ const BlockEdit = observer(() => {
 					<Form.Group>
 						<Form.Field>
 							<label>Name</label>
-							<Input onChange={e => setName(e.target.value)} value={name} />
+							<Input onChange={e => updateForm({ id: e.target.value })} value={form.id} />
 						</Form.Field>
 
 						<Form.Field>
 							<label>Frequency</label>
-							<Input onChange={e => setOdds(fixOdds(e.target.value))} value={odds} />
+							<Input onChange={e => updateForm({ odds: fixOdds(e.target.value) })} value={form.odds} />
 						</Form.Field>
 
 						<Form.Field>
 							<label>Color</label>
-							<Input {...colorProps} onChange={e => setColor(e.target.value)} value={color} />
+							<Input {...colorProps} onChange={e => updateForm({ color: e.target.value })} value={form.color} />
 						</Form.Field>
 					</Form.Group>
 
@@ -72,7 +53,7 @@ const BlockEdit = observer(() => {
 							<label>Size</label>
 							<Button.Group>
 								{[1, 2, 3, 4, 5].map(val => (
-									<Button type='button' active={size === val} key={val} onClick={() => setSize(val)}>
+									<Button type='button' active={form.size === val} key={val} onClick={() => updateForm({ size: val })}>
 										{val}
 									</Button>
 								))}
@@ -82,20 +63,20 @@ const BlockEdit = observer(() => {
 						<Form.Field>
 							<label>Rotations</label>
 							<Button.Group>
-								<Button type='button' active={rotate90} onClick={() => setRotate90(!rotate90)}>
+								<Button type='button' active={form.rotate90} onClick={() => updateForm({ rotate90: !form.rotate90 })}>
 									90&deg;
 								</Button>
-								<Button type='button' active={rotate180} onClick={() => setRotate180(!rotate180)}>
+								<Button type='button' active={form.rotate180} onClick={() => updateForm({ rotate180: !form.rotate180 })}>
 									180&deg;
 								</Button>
-								<Button type='button' active={rotate270} onClick={() => setRotate270(!rotate270)}>
+								<Button type='button' active={form.rotate270} onClick={() => updateForm({ rotate270: !form.rotate270 })}>
 									270&deg;
 								</Button>
 							</Button.Group>
 						</Form.Field>
 					</Form.Group>
 
-					<BlockBitmap prefix={preferencesStore.prefsSymbolPrefix} size={size} id={origDef.id} points={points} onChangePoints={setPoints} />
+					<BlockBitmap prefix={preferencesStore.prefsSymbolPrefix} size={form.size} id={form.id} points={form.points} onChangePoints={points => updateForm({ points })} />
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>

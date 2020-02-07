@@ -1,16 +1,32 @@
 import { decorate, observable, action } from 'mobx';
 
-import { BlockDef, BlockType, defaultEdit } from 'utils/blocks';
+import { BlockDef, BlockType, defaultEdit, PointSymbolID, PointBitmap, pointsXYToBitmap, pointBitmapToXY } from 'utils/blocks';
 import { PreferencesStore } from './PreferencesStore';
+
+export interface BlockEditForm {
+	id: PointSymbolID;
+	color: string;
+	odds: number | '';
+	size: number;
+	rotate90: boolean;
+	rotate180: boolean;
+	rotate270: boolean;
+	points: PointBitmap;
+}
 
 class BlockEditStore {
 	visible: boolean = false;
+	form: BlockEditForm;
 	blockType: BlockType | null = null;
-	adding: boolean = false;
+
 	preferencesStore: PreferencesStore;
 
 	constructor(preferencesStore: PreferencesStore) {
 		this.preferencesStore = preferencesStore;
+		this.form = {
+			...defaultEdit,
+			points: pointsXYToBitmap(defaultEdit.points)
+		};
 	}
 
 	addBlockDef(def: BlockDef): void {
@@ -44,35 +60,51 @@ class BlockEditStore {
 		});
 	}
 
+	updateForm = (updates: Partial<BlockEditForm>): void => {
+		this.form = {
+			...this.form,
+			...updates
+		};
+	}
+
 	dialogShowAdd() {
-		this.blockType = this.preferencesStore.prefsEdited.blockDefs.length;
-		this.adding = true;
-		this.addBlockDef(defaultEdit);
+		this.blockType = null;
+		this.form = {
+			...defaultEdit,
+			points: pointsXYToBitmap(defaultEdit.points)
+		};
 		this.visible = true;
 	}
 
 	dialogShowEdit(type: BlockType, def: BlockDef) {
 		this.blockType = type;
-		this.adding = false;
+		this.form = {
+			...def,
+			points: pointsXYToBitmap(def.points)
+		};
 		this.visible = true;
 	}
 
 	dialogCancel() {
 		this.visible = false;
-		if (this.adding && this.blockType !== null) {
-			this.deleteBlockDef(this.blockType);
-		}
 		this.blockType = null;
-		this.adding = false;
 	}
 
-	dialogSave(def: BlockDef) {
+	dialogSave() {
 		this.visible = false;
-		if (this.blockType !== null) {
-			this.updateBlockDef(this.blockType, def);
+		if (this.form !== null) {
+			const def: BlockDef = {
+				...this.form,
+				odds: this.form.odds === '' ? 0 : this.form.odds,
+				points: pointBitmapToXY(this.form.points)
+			};
+			if (this.blockType === null) {
+				this.addBlockDef(def);
+			} else {
+				this.updateBlockDef(this.blockType, def);
+			}
 		}
 		this.blockType = null;
-		this.adding = false;
 	}
 
 	dialogDelete() {
@@ -80,13 +112,14 @@ class BlockEditStore {
 		if (this.blockType !== null) {
 			this.deleteBlockDef(this.blockType);
 		}
-		this.adding = false;
 	}
 }
 
 decorate(BlockEditStore, {
 	visible: observable,
+	form: observable.ref,
 	blockType: observable,
+	updateForm: action,
 	dialogShowAdd: action,
 	dialogShowEdit: action,
 	dialogCancel: action,
