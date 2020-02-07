@@ -4,6 +4,7 @@ export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 
 export interface BlockDef {
 	id: PointSymbolID;
+	odds: number;
 	size: number;
 	canRotate: [ boolean, boolean, boolean ]; // 90, 180, 270
 	points: Array<PointXY>;
@@ -14,6 +15,7 @@ export type PointSymbolID = string;
 
 const line: BlockDef = {
 	id: 'line',
+	odds: 1,
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
 	canRotate: [ true, false, false ],
@@ -21,6 +23,7 @@ const line: BlockDef = {
 };
 const square: BlockDef = {
 	id: 'square',
+	odds: 1,
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
 	canRotate: [ false, false, false ],
@@ -28,6 +31,7 @@ const square: BlockDef = {
 };
 const are: BlockDef = {
 	id: 'are',
+	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
 	canRotate: [ true, true, true ],
@@ -35,6 +39,7 @@ const are: BlockDef = {
 };
 const ell: BlockDef = {
 	id: 'ell',
+	odds: 1,
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
 	canRotate: [ true, true, true ],
@@ -42,6 +47,7 @@ const ell: BlockDef = {
 };
 const ess: BlockDef = {
 	id: 'ess',
+	odds: 1,
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
 	canRotate: [ false, false, true ],
@@ -49,6 +55,7 @@ const ess: BlockDef = {
 };
 const zee: BlockDef = {
 	id: 'zee',
+	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
 	canRotate: [ false, false, true ],
@@ -56,6 +63,7 @@ const zee: BlockDef = {
 };
 const tee: BlockDef = {
 	id: 'tee',
+	odds: 1,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],
 	canRotate: [ true, true, true ],
@@ -89,6 +97,20 @@ const getExtentReducer = (prev: ExtentLTRB, cur: PointXY, idx: number, arr: Arra
 		return [l, t, r, b];
 	}
 };
+
+let weightedBlockTypes: Array<BlockType> = [];
+
+export function calculateBlockWeights(): void {
+	weightedBlockTypes = [];
+	blockDefs.forEach((def, index) => {
+		weightedBlockTypes.push( ...Array.from({ length: def.odds }, () => index) );
+	});
+};
+
+export function getRandomBlockType(): BlockType {
+	const index = Math.floor(Math.random() * weightedBlockTypes.length);
+	return weightedBlockTypes[index];
+}
 
 export function calculateBlockRotations() {
 	blockDefs.forEach((def: BlockDef) => {

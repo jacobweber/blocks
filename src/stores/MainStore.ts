@@ -5,7 +5,7 @@ import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
 import { NewGameStore } from 'stores/NewGameStore';
 import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
 import { GameState, Actions, logAction, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
-import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs, calculateBlockRotations } from 'utils/blocks';
+import { PointSymbolID, BlockType, BlockDef, PointXY, blockDefs, getRandomBlockType, calculateBlockWeights, calculateBlockRotations } from 'utils/blocks';
 
 const log = false;
 const numClearRowsBonus = 4;
@@ -60,6 +60,7 @@ class MainStore {
 	unpausedStart = 0;
 
 	constructor() {
+		calculateBlockWeights();
 		calculateBlockRotations();
 		this.preferencesStore.load();
 		this.highScoresStore.load();
@@ -112,10 +113,6 @@ class MainStore {
 	get nextBlockDef(): BlockDef | null {
 		if (this.nextBlockTypes.length === 0) return null;
 		return this.getBlockDef(this.nextBlockTypes[this.nextBlockTypes.length - 1]);
-	}
-
-	getRandomBlockType(): BlockType {
-		return Math.floor(Math.random() * blockDefs.length);
 	}
 
 	getBlockDef(type: BlockType): BlockDef {
@@ -177,7 +174,7 @@ class MainStore {
 		for (let y = this.height - 1; y >= this.height - this.prefs.rowsJunk; y--) {
 			for (let x = 0; x < this.width; x++) {
 				if (Math.floor(Math.random() * junkOdds) === 0) {
-					const type = this.getRandomBlockType();
+					const type = getRandomBlockType();
 					this.filledPoints[y][x] = {
 						id: this.getBlockDef(type).id
 					};
@@ -332,10 +329,10 @@ class MainStore {
 			type = this.nextBlockTypes[this.nextBlockTypes.length - 1];
 			this.nextBlockTypes = this.nextBlockTypes.slice(0, -1);
 		} else {
-			type = this.getRandomBlockType();
+			type = getRandomBlockType();
 		}
 		if (this.nextBlockTypes.length === 0) {
-			this.nextBlockTypes = [ this.getRandomBlockType() ];
+			this.nextBlockTypes = [ getRandomBlockType() ];
 		}
 		const rotation = 0;
 		const extent = this.getBlockDef(type).rotations[rotation].extent;
