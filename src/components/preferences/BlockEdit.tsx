@@ -92,7 +92,7 @@ const BlockEdit = observer(() => {
 						</Form.Field>
 					</Form.Group>
 
-					<BlockBitmap size={size} id={origDef.id} points={points} onChangePoints={setPoints} />
+					<BlockBitmap prefix={preferencesStore.prefsSymbolPrefix} size={size} id={origDef.id} points={points} onChangePoints={setPoints} />
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>

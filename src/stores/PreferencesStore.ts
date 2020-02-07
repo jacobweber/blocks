@@ -69,6 +69,7 @@ class PreferencesStore {
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
 	gameBlockDefs: Array<BlockDef> = [];
+	prefsSymbolPrefix = 'prefs-'; // will need to be blank if using static SVG for pieces
 
 	blockEditVisible: boolean = false;
 	blockEditType: BlockType | null = null;
@@ -84,7 +85,7 @@ class PreferencesStore {
 			{ id: 'flashOff', color: '#FFFFFF' },
 			...this.gameBlockDefs,
 			...this.prefs.blockDefs.map(def => ({
-				id: 'prefs-' + def.id,
+				id: this.prefsSymbolPrefix + def.id,
 				color: def.color
 			}))
 		];
@@ -346,6 +347,7 @@ decorate(PreferencesStore, {
 	prefs: observable.ref,
 	blockColors: computed,
 	gameBlockDefs: observable,
+	prefsSymbolPrefix: observable,
 	gameBlockRotations: computed,
 	weightedBlockTypes: computed,
 	styles: computed,

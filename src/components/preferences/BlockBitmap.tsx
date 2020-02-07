@@ -7,6 +7,7 @@ import { pointSize } from 'utils/helpers';
 import { PointSymbolID, PointBitmap } from 'utils/blocks';
 
 type BlockBitmapProps = {
+	prefix: string;
 	size: number;
 	id: PointSymbolID;
 	points: PointBitmap;
@@ -25,8 +26,7 @@ const togglePoint = function(points: PointBitmap, x: number, y: number): PointBi
 	];
 };
 
-const BlockBitmap = observer(({ id, size, points, onChangePoints }: BlockBitmapProps) => {
-
+const BlockBitmap = observer(({ prefix, id, size, points, onChangePoints }: BlockBitmapProps) => {
 	const xLines = [];
 	for (let i = 0; i < size; i++) {
 		xLines.push(<line key={i} stroke='black' strokeWidth='1' x1='0' y1={pointSize * i} x2='100%' y2={pointSize * i} />);
@@ -41,7 +41,7 @@ const BlockBitmap = observer(({ id, size, points, onChangePoints }: BlockBitmapP
 	for (let x = 0; x < size; x++) {
 		for (let y = 0; y < size; y++) {
 			if (points[x][y]) {
-				pointComps.push(<Point onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} id={'prefs-' + id} />);
+				pointComps.push(<Point onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} id={prefix + id} />);
 			} else {
 				blankComps.push(<rect onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * pointSize} y={y * pointSize} width={pointSize} height={pointSize} fill='white' stroke='none' />);
 			}
