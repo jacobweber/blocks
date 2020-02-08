@@ -5,7 +5,7 @@ import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
 import { NewGameStore } from 'stores/NewGameStore';
 import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
 import { GameState, Actions, logAction, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
-import { PointSymbolID, BlockType, BlockDef, PointXY, BlockRotations } from 'utils/blocks';
+import { PointSymbolID, BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
 
 const log = false;
 const numClearRowsBonus = 4;
@@ -56,9 +56,14 @@ class MainStore {
 	totalTime = 0;
 	unpausedStart = 0;
 
+	gameBlockDefs: Array<BlockDef> = [];
+	width: number = 0;
+	height: number = 0;
+
 	constructor() {
 		this.preferencesStore.load();
 		this.highScoresStore.load();
+		this.lockGamePrefs();
 		this.resetGameCompletely();
 	}
 
@@ -101,6 +106,27 @@ class MainStore {
 		});
 	}
 
+	get blockColors(): Array<BlockColor> {
+		return [
+			{ id: 'flashOn', color: '#000000' },
+			{ id: 'flashOff', color: '#FFFFFF' },
+			...this.gameBlockDefs
+		];
+	}
+
+	get gameBlockRotations(): Array<BlockRotations> {
+		return this.gameBlockDefs.map(def => calculateBlockRotations(def));
+	}
+
+	get weightedBlockTypes() {
+		return calculateBlockWeights(this.gameBlockDefs);
+	}
+
+	getRandomBlockType(): BlockType {
+		const index = Math.floor(Math.random() * this.weightedBlockTypes.length);
+		return this.weightedBlockTypes[index];
+	}
+
 	get downDelayMS(): number {
 		return getDownDelayMS(this.level);
 	}
@@ -111,11 +137,17 @@ class MainStore {
 	}
 
 	getBlockDef(type: BlockType): BlockDef {
-		return this.preferencesStore.gameBlockDefs[type]!;
+		return this.gameBlockDefs[type]!;
 	}
 
 	getBlockRotations(type: BlockType): BlockRotations {
-		return this.preferencesStore.gameBlockRotations[type]!;
+		return this.gameBlockRotations[type]!;
+	}
+
+	lockGamePrefs() {
+		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
+		this.width = Math.min(Math.max(5, this.prefs.width), 100);
+		this.height = Math.min(Math.max(5, this.prefs.height), 100);
 	}
 
 	resetGameLeavingBoard(): void {
@@ -137,7 +169,7 @@ class MainStore {
 
 	resetGameCompletely() {
 		this.resetGameLeavingBoard();
-		this.filledPoints = Array.from({ length: this.preferencesStore.height }, () => Array.from({ length: this.preferencesStore.width }));
+		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.score = 0;
 		this.rows = 0;
 		this.totalTime = 0;
@@ -145,7 +177,7 @@ class MainStore {
 
 	newGame(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
-		this.preferencesStore.lockGamePrefs();
+		this.lockGamePrefs();
 		this.resetGameCompletely();
 
 		this.startLevel = this.prefs.startLevel;
@@ -171,10 +203,10 @@ class MainStore {
 
 	fillRowsWithJunk() {
 		if (this.prefs.rowsJunk === 0) return;
-		for (let y = this.preferencesStore.height - 1; y >= this.preferencesStore.height - this.prefs.rowsJunk; y--) {
-			for (let x = 0; x < this.preferencesStore.width; x++) {
+		for (let y = this.height - 1; y >= this.height - this.prefs.rowsJunk; y--) {
+			for (let x = 0; x < this.width; x++) {
 				if (Math.floor(Math.random() * junkOdds) === 0) {
-					const type = this.preferencesStore.getRandomBlockType();
+					const type = this.getRandomBlockType();
 					this.filledPoints[y][x] = {
 						id: this.getBlockDef(type).id
 					};
@@ -280,16 +312,16 @@ class MainStore {
 	canRotate(block: PositionedBlock) {
 		const def = this.getBlockDef(block.type);
 		return block.x >= 0
-			&& block.x + def.size <= this.preferencesStore.width
-			&& block.y + def.size <= this.preferencesStore.height;
+			&& block.x + def.size <= this.width
+			&& block.y + def.size <= this.height;
 	}
 
 	inBounds(block: PositionedBlock): boolean {
 		const extent = this.getBlockRotations(block.type)[block.rotation].extent;
 		return block.x + extent[0] >= 0
 			// && block.y - extent[1] >= 0
-			&& block.x + extent[2] < this.preferencesStore.width
-			&& block.y + extent[3] < this.preferencesStore.height;
+			&& block.x + extent[2] < this.width
+			&& block.y + extent[3] < this.height;
 	}
 
 	positionFree(block: PositionedBlock): boolean {
@@ -329,15 +361,15 @@ class MainStore {
 			type = this.nextBlockTypes[this.nextBlockTypes.length - 1];
 			this.nextBlockTypes = this.nextBlockTypes.slice(0, -1);
 		} else {
-			type = this.preferencesStore.getRandomBlockType();
+			type = this.getRandomBlockType();
 		}
 		if (this.nextBlockTypes.length === 0) {
-			this.nextBlockTypes = [ this.preferencesStore.getRandomBlockType() ];
+			this.nextBlockTypes = [ this.getRandomBlockType() ];
 		}
 		const rotation = 0;
 		const extent = this.getBlockRotations(type)[rotation].extent;
 		const blockWidth = extent[2] - extent[0] + 1;
-		const x = Math.ceil((this.preferencesStore.width - blockWidth) / 2);
+		const x = Math.ceil((this.width - blockWidth) / 2);
 		const y = -extent[1];
 		const nextBlock = { x, y, type, rotation };
 		if (this.positionFree(nextBlock)) {
@@ -352,10 +384,10 @@ class MainStore {
 		if (!this.positionedBlock) return rows;
 		for (let checkOffset = 0; checkOffset < this.getBlockDef(this.positionedBlock.type).size; checkOffset++) {
 			const y = this.positionedBlock.y + checkOffset;
-			if (y < 0 || y >= this.preferencesStore.height) continue;
+			if (y < 0 || y >= this.height) continue;
 			const checkRow = this.filledPoints[y];
 			let rowComplete = true;
-			for (let x = 0; x < this.preferencesStore.width; x++) {
+			for (let x = 0; x < this.width; x++) {
 				if (!checkRow[x]) {
 					rowComplete = false;
 					break;
@@ -377,7 +409,7 @@ class MainStore {
 		const flash = action(() => {
 			const id = count % 2 === 0 ? 'flashOn' : 'flashOff';
 			for (let row = 0; row < rows.length; row++) {
-				this.filledPoints[rows[row]] = Array.from({ length: this.preferencesStore.width }, () => ({
+				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
 					id: id
 				}));
 			}
@@ -399,7 +431,7 @@ class MainStore {
 			this.filledPoints.splice(rows[row], 1);
 		}
 		for (let row = 0; row < rows.length; row++) {
-			this.filledPoints.unshift(Array.from({ length: this.preferencesStore.width }));
+			this.filledPoints.unshift(Array.from({ length: this.width }));
 		}
 	}
 
@@ -569,7 +601,7 @@ class MainStore {
 		};
 
 		const extent = this.getBlockRotations(this.positionedBlock.type)[this.positionedBlock.rotation].extent;
-		const points = this.preferencesStore.height - (this.positionedBlock.y + extent[3]) - 1;
+		const points = this.height - (this.positionedBlock.y + extent[3]) - 1;
 
 		this.setAnimating(true);
 		while (!done) {
@@ -735,8 +767,8 @@ class MainStore {
 
 	getFrozenPoints(): Array<PositionedPoint> {
 		const points: Array<PositionedPoint> = [];
-		for (let x = 0; x < this.preferencesStore.width; x++) {
-			for (let y = 0; y < this.preferencesStore.height; y++) {
+		for (let x = 0; x < this.width; x++) {
+			for (let y = 0; y < this.height; y++) {
 				const point = this.filledPoints[y][x];
 				if (point) {
 					points.push({
@@ -783,10 +815,17 @@ decorate(MainStore, {
 	downDelayMS: computed,
 	gameState: observable,
 	positionedBlock: observable.ref,
+	gameBlockDefs: observable,
+	width: observable,
+	height: observable,
+	gameBlockRotations: computed,
+	weightedBlockTypes: computed,
 	prefs: computed,
 	nextBlockType: computed,
 	nextBlockTypes: observable.ref,
 	filledPoints: observable,
+	blockColors: computed,
+	lockGamePrefs: action,
 	resetGameLeavingBoard: action,
 	resetGameCompletely: action,
 	newGame: action,

@@ -3,7 +3,7 @@ import { decorate, observable, action, computed } from 'mobx';
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
 import { PositionedPoint } from 'stores/MainStore';
 import { BlockEditStore } from 'stores/BlockEditStore';
-import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor } from 'utils/blocks';
+import { BlockDef, BlockType, defaultBlockDefs, BlockColor } from 'utils/blocks';
 
 export type BoardType = 'Black' | 'White';
 export const boardTypes: Array<BoardType> = ['Black', 'White'];
@@ -89,20 +89,8 @@ class PreferencesStore {
 	sampleBlockType: BlockType | null = null;
 	sampleBlockTimer: number | null = null;
 
-	gameBlockDefs: Array<BlockDef> = [];
-	width: number = 0;
-	height: number = 0;
-
 	get styles() {
 		return this.prefs.styles;
-	}
-
-	get blockColors(): Array<BlockColor> {
-		return [
-			{ id: 'flashOn', color: '#000000' },
-			{ id: 'flashOff', color: '#FFFFFF' },
-			...this.gameBlockDefs
-		];
 	}
 
 	get formBlockColors(): Array<BlockColor> {
@@ -112,19 +100,6 @@ class PreferencesStore {
 				color: def.color
 			}))
 		];
-	}
-
-	get gameBlockRotations(): Array<BlockRotations> {
-		return this.gameBlockDefs.map(def => calculateBlockRotations(def));
-	}
-
-	get weightedBlockTypes() {
-		return calculateBlockWeights(this.gameBlockDefs);
-	}
-
-	getRandomBlockType(): BlockType {
-		const index = Math.floor(Math.random() * this.weightedBlockTypes.length);
-		return this.weightedBlockTypes[index];
 	}
 
 	get gameKeyMap(): { [key: string]: Actions } {
@@ -168,7 +143,6 @@ class PreferencesStore {
 			...defaultPrefs,
 			...(prefs || {})
 		};
-		this.lockGamePrefs();
 	}
 
 	save() {
@@ -241,12 +215,6 @@ class PreferencesStore {
 
 	setForm(prefs: Preferences): void {
 		this.form = prefs;
-	}
-
-	lockGamePrefs() {
-		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
-		this.width = Math.min(Math.max(5, this.prefs.width), 100);
-		this.height = Math.min(Math.max(5, this.prefs.height), 100);
 	}
 
 	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
@@ -350,13 +318,7 @@ decorate(PreferencesStore, {
 	form: observable.ref,
 	sampleBlockType: observable.ref,
 	sampleBlockDef: computed,
-	blockColors: computed,
 	formBlockColors: computed,
-	gameBlockDefs: observable,
-	width: observable,
-	height: observable,
-	gameBlockRotations: computed,
-	weightedBlockTypes: computed,
 	styles: computed,
 	gameKeyMap: computed,
 	moveKeyMap: computed,
@@ -364,7 +326,6 @@ decorate(PreferencesStore, {
 	save: action,
 	updateSampleBlockType: action,
 	setForm: action,
-	lockGamePrefs: action,
 	saveNewGameOptions: action,
 	dialogShow: action,
 	dialogCancel: action,

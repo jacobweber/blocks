@@ -19,19 +19,19 @@ const Board = observer(() => {
 	return (
 		<div className={styles.root + (mainStore.gameState === GameState.Active ? ' ' + styles.hideCursor : '')}>
 			<div className={styles.pointDefs}>
-				<PointDefsSelector type={preferencesStore.prefs.pointsType} blockColors={preferencesStore.blockColors} />
+				<PointDefsSelector type={preferencesStore.prefs.pointsType} blockColors={mainStore.blockColors} />
 				<BoardDefSelector type={preferencesStore.prefs.boardType} />
 			</div>
 			<svg
 				version="1.1"
 				baseProfile="full"
-				viewBox={`0 0 ${pointSize * preferencesStore.width} ${pointSize * preferencesStore.height}`}
+				viewBox={`0 0 ${pointSize * mainStore.width} ${pointSize * mainStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<BoardBackdrop
 					gridColor={prefsStyles.gridColor}
-					width={preferencesStore.width}
-					height={preferencesStore.height}
+					width={mainStore.width}
+					height={mainStore.height}
 				/>
 				<Points />
 				<PositionedBlock />
