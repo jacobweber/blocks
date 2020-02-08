@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
-import { Button, Header, Icon, Modal, Form, Input } from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Form, Input, Confirm } from 'semantic-ui-react'
 
 import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
@@ -17,14 +17,29 @@ const BlockEdit = observer(() => {
 		className: styles.colorInput
 	}; // breaks on safari
 
+	const [ confirmOpen, setConfirmOpen ] = useState(false);
+
 	const cancel = () => blockEditStore.dialogCancel();
-	const del = () => blockEditStore.dialogDelete();
 	const ok = () => blockEditStore.dialogSave();
+	const del = () => setConfirmOpen(true);
+	const cancelDelete = () => setConfirmOpen(false);
+	const confirmDelete = () => {
+		setConfirmOpen(false);
+		blockEditStore.dialogDelete();
+	}
 
 	return (<>
 		<div className={styles.pointDefs}>
 			<PointDefsSelector type={preferencesStore.form.pointsType} prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
 		</div>
+
+		<Confirm
+			content='Are you sure you want to delete this block?'
+			open={confirmOpen}
+			onCancel={cancelDelete}
+			onConfirm={confirmDelete}
+			confirmButton='Delete'
+		/>
 
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
 			<Header icon='setting' content='Edit Block' />
