@@ -146,7 +146,7 @@ const Preferences = observer(() => {
 						</Form.Field>
 		          	</Form.Group>
 
-					<Header as='h3' dividing>Styles</Header>
+					<Header as='h3' dividing>Colors</Header>
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Background</label>
@@ -167,27 +167,7 @@ const Preferences = observer(() => {
 					</Form.Group>
 
 					<Header as='h3' dividing>
-						Block Types
-						<Header.Subheader>Changes will apply to next game.</Header.Subheader>
-					</Header>
-					<div className={styles.blocks}>
-						{form.blockDefs.map((def, idx) => (
-							<div key={idx} className={styles.block}>
-								<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowEdit(idx, def)}>
-									<Block def={def} prefix={form.pointsType + '-'} />
-								</Button>
-							</div>
-						))}
-						<div className={styles.block + ' ' + styles.addBlock}>
-							<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowAdd()}>
-								<Icon size='huge' name='add' />
-								Add...
-							</Button>
-						</div>
-					</div>
-
-					<Header as='h3' dividing>
-						Color Palette
+						Block Colors
 						<Header.Subheader>Will replace any customized colors.</Header.Subheader>
 					</Header>
 					<div className={styles.blocks + ' ' + styles.colors}>
@@ -233,6 +213,26 @@ const Preferences = observer(() => {
 								</Button>
 							</div>
 						))}
+					</div>
+
+					<Header as='h3' dividing>
+						Block Shapes
+						<Header.Subheader>Changes will apply to next game.</Header.Subheader>
+					</Header>
+					<div className={styles.blocks}>
+						{form.blockDefs.map((def, idx) => (
+							<div key={idx} className={styles.block}>
+								<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowEdit(idx, def)}>
+									<Block def={def} prefix={form.pointsType + '-'} />
+								</Button>
+							</div>
+						))}
+						<div className={styles.block + ' ' + styles.addBlock}>
+							<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowAdd()}>
+								<Icon size='huge' name='add' />
+								Add...
+							</Button>
+						</div>
 					</div>
 				</Form>
 			</Modal.Content>
