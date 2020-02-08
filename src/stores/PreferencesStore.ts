@@ -1,6 +1,6 @@
 import { decorate, observable, action, computed } from 'mobx';
 
-import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr } from 'utils/helpers';
+import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr, strToIntRange } from 'utils/helpers';
 import { PositionedPoint } from 'stores/MainStore';
 import { BlockEditStore } from 'stores/BlockEditStore';
 import { BlockDef, BlockType, defaultBlockDefs, BlockColor } from 'utils/blocks';
@@ -180,9 +180,9 @@ class PreferencesStore {
 		return {
 			...origPrefs,
 			...form,
-			leftRightAccelAfterMS: Math.max(0, Math.min(1000, parseInt(form.leftRightAccelAfterMS, 10) || 0)),
-			width: Math.max(5, Math.min(30, parseInt(form.width, 10) || 10)),
-			height: Math.max(5, Math.min(30, parseInt(form.height, 10) || 20))
+			leftRightAccelAfterMS: strToIntRange(form.leftRightAccelAfterMS, 0, 100),
+			width: strToIntRange(form.width, 5, 30),
+			height: strToIntRange(form.height, 5, 30)
 		}
 	}
 

@@ -93,3 +93,23 @@ export const palettes = [
 	['#fbb4ae', '#b3cde3', '#ccebc5', '#decbe4', '#fed9a6', '#ffffcc', '#e5d8bd'], // pastel
 //	['#', '#', '#', '#', '#', '#', '#']
 ];
+
+export function strToIntRange(str: string, min?: number, max?: number, def?: number): number {
+	let num = parseInt(str, 10);
+	if (isNaN(num)) {
+		if (def !== undefined) {
+			return def;
+		} else if (min !== undefined) {
+			return min;
+		} else {
+			return 0;
+		}
+	}
+	if (min !== undefined) {
+		num = Math.max(min, num);
+	}
+	if (max !== undefined) {
+		num = Math.min(max, num);
+	}
+	return num;
+}

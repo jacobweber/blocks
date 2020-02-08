@@ -7,12 +7,6 @@ import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
 import { PointDefsSelector } from 'components/points/PointDefsSelector';
 
-const fixOdds = function(odds: string): (number | '') {
-	const val = parseInt(odds, 10);
-	if (isNaN(val)) return '';
-	return val;
-};
-
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
 	const blockEditStore = preferencesStore.blockEditStore;
@@ -44,7 +38,7 @@ const BlockEdit = observer(() => {
 
 						<Form.Field>
 							<label>Frequency</label>
-							<Input onChange={e => updateForm({ odds: fixOdds(e.target.value) })} value={form.odds} />
+							<Input onChange={e => updateForm({ odds: e.target.value.replace(/[^0-9]/g, '') })} value={form.odds} />
 						</Form.Field>
 
 						<Form.Field>

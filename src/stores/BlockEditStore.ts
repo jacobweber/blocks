@@ -2,11 +2,12 @@ import { decorate, observable, action, computed } from 'mobx';
 
 import { BlockDef, BlockType, defaultBlockDef, PointSymbolID, PointBitmap, pointsXYToBitmap, pointBitmapToXY, BlockColor } from 'utils/blocks';
 import { PreferencesStore } from './PreferencesStore';
+import { strToIntRange } from 'utils/helpers';
 
 export interface BlockEditForm {
 	id: PointSymbolID;
 	color: string;
-	odds: number | '';
+	odds: string;
 	size: number;
 	rotate90: boolean;
 	rotate180: boolean;
@@ -26,6 +27,7 @@ class BlockEditStore {
 		this.preferencesStore = preferencesStore;
 		this.form = {
 			...defaultBlockDef,
+			odds: String(defaultBlockDef.odds),
 			points: pointsXYToBitmap(defaultBlockDef.points)
 		};
 	}
@@ -81,6 +83,7 @@ class BlockEditStore {
 		this.blockType = null;
 		this.form = {
 			...defaultBlockDef,
+			odds: String(defaultBlockDef.odds),
 			points: pointsXYToBitmap(defaultBlockDef.points)
 		};
 		this.visible = true;
@@ -90,6 +93,7 @@ class BlockEditStore {
 		this.blockType = type;
 		this.form = {
 			...def,
+			odds: String(def.odds),
 			points: pointsXYToBitmap(def.points)
 		};
 		this.visible = true;
@@ -105,7 +109,7 @@ class BlockEditStore {
 		if (this.form !== null) {
 			const def: BlockDef = {
 				...this.form,
-				odds: this.form.odds === '' ? 0 : this.form.odds,
+				odds: strToIntRange(this.form.odds, 0, 100),
 				points: pointBitmapToXY(this.form.points)
 			};
 			if (this.blockType === null) {
