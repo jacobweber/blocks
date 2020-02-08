@@ -48,6 +48,21 @@ export interface Preferences {
 	pointsType: PointsType;
 }
 
+export interface PreferencesForm {
+	keys: KeysPrefs;
+	styles: StylesPrefs,
+	blockDefs: Array<BlockDef>;
+	name: string;
+	leftRightAccelAfterMS: string;
+	allowUndo: boolean;
+	startLevel: string;
+	rowsJunk: string;
+	width: string;
+	height: string;
+	boardType: BoardType;
+	pointsType: PointsType;
+}
+
 const defaultPrefs: Preferences = {
 	keys: {
 		newGame: 'n',
@@ -89,7 +104,7 @@ class PreferencesStore {
 	visible: boolean = false;
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
-	form: Preferences = this.prefs;
+	form: PreferencesForm = this.prefsToForm(this.prefs);
 	sampleBlockType: BlockType | null = null;
 	sampleBlockTimer: number | null = null;
 
@@ -154,6 +169,33 @@ class PreferencesStore {
 		window.localStorage.setItem('preferences', str);
 	}
 
+	prefsToForm(prefs: Preferences): PreferencesForm {
+		return {
+			...prefs,
+			leftRightAccelAfterMS: String(prefs.leftRightAccelAfterMS),
+			startLevel: String(prefs.startLevel),
+			rowsJunk: String(prefs.rowsJunk),
+			width: String(prefs.width),
+			height: String(prefs.height)
+		}
+	}
+
+	formToPrefs(form: PreferencesForm, origPrefs: Preferences): Preferences {
+		return {
+			...origPrefs,
+			...form,
+			leftRightAccelAfterMS: parseInt(form.leftRightAccelAfterMS, 10),
+			startLevel: parseInt(form.startLevel, 10) || 1,
+			rowsJunk: parseInt(form.rowsJunk) || 0,
+			width: parseInt(form.width) || 10,
+			height: parseInt(form.height) || 20
+		}
+	}
+
+	setForm(form: PreferencesForm): void {
+		this.form = form;
+	}
+
 	updateSampleBlockType(): void {
 		if (this.sampleBlockType === null) {
 			this.sampleBlockType = 0;
@@ -174,7 +216,7 @@ class PreferencesStore {
 
 	dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
-		this.form = this.prefs;
+		this.form = this.prefsToForm(this.prefs);
 		if (doneCallback) {
 			this.doneCallback = doneCallback;
 		}
@@ -189,7 +231,7 @@ class PreferencesStore {
 
 	dialogCancel() {
 		this.visible = false;
-		this.form = this.prefs;
+		this.form = this.prefsToForm(this.prefs);
 		if (this.doneCallback) {
 			this.doneCallback();
 			delete this.doneCallback;
@@ -201,8 +243,8 @@ class PreferencesStore {
 
 	dialogSave() {
 		this.visible = false;
-		this.prefs = this.form;
-		this.form = this.prefs;
+		this.prefs = this.formToPrefs(this.form, this.prefs);
+		this.form = this.prefsToForm(this.prefs);
 		this.save();
 		if (this.doneCallback) {
 			this.doneCallback();
@@ -214,11 +256,7 @@ class PreferencesStore {
 	}
 
 	dialogReset() {
-		this.form = defaultPrefs;
-	}
-
-	setForm(prefs: Preferences): void {
-		this.form = prefs;
+		this.form = this.prefsToForm(defaultPrefs);
 	}
 
 	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
@@ -231,14 +269,9 @@ class PreferencesStore {
 	}
 
 	handleChangeInteger(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
-		let value = 0;
-		if (e.target.value.length > 0) {
-			value = parseInt(e.target.value, 10);
-			if (isNaN(value)) return;
-		}
 		this.setForm({
 			...this.form,
-			[name]: value
+			[name]: e.target.value.replace(/[^0-9]/g, '')
 		});
 	}
 
