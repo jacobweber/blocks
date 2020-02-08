@@ -203,7 +203,7 @@ class PreferencesStore {
 		if (this.sampleBlockTimer) {
 			window.clearInterval(this.sampleBlockTimer);
 		}
-		this.updateSampleBlockType();
+		this.sampleBlockType = 0;
 		this.sampleBlockTimer = window.setInterval(() => {
 			this.updateSampleBlockType();
 		}, 2000);
