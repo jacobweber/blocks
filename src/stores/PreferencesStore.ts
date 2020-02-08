@@ -55,8 +55,6 @@ export interface PreferencesForm {
 	name: string;
 	leftRightAccelAfterMS: string;
 	allowUndo: boolean;
-	startLevel: string;
-	rowsJunk: string;
 	width: string;
 	height: string;
 	boardType: BoardType;
@@ -173,8 +171,6 @@ class PreferencesStore {
 		return {
 			...prefs,
 			leftRightAccelAfterMS: String(prefs.leftRightAccelAfterMS),
-			startLevel: String(prefs.startLevel),
-			rowsJunk: String(prefs.rowsJunk),
 			width: String(prefs.width),
 			height: String(prefs.height)
 		}
@@ -184,11 +180,9 @@ class PreferencesStore {
 		return {
 			...origPrefs,
 			...form,
-			leftRightAccelAfterMS: parseInt(form.leftRightAccelAfterMS, 10),
-			startLevel: parseInt(form.startLevel, 10) || 1,
-			rowsJunk: parseInt(form.rowsJunk) || 0,
-			width: parseInt(form.width) || 10,
-			height: parseInt(form.height) || 20
+			leftRightAccelAfterMS: Math.max(0, Math.min(1000, parseInt(form.leftRightAccelAfterMS, 10) || 0)),
+			width: Math.max(5, Math.min(30, parseInt(form.width, 10) || 10)),
+			height: Math.max(5, Math.min(30, parseInt(form.height, 10) || 20))
 		}
 	}
 

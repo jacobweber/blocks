@@ -146,8 +146,8 @@ class MainStore {
 
 	lockGamePrefs() {
 		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
-		this.width = Math.min(Math.max(5, this.prefs.width), 100);
-		this.height = Math.min(Math.max(5, this.prefs.height), 100);
+		this.width = this.prefs.width;
+		this.height = this.prefs.height;
 	}
 
 	resetGameLeavingBoard(): void {
