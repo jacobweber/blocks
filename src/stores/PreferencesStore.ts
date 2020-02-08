@@ -73,7 +73,7 @@ const defaultPrefs: Preferences = {
 		down: 'ArrowUp',
 		rotateCCW: 'z',
 		rotateCW: 'x',
-		undo: 'a'
+		undo: navigator.platform.toUpperCase().indexOf('MAC') !== -1 ? 'Meta+z' : 'Ctrl+z'
 	},
 	styles: {
 		backgroundColor: '#000000',
