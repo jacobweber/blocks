@@ -196,10 +196,10 @@ export function pointsXYToBitmap(points: Array<PointXY>): PointBitmap {
 	return result;
 }
 
-export function pointBitmapToXY(bitmap: PointBitmap): Array<PointXY> {
+export function pointBitmapToXY(bitmap: PointBitmap, size: number): Array<PointXY> {
 	const result: Array<PointXY> = [];
-	for (let x = 0; x < bitmap.length; x++) {
-		for (let y = 0; y < bitmap[x].length; y++) {
+	for (let x = 0; x < bitmap.length && x < size; x++) {
+		for (let y = 0; y < bitmap[x].length && y < size; y++) {
 			if (bitmap[x][y]) {
 				result.push([x, y]);
 			}
