@@ -37,7 +37,7 @@ const BlockEdit = observer(() => {
 				<Form>
 					<Form.Group>
 						<Form.Field>
-							<label>Name</label>
+							<label>Symbol ID</label>
 							<Input onChange={e => updateForm({ id: e.target.value })} value={form.id} />
 						</Form.Field>
 
