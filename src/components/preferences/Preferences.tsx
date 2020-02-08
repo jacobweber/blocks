@@ -8,6 +8,7 @@ import { KeyActionName } from 'utils/helpers';
 import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
 import { PointDefs } from 'components/points/Standard';
+import { boardTypes, pointsTypes } from 'stores/PreferencesStore';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -40,7 +41,9 @@ const Preferences = observer(() => {
 		/>
 
 		<div className={styles.pointDefs}>
-			<PointDefs prefix={preferencesStore.symbolPrefix} blockColors={preferencesStore.formBlockColors} />
+			{pointsTypes.map(type => (
+				<PointDefs key={type} prefix={type + '-'} blockColors={preferencesStore.formBlockColors} />
+			))}
 		</div>
 
 		{preferencesStore.blockEditStore.visible && <BlockEdit />}
@@ -160,14 +163,14 @@ const Preferences = observer(() => {
 					</Form.Group>
 
 					<Header as='h3' dividing>
-						Blocks
+						Block Types
 						<Header.Subheader>Changes will apply to next game.</Header.Subheader>
 					</Header>
 					<div className={styles.blocks}>
 						{form.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowEdit(idx, def)}>
-									<Block def={def} prefix='prefs-' />
+									<Block def={def} prefix={form.points + '-'} />
 								</Button>
 							</div>
 						))}
@@ -177,6 +180,27 @@ const Preferences = observer(() => {
 								Add...
 							</Button>
 						</div>
+					</div>
+
+					<Header as='h3' dividing>Block Style</Header>
+					<div className={styles.blocks}>
+						{pointsTypes.map((type, idx) => (
+							<div key={idx} className={styles.block}>
+								<Button active={form.points === type} type='button' basic onClick={e => preferencesStore.handleChangePointsType(type)}>
+									{preferencesStore.sampleBlockType !== null && <Block def={form.blockDefs[preferencesStore.sampleBlockType]} prefix={type + '-'} />}
+								</Button>
+							</div>
+						))}
+					</div>
+
+					<Header as='h3' dividing>Board Style</Header>
+					<div className={styles.blocks}>
+						{boardTypes.map((type, idx) => (
+							<div key={idx} className={styles.block}>
+								<Button active={form.board === type} type='button' basic onClick={e => preferencesStore.handleChangeBoardType(type)}>
+								</Button>
+							</div>
+						))}
 					</div>
 				</Form>
 			</Modal.Content>

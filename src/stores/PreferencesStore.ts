@@ -5,6 +5,12 @@ import { PositionedPoint } from 'stores/MainStore';
 import { BlockEditStore } from 'stores/BlockEditStore';
 import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor } from 'utils/blocks';
 
+type BoardType = 'Black' | 'White';
+export const boardTypes: Array<BoardType> = ['Black', 'White'];
+
+type PointsType = 'Standard' | 'Plain';
+export const pointsTypes: Array<PointsType> = ['Standard', 'Plain'];
+
 export interface Preferences {
 	keys: {
 		newGame: string;
@@ -34,6 +40,8 @@ export interface Preferences {
 	rowsJunk: number;
 	width: number;
 	height: number;
+	board: BoardType;
+	points: PointsType;
 }
 
 const defaultPrefs: Preferences = {
@@ -64,7 +72,9 @@ const defaultPrefs: Preferences = {
 	startLevel: 1,
 	rowsJunk: 0,
 	width: 10,
-	height: 20
+	height: 20,
+	board: 'Black',
+	points: 'Standard'
 };
 
 type DoneCallbackType = () => void;
@@ -76,7 +86,8 @@ class PreferencesStore {
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
 	form: Preferences = this.prefs;
-	symbolPrefix = 'prefs-'; // will need to be blank if using static SVG for pieces
+	sampleBlockType: BlockType | null = null;
+	sampleBlockTimer: number | null = null;
 
 	gameBlockDefs: Array<BlockDef> = [];
 	width: number = 0;
@@ -169,12 +180,29 @@ class PreferencesStore {
 		window.localStorage.setItem('preferences', str);
 	}
 
+	updateSampleBlockType(): void {
+		if (this.sampleBlockType === null) {
+			this.sampleBlockType = 0;
+		} else if (this.sampleBlockType + 1 >= this.form.blockDefs.length) {
+			this.sampleBlockType = 0;
+		} else {
+			this.sampleBlockType++;
+		}
+	}
+
 	dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
 		this.form = this.prefs;
 		if (doneCallback) {
 			this.doneCallback = doneCallback;
 		}
+		if (this.sampleBlockTimer) {
+			window.clearInterval(this.sampleBlockTimer);
+		}
+		this.updateSampleBlockType();
+		this.sampleBlockTimer = window.setInterval(() => {
+			this.updateSampleBlockType();
+		}, 2000);
 	}
 
 	dialogCancel() {
@@ -183,6 +211,9 @@ class PreferencesStore {
 		if (this.doneCallback) {
 			this.doneCallback();
 			delete this.doneCallback;
+		}
+		if (this.sampleBlockTimer) {
+			window.clearInterval(this.sampleBlockTimer);
 		}
 	}
 
@@ -194,6 +225,9 @@ class PreferencesStore {
 		if (this.doneCallback) {
 			this.doneCallback();
 			delete this.doneCallback;
+		}
+		if (this.sampleBlockTimer) {
+			window.clearInterval(this.sampleBlockTimer);
 		}
 	}
 
@@ -283,6 +317,20 @@ class PreferencesStore {
 		});
 	}
 
+	handleChangeBoardType(type: BoardType): void {
+		this.setForm({
+			...this.form,
+			board: type
+		});
+	}
+
+	handleChangePointsType(type: PointsType): void {
+		this.setForm({
+			...this.form,
+			points: type
+		});
+	}
+
 	getBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
 		return blockDef.points.map(point => ({
 			x: point[0],
@@ -296,12 +344,12 @@ decorate(PreferencesStore, {
 	visible: observable,
 	prefs: observable.ref,
 	form: observable.ref,
+	sampleBlockType: observable.ref,
 	blockColors: computed,
 	formBlockColors: computed,
 	gameBlockDefs: observable,
 	width: observable,
 	height: observable,
-	symbolPrefix: observable,
 	gameBlockRotations: computed,
 	weightedBlockTypes: computed,
 	styles: computed,
@@ -309,6 +357,7 @@ decorate(PreferencesStore, {
 	moveKeyMap: computed,
 	load: action,
 	save: action,
+	updateSampleBlockType: action,
 	setForm: action,
 	lockGamePrefs: action,
 	saveNewGameOptions: action,

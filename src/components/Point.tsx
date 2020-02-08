@@ -4,7 +4,6 @@ import { PointSymbolID } from 'utils/blocks';
 import { pointSize } from 'utils/helpers';
 
 type PointProps = {
-	key: string;
 	id: PointSymbolID;
 	x: number;
 	y: number;

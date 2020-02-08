@@ -16,7 +16,7 @@
 	flex-shrink: 0 !important;
 }
 .blocks {
-	overflow-x: scroll;
+	overflow-x: auto;
 	overflow-y: hidden;
 	height: 170px;
 	display: flex;
