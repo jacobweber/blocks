@@ -180,7 +180,7 @@ class PreferencesStore {
 		return {
 			...origPrefs,
 			...form,
-			leftRightAccelAfterMS: strToIntRange(form.leftRightAccelAfterMS, 0, 100),
+			leftRightAccelAfterMS: strToIntRange(form.leftRightAccelAfterMS, 0, 1000),
 			width: strToIntRange(form.width, 5, 30),
 			height: strToIntRange(form.height, 5, 30)
 		}
