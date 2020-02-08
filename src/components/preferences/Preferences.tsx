@@ -67,7 +67,7 @@ const Preferences = observer(() => {
 
 					<Form.Group>
 						<Form.Field>
-							<label>Accelerate Left/Right after holding for</label>
+							<label>Accelerate Left/Right After Holding</label>
 							<Input
 								label={{ basic: true, content: 'ms' }}
 								labelPosition='right'
