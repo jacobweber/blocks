@@ -93,10 +93,6 @@ class PreferencesStore {
 	width: number = 0;
 	height: number = 0;
 
-	blockEditVisible: boolean = false;
-	blockEditType: BlockType | null = null;
-	blockEditAdding: boolean = false;
-
 	get styles() {
 		return this.prefs.styles;
 	}
