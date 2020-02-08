@@ -8,8 +8,8 @@ import { BlockDef, BlockType, defaultBlockDefs, BlockColor } from 'utils/blocks'
 export type BoardType = 'Black' | 'White';
 export const boardTypes: Array<BoardType> = ['Black', 'White'];
 
-export type PointsType = 'Standard' | 'Plain';
-export const pointsTypes: Array<PointsType> = ['Standard', 'Plain'];
+export type PointsType = 'Standard' | 'Plain' | 'Boxy';
+export const pointsTypes: Array<PointsType> = ['Standard', 'Plain', 'Boxy'];
 
 interface KeysPrefs {
 	newGame: string;

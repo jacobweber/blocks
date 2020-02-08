@@ -3,6 +3,7 @@ import { BlockColor } from 'utils/blocks';
 import { PointsType } from 'stores/PreferencesStore';
 import { Standard } from 'components/points/Standard';
 import { Plain } from 'components/points/Plain';
+import { Boxy } from 'components/points/Boxy';
 
 type PointDefsSelectorProps = {
 	type: PointsType;
@@ -18,6 +19,7 @@ export type PointDefsProps = {
 const getPointsDefsComp = function(type: PointsType): React.ComponentType<PointDefsProps> {
 	switch (type) {
 		case 'Plain': return Plain;
+		case 'Boxy': return Boxy;
 		case 'Standard': default: return Standard;
 	}
 }
