@@ -207,7 +207,7 @@ class PreferencesStore {
 	}
 
 	get sampleBlockDef(): BlockDef | null {
-		if (this.sampleBlockType !== null && this.sampleBlockType + 1 < this.form.blockDefs.length) {
+		if (this.sampleBlockType !== null && this.sampleBlockType < this.form.blockDefs.length) {
 			return this.form.blockDefs[this.sampleBlockType];
 		}
 		// in case it was deleted while visible
