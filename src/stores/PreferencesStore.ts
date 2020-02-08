@@ -83,7 +83,7 @@ const defaultPrefs: Preferences = {
 	},
 	blockDefs: defaultBlockDefs,
 	name: 'Anonymous',
-	leftRightAccelAfterMS: 200,
+	leftRightAccelAfterMS: 250,
 	downTimerPauseWhenMovingMS: 500,
 	allowUndo: true,
 	startLevel: 1,
