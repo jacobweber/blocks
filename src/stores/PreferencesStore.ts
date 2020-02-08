@@ -326,6 +326,17 @@ class PreferencesStore {
 		});
 	}
 
+	handleChangePalette(palette: Array<string>): void {
+		const blockDefs = this.form.blockDefs.map((def, idx) => ({
+			...def,
+			color: palette[idx % palette.length]
+		}));
+		this.setForm({
+			...this.form,
+			blockDefs
+		});
+	}
+
 	handleChangeBoardType(type: BoardType): void {
 		this.setForm({
 			...this.form,

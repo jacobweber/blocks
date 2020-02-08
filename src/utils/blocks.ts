@@ -1,3 +1,5 @@
+import { palettes } from "./helpers";
+
 export type PointXY = [number, number];
 export type ExtentLTRB = [ number, number, number, number ];
 export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
@@ -23,7 +25,7 @@ export type PointSymbolID = string;
 
 export const defaultBlockDef: BlockDef = {
 	id: 'sample',
-	color: '#FF0000',
+	color: palettes[0][0],
 	odds: 10,
 	size: 3,
 	points: [],
@@ -34,7 +36,7 @@ export const defaultBlockDef: BlockDef = {
 
 const line: BlockDef = {
 	id: 'line',
-	color: '#ADFF2F',
+	color: palettes[0][1],
 	odds: 10,
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
@@ -44,7 +46,7 @@ const line: BlockDef = {
 };
 const square: BlockDef = {
 	id: 'square',
-	color: '#F08080',
+	color: palettes[0][2],
 	odds: 10,
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
@@ -54,7 +56,7 @@ const square: BlockDef = {
 };
 const are: BlockDef = {
 	id: 'are',
-	color: '#F0E68C',
+	color: palettes[0][3],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
@@ -64,7 +66,7 @@ const are: BlockDef = {
 };
 const ell: BlockDef = {
 	id: 'ell',
-	color: '#DEB887',
+	color: palettes[0][4],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
@@ -74,7 +76,7 @@ const ell: BlockDef = {
 };
 const ess: BlockDef = {
 	id: 'ess',
-	color: '#6495ED',
+	color: palettes[0][5],
 	odds: 10,
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
@@ -84,7 +86,7 @@ const ess: BlockDef = {
 };
 const zee: BlockDef = {
 	id: 'zee',
-	color: '#FFB6C1',
+	color: palettes[0][6],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
@@ -94,7 +96,7 @@ const zee: BlockDef = {
 };
 const tee: BlockDef = {
 	id: 'tee',
-	color: '#7FFFD4',
+	color: palettes[0][7],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],

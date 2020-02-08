@@ -82,3 +82,13 @@ export function getModifiedKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
 		+ (e.metaKey ? 'Meta+' : '')
 		+ getKeyStr(e);
 }
+
+// https://loading.io/color/random/
+export const palettes = [
+	['#adff2f', '#f08080', '#f0e68c', '#deb887', '#6495ed', '#ffb6c1', '#7fffd4'], // default
+	['#e6261f', '#eba532', '#f7d038', '#a3e048', '#49c7d0', '#4355db', '#d23be7'], // rainbow
+	['#91d6bc', '#8ac8a6', '#85b991', '#80ab7d', '#7d9c6a', '#798d58', '#767e48'], // green
+	['#fff995', '#ffdb77', '#e2bd5b', '#c29f3f', '#a38321', '#856800', '#684e00'], // brown
+//	['#', '#', '#', '#', '#', '#', '#']
+	
+];

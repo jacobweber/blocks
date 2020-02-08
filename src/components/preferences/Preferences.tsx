@@ -4,7 +4,7 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'sem
 
 import styles from 'components/preferences/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
-import { KeyActionName } from 'utils/helpers';
+import { KeyActionName, palettes } from 'utils/helpers';
 import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
 import { PointDefsSelector } from 'components/points/PointDefsSelector';
@@ -184,6 +184,26 @@ const Preferences = observer(() => {
 								Add...
 							</Button>
 						</div>
+					</div>
+
+					<Header as='h3' dividing>
+						Color Palette
+						<Header.Subheader>Will replace customized colors.</Header.Subheader>
+					</Header>
+					<div className={styles.blocks}>
+						{palettes.map((palette, idx) => (
+							<div key={idx} className={styles.block}>
+								<Button type='button' basic onClick={e => preferencesStore.handleChangePalette(palette)}>
+									{palette.map((color, idx) => (
+										<div key={idx} className={styles.color} style={{
+											left: (idx % 5) * 30,
+											top: Math.floor(idx / 5) * 30,
+											backgroundColor: color
+										}}></div>
+									))}
+								</Button>
+							</div>
+						))}
 					</div>
 
 					<Header as='h3' dividing>Block Style</Header>
