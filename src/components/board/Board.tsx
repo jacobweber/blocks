@@ -25,13 +25,13 @@ const Board = observer(() => {
 			<svg
 				version="1.1"
 				baseProfile="full"
-				viewBox={`0 0 ${pointSize * mainStore.width} ${pointSize * mainStore.height}`}
+				viewBox={`0 0 ${pointSize * preferencesStore.width} ${pointSize * preferencesStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<BoardBackdrop
 					gridColor={prefsStyles.gridColor}
-					width={mainStore.width}
-					height={mainStore.height}
+					width={preferencesStore.width}
+					height={preferencesStore.height}
 				/>
 				<Points />
 				<PositionedBlock />

@@ -71,9 +71,17 @@ const Preferences = observer(() => {
 							<Input
 								label={{ basic: true, content: 'ms' }}
 								labelPosition='right'
-								onChange={e => preferencesStore.handleChangeLeftRightAccel(e)}
+								onChange={e => preferencesStore.handleChangeInteger(e, 'leftRightAccelAfterMS')}
 								value={form.leftRightAccelAfterMS}
 							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Board Width</label>
+							<Input onChange={e => preferencesStore.handleChangeInteger(e, 'width')} value={form.width} />
+						</Form.Field>
+						<Form.Field>
+							<label>Board Height</label>
+							<Input onChange={e => preferencesStore.handleChangeInteger(e, 'height')} value={form.height} />
 						</Form.Field>
 					</Form.Group>
 

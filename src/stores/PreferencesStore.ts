@@ -32,6 +32,8 @@ export interface Preferences {
 	allowUndo: boolean;
 	startLevel: number;
 	rowsJunk: number;
+	width: number;
+	height: number;
 }
 
 const defaultPrefs: Preferences = {
@@ -60,7 +62,9 @@ const defaultPrefs: Preferences = {
 	downTimerPauseWhenMovingMS: 500,
 	allowUndo: true,
 	startLevel: 1,
-	rowsJunk: 0
+	rowsJunk: 0,
+	width: 10,
+	height: 20
 };
 
 type DoneCallbackType = () => void;
@@ -72,8 +76,11 @@ class PreferencesStore {
 	doneCallback: DoneCallbackType | null = null;
 	prefs: Preferences = defaultPrefs;
 	form: Preferences = this.prefs;
-	gameBlockDefs: Array<BlockDef> = [];
 	symbolPrefix = 'prefs-'; // will need to be blank if using static SVG for pieces
+
+	gameBlockDefs: Array<BlockDef> = [];
+	width: number = 0;
+	height: number = 0;
 
 	blockEditVisible: boolean = false;
 	blockEditType: BlockType | null = null;
@@ -154,6 +161,8 @@ class PreferencesStore {
 			...defaultPrefs,
 			...(prefs || {})
 		};
+		this.width = this.prefs.width;
+		this.height = this.prefs.height;
 	}
 
 	save() {
@@ -199,6 +208,8 @@ class PreferencesStore {
 
 	lockGamePrefs() {
 		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
+		this.width = this.prefs.width;
+		this.height = this.prefs.height;
 	}
 
 	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
@@ -210,7 +221,7 @@ class PreferencesStore {
 		this.save();
 	}
 
-	handleChangeLeftRightAccel(e: React.ChangeEvent<HTMLInputElement>): void {
+	handleChangeInteger(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
 		let value = 0;
 		if (e.target.value.length > 0) {
 			value = parseInt(e.target.value, 10);
@@ -218,7 +229,7 @@ class PreferencesStore {
 		}
 		this.setForm({
 			...this.form,
-			leftRightAccelAfterMS: value
+			[name]: value
 		});
 	}
 
@@ -289,6 +300,8 @@ decorate(PreferencesStore, {
 	blockColors: computed,
 	formBlockColors: computed,
 	gameBlockDefs: observable,
+	width: observable,
+	height: observable,
 	symbolPrefix: observable,
 	gameBlockRotations: computed,
 	weightedBlockTypes: computed,

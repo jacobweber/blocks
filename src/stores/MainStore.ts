@@ -36,9 +36,6 @@ class MainStore {
 	highScoresStore: HighScoresStore = new HighScoresStore();
 	newGameStore: NewGameStore = new NewGameStore();
 
-	width: number = 10;
-	height: number = 20;
-
 	positionedBlock: PositionedBlock | null = null;
 	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
 	undoStack: Array<UndoFrame> = [];
@@ -140,7 +137,7 @@ class MainStore {
 
 	resetGameCompletely() {
 		this.resetGameLeavingBoard();
-		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
+		this.filledPoints = Array.from({ length: this.preferencesStore.height }, () => Array.from({ length: this.preferencesStore.width }));
 		this.score = 0;
 		this.rows = 0;
 		this.totalTime = 0;
@@ -148,8 +145,8 @@ class MainStore {
 
 	newGame(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
-		this.resetGameCompletely();
 		this.preferencesStore.lockGamePrefs();
+		this.resetGameCompletely();
 
 		this.startLevel = this.prefs.startLevel;
 		this.fillRowsWithJunk();
@@ -174,8 +171,8 @@ class MainStore {
 
 	fillRowsWithJunk() {
 		if (this.prefs.rowsJunk === 0) return;
-		for (let y = this.height - 1; y >= this.height - this.prefs.rowsJunk; y--) {
-			for (let x = 0; x < this.width; x++) {
+		for (let y = this.preferencesStore.height - 1; y >= this.preferencesStore.height - this.prefs.rowsJunk; y--) {
+			for (let x = 0; x < this.preferencesStore.width; x++) {
 				if (Math.floor(Math.random() * junkOdds) === 0) {
 					const type = this.preferencesStore.getRandomBlockType();
 					this.filledPoints[y][x] = {
@@ -283,16 +280,16 @@ class MainStore {
 	canRotate(block: PositionedBlock) {
 		const def = this.getBlockDef(block.type);
 		return block.x >= 0
-			&& block.x + def.size <= this.width
-			&& block.y + def.size <= this.height;
+			&& block.x + def.size <= this.preferencesStore.width
+			&& block.y + def.size <= this.preferencesStore.height;
 	}
 
 	inBounds(block: PositionedBlock): boolean {
 		const extent = this.getBlockRotations(block.type)[block.rotation].extent;
 		return block.x + extent[0] >= 0
 			// && block.y - extent[1] >= 0
-			&& block.x + extent[2] < this.width
-			&& block.y + extent[3] < this.height;
+			&& block.x + extent[2] < this.preferencesStore.width
+			&& block.y + extent[3] < this.preferencesStore.height;
 	}
 
 	positionFree(block: PositionedBlock): boolean {
@@ -340,7 +337,7 @@ class MainStore {
 		const rotation = 0;
 		const extent = this.getBlockRotations(type)[rotation].extent;
 		const blockWidth = extent[2] - extent[0] + 1;
-		const x = Math.ceil((this.width - blockWidth) / 2);
+		const x = Math.ceil((this.preferencesStore.width - blockWidth) / 2);
 		const y = -extent[1];
 		const nextBlock = { x, y, type, rotation };
 		if (this.positionFree(nextBlock)) {
@@ -355,10 +352,10 @@ class MainStore {
 		if (!this.positionedBlock) return rows;
 		for (let checkOffset = 0; checkOffset < this.getBlockDef(this.positionedBlock.type).size; checkOffset++) {
 			const y = this.positionedBlock.y + checkOffset;
-			if (y < 0 || y >= this.height) continue;
+			if (y < 0 || y >= this.preferencesStore.height) continue;
 			const checkRow = this.filledPoints[y];
 			let rowComplete = true;
-			for (let x = 0; x < this.width; x++) {
+			for (let x = 0; x < this.preferencesStore.width; x++) {
 				if (!checkRow[x]) {
 					rowComplete = false;
 					break;
@@ -380,7 +377,7 @@ class MainStore {
 		const flash = action(() => {
 			const id = count % 2 === 0 ? 'flashOn' : 'flashOff';
 			for (let row = 0; row < rows.length; row++) {
-				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
+				this.filledPoints[rows[row]] = Array.from({ length: this.preferencesStore.width }, () => ({
 					id: id
 				}));
 			}
@@ -402,7 +399,7 @@ class MainStore {
 			this.filledPoints.splice(rows[row], 1);
 		}
 		for (let row = 0; row < rows.length; row++) {
-			this.filledPoints.unshift(Array.from({ length: this.width }));
+			this.filledPoints.unshift(Array.from({ length: this.preferencesStore.width }));
 		}
 	}
 
@@ -572,7 +569,7 @@ class MainStore {
 		};
 
 		const extent = this.getBlockRotations(this.positionedBlock.type)[this.positionedBlock.rotation].extent;
-		const points = this.height -  (this.positionedBlock.y + extent[3]) - 1;
+		const points = this.preferencesStore.height - (this.positionedBlock.y + extent[3]) - 1;
 
 		this.setAnimating(true);
 		while (!done) {
@@ -738,8 +735,8 @@ class MainStore {
 
 	getFrozenPoints(): Array<PositionedPoint> {
 		const points: Array<PositionedPoint> = [];
-		for (let x = 0; x < this.width; x++) {
-			for (let y = 0; y < this.height; y++) {
+		for (let x = 0; x < this.preferencesStore.width; x++) {
+			for (let y = 0; y < this.preferencesStore.height; y++) {
 				const point = this.filledPoints[y][x];
 				if (point) {
 					points.push({
@@ -778,8 +775,6 @@ class MainStore {
 }
 
 decorate(MainStore, {
-	width: observable,
-	height: observable,
 	animating: observable,
 	score: observable,
 	rows: observable,
