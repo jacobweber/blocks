@@ -174,7 +174,7 @@ const Preferences = observer(() => {
 						{form.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowEdit(idx, def)}>
-									<Block def={def} prefix={form.points + '-'} />
+									<Block def={def} prefix={form.pointsType + '-'} />
 								</Button>
 							</div>
 						))}
@@ -190,7 +190,7 @@ const Preferences = observer(() => {
 					<div className={styles.blocks}>
 						{pointsTypes.map((type, idx) => (
 							<div key={idx} className={styles.block}>
-								<Button active={form.points === type} type='button' basic onClick={e => preferencesStore.handleChangePointsType(type)}>
+								<Button active={form.pointsType === type} type='button' basic onClick={e => preferencesStore.handleChangePointsType(type)}>
 									{preferencesStore.sampleBlockDef && <Block def={preferencesStore.sampleBlockDef} prefix={type + '-'} />}
 								</Button>
 							</div>
@@ -201,7 +201,7 @@ const Preferences = observer(() => {
 					<div className={styles.blocks}>
 						{boardTypes.map((type, idx) => (
 							<div key={idx} className={styles.block}>
-								<Button active={form.board === type} type='button' basic onClick={e => preferencesStore.handleChangeBoardType(type)}>
+								<Button active={form.boardType === type} type='button' basic onClick={e => preferencesStore.handleChangeBoardType(type)}>
 									<svg
 										version="1.1"
 										baseProfile="full"

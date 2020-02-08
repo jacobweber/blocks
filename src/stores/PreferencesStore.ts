@@ -40,8 +40,8 @@ export interface Preferences {
 	rowsJunk: number;
 	width: number;
 	height: number;
-	board: BoardType;
-	points: PointsType;
+	boardType: BoardType;
+	pointsType: PointsType;
 }
 
 const defaultPrefs: Preferences = {
@@ -73,8 +73,8 @@ const defaultPrefs: Preferences = {
 	rowsJunk: 0,
 	width: 10,
 	height: 20,
-	board: 'Black',
-	points: 'Standard'
+	boardType: 'Black',
+	pointsType: 'Standard'
 };
 
 type DoneCallbackType = () => void;
@@ -324,14 +324,14 @@ class PreferencesStore {
 	handleChangeBoardType(type: BoardType): void {
 		this.setForm({
 			...this.form,
-			board: type
+			boardType: type
 		});
 	}
 
 	handleChangePointsType(type: PointsType): void {
 		this.setForm({
 			...this.form,
-			points: type
+			pointsType: type
 		});
 	}
 
