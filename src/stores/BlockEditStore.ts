@@ -109,6 +109,7 @@ class BlockEditStore {
 		if (this.form !== null) {
 			const def: BlockDef = {
 				...this.form,
+				id: this.form.id || 'default', 
 				odds: strToIntRange(this.form.odds, 0, 100),
 				points: pointBitmapToXY(this.form.points, this.form.size)
 			};
