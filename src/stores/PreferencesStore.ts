@@ -11,26 +11,30 @@ export const boardTypes: Array<BoardType> = ['Black', 'White'];
 export type PointsType = 'Standard' | 'Plain';
 export const pointsTypes: Array<PointsType> = ['Standard', 'Plain'];
 
+interface KeysPrefs {
+	newGame: string;
+	newGameOptions: string;
+	endGame: string;
+	pauseResumeGame: string;
+	left: string;
+	right: string;
+	drop: string;
+	down: string;
+	rotateCCW: string;
+	rotateCW: string;
+	undo: string;
+}
+
+interface StylesPrefs {
+	backgroundColor: string;
+	textColor: string;
+	gridColor: string;
+	outlineColor: string;
+}
+
 export interface Preferences {
-	keys: {
-		newGame: string;
-		newGameOptions: string;
-		endGame: string;
-		pauseResumeGame: string;
-		left: string;
-		right: string;
-		drop: string;
-		down: string;
-		rotateCCW: string;
-		rotateCW: string;
-		undo: string;
-	};
-	styles: {
-		backgroundColor: string;
-		textColor: string;
-		gridColor: string;
-		outlineColor: string;
-	},
+	keys: KeysPrefs;
+	styles: StylesPrefs,
 	blockDefs: Array<BlockDef>;
 	name: string;
 	leftRightAccelAfterMS: number;
