@@ -5,10 +5,10 @@ import { PositionedPoint } from 'stores/MainStore';
 import { BlockEditStore } from 'stores/BlockEditStore';
 import { BlockRotations, BlockDef, BlockType, defaultBlockDefs, calculateBlockRotations, calculateBlockWeights, BlockColor } from 'utils/blocks';
 
-type BoardType = 'Black' | 'White';
+export type BoardType = 'Black' | 'White';
 export const boardTypes: Array<BoardType> = ['Black', 'White'];
 
-type PointsType = 'Standard' | 'Plain';
+export type PointsType = 'Standard' | 'Plain';
 export const pointsTypes: Array<PointsType> = ['Standard', 'Plain'];
 
 export interface Preferences {

@@ -7,7 +7,7 @@ import { useStore } from 'stores/MainStore';
 import { KeyActionName } from 'utils/helpers';
 import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
-import { PointDefs } from 'components/points/Standard';
+import { PointDefsSelector } from 'components/points/PointDefsSelector';
 import { boardTypes, pointsTypes } from 'stores/PreferencesStore';
 
 const Preferences = observer(() => {
@@ -42,7 +42,7 @@ const Preferences = observer(() => {
 
 		<div className={styles.pointDefs}>
 			{pointsTypes.map(type => (
-				<PointDefs key={type} prefix={type + '-'} blockColors={preferencesStore.formBlockColors} />
+				<PointDefsSelector key={type} type={type} prefix={type + '-'} blockColors={preferencesStore.formBlockColors} />
 			))}
 		</div>
 

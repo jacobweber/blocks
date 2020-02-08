@@ -1,13 +1,8 @@
 import React from 'react';
 
-import { BlockColor } from 'utils/blocks';
+import { PointDefsProps } from './PointDefsSelector';
 
-type PointDefsProps = {
-	prefix?: string;
-	blockColors: Array<BlockColor>;
-};
-
-const PointDefs = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
+const Plain = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
 	return (
 		<svg>
 			<defs>
@@ -21,4 +16,4 @@ const PointDefs = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
 	);
 });
 
-export { PointDefs };
+export { Plain };

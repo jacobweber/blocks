@@ -1,6 +1,8 @@
 import React from 'react';
 
-const BoardDef = () => {
+import { BoardDefProps } from 'components/boards/BoardDefSelector';
+
+const White = React.memo((props: BoardDefProps) => {
 	return (
 		<svg>
 			<defs>
@@ -14,6 +16,6 @@ const BoardDef = () => {
 			</defs>
 		</svg>
 	);
-};
+});
 
-export { BoardDef };
+export { White };

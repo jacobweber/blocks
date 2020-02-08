@@ -5,7 +5,7 @@ import { Button, Header, Icon, Modal, Form, Input } from 'semantic-ui-react'
 import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
-import { PointDefs } from 'components/points/Standard';
+import { PointDefsSelector } from 'components/points/PointDefsSelector';
 
 const fixOdds = function(odds: string): (number | '') {
 	const val = parseInt(odds, 10);
@@ -14,7 +14,8 @@ const fixOdds = function(odds: string): (number | '') {
 };
 
 const BlockEdit = observer(() => {
-	const blockEditStore = useStore().preferencesStore.blockEditStore;
+	const preferencesStore = useStore().preferencesStore;
+	const blockEditStore = preferencesStore.blockEditStore;
 	const { form, updateForm } = blockEditStore;
 
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
@@ -28,7 +29,7 @@ const BlockEdit = observer(() => {
 
 	return (<>
 		<div className={styles.pointDefs}>
-			<PointDefs prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
+			<PointDefsSelector type={preferencesStore.form.points} prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
 		</div>
 
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>

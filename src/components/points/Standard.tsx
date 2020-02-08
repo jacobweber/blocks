@@ -1,14 +1,9 @@
 import React from 'react';
 
 import { lightenColor } from 'utils/colors';
-import { BlockColor } from 'utils/blocks';
+import { PointDefsProps } from 'components/points/PointDefsSelector';
 
-type PointDefsProps = {
-	prefix?: string;
-	blockColors: Array<BlockColor>;
-};
-
-const PointDefs = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
+const Standard = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
 	return (
 		<svg>
 			<defs>
@@ -28,4 +23,4 @@ const PointDefs = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
 	);
 });
 
-export { PointDefs };
+export { Standard };
