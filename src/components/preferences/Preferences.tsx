@@ -187,7 +187,7 @@ const Preferences = observer(() => {
 						{pointsTypes.map((type, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button active={form.points === type} type='button' basic onClick={e => preferencesStore.handleChangePointsType(type)}>
-									{preferencesStore.sampleBlockType !== null && <Block def={form.blockDefs[preferencesStore.sampleBlockType]} prefix={type + '-'} />}
+									{preferencesStore.sampleBlockDef && <Block def={preferencesStore.sampleBlockDef} prefix={type + '-'} />}
 								</Button>
 							</div>
 						))}

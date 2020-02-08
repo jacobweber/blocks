@@ -186,6 +186,14 @@ class PreferencesStore {
 		}
 	}
 
+	get sampleBlockDef(): BlockDef | null {
+		if (this.sampleBlockType !== null && this.sampleBlockType + 1 < this.form.blockDefs.length) {
+			return this.form.blockDefs[this.sampleBlockType];
+		}
+		// in case it was deleted while visible
+		return null;
+	}
+
 	dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
 		this.form = this.prefs;
@@ -341,6 +349,7 @@ decorate(PreferencesStore, {
 	prefs: observable.ref,
 	form: observable.ref,
 	sampleBlockType: observable.ref,
+	sampleBlockDef: computed,
 	blockColors: computed,
 	formBlockColors: computed,
 	gameBlockDefs: observable,
