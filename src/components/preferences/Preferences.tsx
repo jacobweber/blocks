@@ -18,7 +18,7 @@ const Preferences = observer(() => {
 	const prefsStyles = form.styles;
 	const cancel = () => preferencesStore.dialogCancel();
 	const save = () => preferencesStore.dialogSave();
-	const handleKeySelectorKeyDown = (name: KeyActionName) => (e: React.KeyboardEvent) => preferencesStore.handleDialogKeySelectorKeyDown(e, name);
+	const handleChangeKey = (name: KeyActionName) => (e: React.KeyboardEvent) => preferencesStore.handleChangeKey(e, name);
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
 		type: 'color',
 		className: styles.colorInput
@@ -96,53 +96,53 @@ const Preferences = observer(() => {
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>New Game</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('newGame')} name='newGame' value={keys.newGame} />
+							<Input fluid onKeyDown={handleChangeKey('newGame')} name='newGame' value={keys.newGame} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>New Game with Options</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
+							<Input fluid onKeyDown={handleChangeKey('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>End Game</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('endGame')} name='endGame' value={keys.endGame} />
+							<Input fluid onKeyDown={handleChangeKey('endGame')} name='endGame' value={keys.endGame} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Pause/Resume Game</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
+							<Input fluid onKeyDown={handleChangeKey('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
 						</Form.Field>
 					</Form.Group>
 
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Left</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('left')} name='left' value={keys.left} />
+							<Input fluid onKeyDown={handleChangeKey('left')} name='left' value={keys.left} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Right</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('right')} name='right' value={keys.right} />
+							<Input fluid onKeyDown={handleChangeKey('right')} name='right' value={keys.right} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Down</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('down')} name='down' value={keys.down} />
+							<Input fluid onKeyDown={handleChangeKey('down')} name='down' value={keys.down} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Drop</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('drop')} name='drop' value={keys.drop} />
+							<Input fluid onKeyDown={handleChangeKey('drop')} name='drop' value={keys.drop} />
 						</Form.Field>
 					</Form.Group>
 
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Rotate Left</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
+							<Input fluid onKeyDown={handleChangeKey('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Rotate Right</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('rotateCW')} name='rotateCW' value={keys.rotateCW} />
+							<Input fluid onKeyDown={handleChangeKey('rotateCW')} name='rotateCW' value={keys.rotateCW} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Undo</label>
-							<Input fluid onKeyDown={handleKeySelectorKeyDown('undo')} name='undo' value={keys.undo} />
+							<Input fluid onKeyDown={handleChangeKey('undo')} name='undo' value={keys.undo} />
 						</Form.Field>
 		          	</Form.Group>
 
@@ -150,19 +150,19 @@ const Preferences = observer(() => {
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Background</label>
-							<Input {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'backgroundColor')} value={prefsStyles.backgroundColor} />
+							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'backgroundColor')} value={prefsStyles.backgroundColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Text</label>
-							<Input  {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'textColor')} value={prefsStyles.textColor} />
+							<Input  {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'textColor')} value={prefsStyles.textColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Grid</label>
-							<Input  {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'gridColor')} value={prefsStyles.gridColor} />
+							<Input  {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'gridColor')} value={prefsStyles.gridColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Outline</label>
-							<Input {...colorProps} onChange={e => preferencesStore.handleDialogColorChange(e, 'outlineColor')} value={prefsStyles.outlineColor} />
+							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'outlineColor')} value={prefsStyles.outlineColor} />
 						</Form.Field>
 					</Form.Group>
 

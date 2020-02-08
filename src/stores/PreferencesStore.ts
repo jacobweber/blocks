@@ -284,7 +284,7 @@ class PreferencesStore {
 		});
 	}
 
-	handleDialogKeySelectorKeyDown(e: React.KeyboardEvent, name: KeyActionName): void {
+	handleChangeKey(e: React.KeyboardEvent, name: KeyActionName): void {
 		if (validKey(e.key)) {
 			let value = this.form.keys[name];
 			const keysAllowingModifiers: Array<KeyActionName> = ['newGame', 'newGameOptions', 'endGame', 'pauseResumeGame', 'undo'];
@@ -311,7 +311,7 @@ class PreferencesStore {
 		e.nativeEvent.preventDefault();
 	}
 
-	handleDialogColorChange(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
+	handleChangeColor(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
 		this.setForm({
 			...this.form,
 			styles: {
