@@ -161,8 +161,7 @@ class PreferencesStore {
 			...defaultPrefs,
 			...(prefs || {})
 		};
-		this.width = this.prefs.width;
-		this.height = this.prefs.height;
+		this.lockGamePrefs();
 	}
 
 	save() {
@@ -208,8 +207,8 @@ class PreferencesStore {
 
 	lockGamePrefs() {
 		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
-		this.width = this.prefs.width;
-		this.height = this.prefs.height;
+		this.width = Math.min(Math.max(5, this.prefs.width), 100);
+		this.height = Math.min(Math.max(5, this.prefs.height), 100);
 	}
 
 	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
