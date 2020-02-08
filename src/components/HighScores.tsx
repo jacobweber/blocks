@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import { observer } from "mobx-react-lite"
 import { Button, Header, Icon, Modal, Table, Confirm, Form, Input } from 'semantic-ui-react'
 
@@ -15,6 +16,16 @@ const HighScores = observer(() => {
 		setConfirmOpen(false);
 		highScoresStore.dialogReset();
 	}
+	const inputRef = useRef<Input>(null);
+	useEffect(() => {
+		if (inputRef.current) {
+			const dom = ReactDOM.findDOMNode(inputRef.current); // TODO: remove hack
+			if (dom instanceof HTMLElement) {
+				const input = dom.querySelector('input');
+				if (input) input.scrollIntoView();
+			}
+		}
+	}, []);
 
 	return (<>
 		<Confirm
@@ -46,7 +57,7 @@ const HighScores = observer(() => {
 								<Table.Cell>
 									{highScoresStore.lastPosition === index ? (
 										<Form.Field>
-											<Input onChange={e => highScoresStore.handleChangeLastScoreName(e)} value={highScoresStore.lastScoreName} />
+											<Input ref={inputRef} onChange={e => highScoresStore.handleChangeLastScoreName(e)} value={highScoresStore.lastScoreName} />
 										</Form.Field>
 									) : entry.name}
 								</Table.Cell>
