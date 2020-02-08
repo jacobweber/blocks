@@ -6,9 +6,11 @@ import { White } from 'components/boards/White';
 
 type BoardDefSelectorProps = {
 	type: BoardType;
+	prefix?: string;
 };
 
 export type BoardDefProps = {
+	prefix?: string;
 };
 
 const getBoardDefComp = function(type: BoardType): React.ComponentType<BoardDefProps> {
@@ -18,9 +20,9 @@ const getBoardDefComp = function(type: BoardType): React.ComponentType<BoardDefP
 	}
 }
 
-const BoardDefSelector = React.memo(({ type }: BoardDefSelectorProps) => {
+const BoardDefSelector = React.memo(({ type, prefix = '' }: BoardDefSelectorProps) => {
 	const Comp = getBoardDefComp(type);
-	return <Comp />;
+	return <Comp prefix={prefix} />;
 });
 
 export { BoardDefSelector };

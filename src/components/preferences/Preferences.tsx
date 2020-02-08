@@ -9,6 +9,7 @@ import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
 import { PointDefsSelector } from 'components/points/PointDefsSelector';
 import { boardTypes, pointsTypes } from 'stores/PreferencesStore';
+import { BoardDefSelector } from 'components/boards/BoardDefSelector';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -43,6 +44,9 @@ const Preferences = observer(() => {
 		<div className={styles.pointDefs}>
 			{pointsTypes.map(type => (
 				<PointDefsSelector key={type} type={type} prefix={type + '-'} blockColors={preferencesStore.formBlockColors} />
+			))}
+			{boardTypes.map(type => (
+				<BoardDefSelector key={type} type={type} prefix={type + '-'} />
 			))}
 		</div>
 
@@ -198,6 +202,14 @@ const Preferences = observer(() => {
 						{boardTypes.map((type, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button active={form.board === type} type='button' basic onClick={e => preferencesStore.handleChangeBoardType(type)}>
+									<svg
+										version="1.1"
+										baseProfile="full"
+										viewBox={`0 0 150 150`}
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<use x='25%' y='0' width='50%' height='100%' href={`#${type}-board`} />
+									</svg>
 								</Button>
 							</div>
 						))}
