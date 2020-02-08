@@ -188,9 +188,9 @@ const Preferences = observer(() => {
 
 					<Header as='h3' dividing>
 						Color Palette
-						<Header.Subheader>Will replace customized colors.</Header.Subheader>
+						<Header.Subheader>Will replace any customized colors.</Header.Subheader>
 					</Header>
-					<div className={styles.blocks}>
+					<div className={styles.blocks + ' ' + styles.colors}>
 						{palettes.map((palette, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button type='button' basic onClick={e => preferencesStore.handleChangePalette(palette)}>

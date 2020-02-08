@@ -31,6 +31,7 @@
 	width: 100%;
 	height: 100%;
 	position: relative;
+	padding: 10px;
 }
 .block.addBlock > button {
 	display: flex;
@@ -40,6 +41,12 @@
 }
 .block.addBlock > button > i {
 	margin: 0 0 10px 0 !important;
+}
+.blocks.colors {
+	height: 80px;
+}
+.blocks.colors .block {
+	height: 60px;
 }
 .block .color {
 	position: absolute;
