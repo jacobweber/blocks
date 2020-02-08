@@ -36,7 +36,7 @@ export const defaultBlockDef: BlockDef = {
 
 const line: BlockDef = {
 	id: 'line',
-	color: palettes[0][1],
+	color: palettes[0][0],
 	odds: 10,
 	size: 4,
 	points: [[0, 1], [1, 1], [2, 1], [3, 1]],
@@ -46,7 +46,7 @@ const line: BlockDef = {
 };
 const square: BlockDef = {
 	id: 'square',
-	color: palettes[0][2],
+	color: palettes[0][1],
 	odds: 10,
 	size: 2,
 	points: [[0, 0], [0,1], [1, 0], [1, 1]],
@@ -56,7 +56,7 @@ const square: BlockDef = {
 };
 const are: BlockDef = {
 	id: 'are',
-	color: palettes[0][3],
+	color: palettes[0][2],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [2, 1], [2, 2]],
@@ -66,7 +66,7 @@ const are: BlockDef = {
 };
 const ell: BlockDef = {
 	id: 'ell',
-	color: palettes[0][4],
+	color: palettes[0][3],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [0,2], [1, 1], [2, 1]],
@@ -76,7 +76,7 @@ const ell: BlockDef = {
 };
 const ess: BlockDef = {
 	id: 'ess',
-	color: palettes[0][5],
+	color: palettes[0][4],
 	odds: 10,
 	size: 3,
 	points: [[0, 2], [1, 1], [1, 2], [2, 1]],
@@ -86,7 +86,7 @@ const ess: BlockDef = {
 };
 const zee: BlockDef = {
 	id: 'zee',
-	color: palettes[0][6],
+	color: palettes[0][5],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 2]],
@@ -96,7 +96,7 @@ const zee: BlockDef = {
 };
 const tee: BlockDef = {
 	id: 'tee',
-	color: palettes[0][7],
+	color: palettes[0][6],
 	odds: 10,
 	size: 3,
 	points: [[0, 1], [1, 1], [1, 2], [2, 1]],
