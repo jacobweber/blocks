@@ -53,6 +53,8 @@ const BlockBitmap = observer(({ prefix, id, size, points, onChangePoints }: Bloc
 			<svg
 				version="1.1"
 				baseProfile="full"
+				width={30 * size}
+				height={30 * size}
 				viewBox={`0 0 ${pointSize * size} ${pointSize * size}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
@@ -60,6 +62,7 @@ const BlockBitmap = observer(({ prefix, id, size, points, onChangePoints }: Bloc
 				{xLines}
 				{yLines}
 				{pointComps}
+				<rect width="100%" height="100%" stroke='black' strokeWidth='3' fillOpacity='0' style={{ pointerEvents: 'none' }} />
 			</svg>
 		</div>
 	);

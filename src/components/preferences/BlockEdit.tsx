@@ -29,7 +29,7 @@ const BlockEdit = observer(() => {
 	}
 
 	return (
-		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
+		<Modal size='small' className={styles.root} open={true} closeIcon onClose={cancel}>
 			<div className={styles.pointDefs}>
 				<PointDefs type={preferencesStore.form.pointsType} prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
 			</div>

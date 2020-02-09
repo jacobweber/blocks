@@ -18,4 +18,5 @@
 	margin-right: 30px;
 }
 .content .right {
+	flex: 1;
 }
