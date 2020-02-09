@@ -25,6 +25,8 @@ const Board = observer(() => {
 			<svg
 				version="1.1"
 				baseProfile="full"
+				width={mainStore.actualPointSize * mainStore.width}
+				height={mainStore.actualPointSize * mainStore.height}
 				viewBox={`0 0 ${pointSize * mainStore.width} ${pointSize * mainStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>

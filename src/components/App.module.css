@@ -8,14 +8,13 @@
 .layout {
 	display: flex;
 	max-width: 90vw;
+	max-height: 90vh;
 }
 .left {
 	max-width: 100%;
 }
 .right {
 	margin-left: 30px;
-	height: 90vh;
-	max-height: 700px;
 	min-width: 150px;
 	overflow: hidden;
 	display: flex;
@@ -23,7 +22,6 @@
 	align-items: center;
 }
 .nextBlock {
-	width: 120px;
 	overflow: hidden;
 }
 .scoreBoard {

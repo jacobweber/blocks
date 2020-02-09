@@ -7,6 +7,8 @@ import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
 import { GameState, Actions, logAction, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
 import { PointSymbolID, BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
 
+const extraHeight = 50;
+const extraWidth = 150;
 const log = false;
 const numClearRowsBonus = 4;
 const animDelayMS = 5;
@@ -60,6 +62,8 @@ class MainStore {
 	gameBlockDefs: Array<BlockDef> = [];
 	width: number = 0;
 	height: number = 0;
+	windowWidth: number = 0;
+	windowHeight: number = 0;
 
 	constructor() {
 		this.preferencesStore.load();
@@ -69,6 +73,7 @@ class MainStore {
 	}
 
 	initWindowEvents() {
+		this.updateWindowSize();
 		let wasActive = false;
 		window.addEventListener('blur', e => {
 			wasActive = this.gameState === GameState.Active;
@@ -81,6 +86,18 @@ class MainStore {
 		});
 		window.addEventListener('keydown', e => this.keyDown(e));
 		window.addEventListener('keyup', e => this.keyUp(e));
+		window.addEventListener('resize', e => this.updateWindowSize());
+	}
+
+	updateWindowSize() {
+		this.windowWidth = window.innerWidth;
+		this.windowHeight = window.innerHeight;
+	}
+
+	get actualPointSize(): number {
+		const minWidth = Math.floor((this.windowWidth - extraWidth) / this.width);
+		const minHeight = Math.floor((this.windowHeight - extraHeight) / this.height);
+		return Math.min(Math.max(Math.min(minHeight, minWidth), 10), 30);
 	}
 
 	get prefs(): Preferences {
@@ -815,10 +832,13 @@ decorate(MainStore, {
 	startLevel: observable,
 	downDelayMS: computed,
 	gameState: observable,
+	actualPointSize: computed,
 	positionedBlock: observable.ref,
 	gameBlockDefs: observable,
 	width: observable,
 	height: observable,
+	windowWidth: observable,
+	windowHeight: observable,
 	gameBlockRotations: computed,
 	weightedBlockTypes: computed,
 	prefs: computed,
@@ -827,6 +847,7 @@ decorate(MainStore, {
 	filledPoints: observable,
 	blockColors: computed,
 	lockGamePrefs: action,
+	updateWindowSize: action,
 	resetGameLeavingBoard: action,
 	resetGameCompletely: action,
 	newGame: action,
