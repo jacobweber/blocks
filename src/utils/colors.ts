@@ -21,7 +21,7 @@ export function lightenColor(color: string, amt: number): string {
 // https://loading.io/color/random/, https://loading.io/color/feature/
 export const palettes = [
 	['#fbb4ae', '#b3cde3', '#ccebc5', '#decbe4', '#fed9a6', '#ffffcc', '#e5d8bd'], // pastel
-	['#adff2f', '#f08080', '#f0e68c', '#deb887', '#6495ed', '#ffb6c1', '#7fffd4'], // classic
+	['#adff2f', '#f08080', '#f0e68c', '#deb887', '#689bf9', '#ffb6c1', '#7fffd4'], // classic
 	['#e6261f', '#eba532', '#f7d038', '#a3e048', '#49c7d0', '#4355db', '#d23be7'], // rainbow
 	['#91d6bc', '#8ac8a6', '#85b991', '#80ab7d', '#7d9c6a', '#798d58', '#767e48'], // green
 	['#fff995', '#ffdb77', '#e2bd5b', '#c29f3f', '#a38321', '#856800', '#684e00'], // brown
