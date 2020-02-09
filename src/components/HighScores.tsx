@@ -27,15 +27,16 @@ const HighScores = observer(() => {
 		}
 	}, []);
 
-	return (<>
-		<Confirm
-			content='Are you sure you want to reset the high scores?'
-			open={confirmOpen}
-			onCancel={cancelReset}
-			onConfirm={confirmReset}
-			confirmButton='Reset'
-		/>
+	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={hide}>
+			<Confirm
+				content='Are you sure you want to reset the high scores?'
+				open={confirmOpen}
+				onCancel={cancelReset}
+				onConfirm={confirmReset}
+				confirmButton='Reset'
+			/>
+
 			<Header icon='trophy' content='High Scores' />
 			<Modal.Content scrolling>
 
@@ -81,7 +82,7 @@ const HighScores = observer(() => {
 				</Button>
 			</Modal.Actions>
 		</Modal>
-	</>);
+	);
 });
 
 export { HighScores };

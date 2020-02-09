@@ -31,27 +31,27 @@ const Preferences = observer(() => {
 		preferencesStore.dialogReset();
 	}
 
-	return (<>
-		<Confirm
-			content='Are you sure you want to reset the preferences?'
-			open={confirmOpen}
-			onCancel={cancelReset}
-			onConfirm={confirmReset}
-			confirmButton='Reset'
-		/>
-
-		<div className={styles.pointDefs}>
-			{pointsTypes.map(type => (
-				<PointDefs key={type} type={type} prefix={type + '-'} blockColors={preferencesStore.formBlockColors} />
-			))}
-			{boardTypes.map(type => (
-				<BoardDef key={type} type={type} prefix={type + '-'} />
-			))}
-		</div>
-
-		{preferencesStore.blockEditStore.visible && <BlockEdit />}
-
+	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
+			<Confirm
+				content='Are you sure you want to reset the preferences?'
+				open={confirmOpen}
+				onCancel={cancelReset}
+				onConfirm={confirmReset}
+				confirmButton='Reset'
+			/>
+
+			<div className={styles.pointDefs}>
+				{pointsTypes.map(type => (
+					<PointDefs key={type} type={type} prefix={type + '-'} blockColors={preferencesStore.formBlockColors} />
+				))}
+				{boardTypes.map(type => (
+					<BoardDef key={type} type={type} prefix={type + '-'} />
+				))}
+			</div>
+
+			{preferencesStore.blockEditStore.visible && <BlockEdit />}
+
 			<Header icon='setting' content='Preferences' />
 			<Modal.Content scrolling>
 				<Form>
@@ -205,7 +205,7 @@ const Preferences = observer(() => {
 				</Button>
 			</Modal.Actions>
 		</Modal>
-	</>);
+	);
 });
 
 export { Preferences };

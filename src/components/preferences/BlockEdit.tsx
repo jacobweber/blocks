@@ -28,20 +28,20 @@ const BlockEdit = observer(() => {
 		blockEditStore.dialogDelete();
 	}
 
-	return (<>
-		<div className={styles.pointDefs}>
-			<PointDefs type={preferencesStore.form.pointsType} prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
-		</div>
-
-		<Confirm
-			content='Are you sure you want to delete this block?'
-			open={confirmOpen}
-			onCancel={cancelDelete}
-			onConfirm={confirmDelete}
-			confirmButton='Delete'
-		/>
-
+	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
+			<div className={styles.pointDefs}>
+				<PointDefs type={preferencesStore.form.pointsType} prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
+			</div>
+
+			<Confirm
+				content='Are you sure you want to delete this block?'
+				open={confirmOpen}
+				onCancel={cancelDelete}
+				onConfirm={confirmDelete}
+				confirmButton='Delete'
+			/>
+
 			<Header icon='setting' content='Edit Block' />
 			<Modal.Content>
 				<Form>
@@ -100,7 +100,7 @@ const BlockEdit = observer(() => {
 				</Button>
 			</Modal.Actions>
 		</Modal>
-	</>);
+	);
 });
 
 export { BlockEdit };
