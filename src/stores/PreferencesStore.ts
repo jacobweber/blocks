@@ -314,8 +314,13 @@ class PreferencesStore {
 	}
 
 	handleChangeColor(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
+		let boardType = this.form.boardType;
+		if (name === 'boardColor') {
+			boardType = 'Custom';
+		}
 		this.setForm({
 			...this.form,
+			boardType,
 			styles: {
 				...this.form.styles,
 				[name]: e.target.value
