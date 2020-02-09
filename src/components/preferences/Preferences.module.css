@@ -6,7 +6,7 @@
 	overflow: hidden;
 }
 .colorInput {
-	width: 150px !important;
+	width: 150px;
 }
 .colorInput input {
 	padding: initial !important;
