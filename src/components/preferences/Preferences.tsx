@@ -74,6 +74,15 @@ const Preferences = observer(() => {
 					<Form.Group>
 						<Form.Field>
 							<Checkbox
+								label='Show Grid'
+								onChange={(e, data: CheckboxProps) => preferencesStore.handleChangeBoolean(e, 'showGrid', data.checked)}
+								checked={form.showGrid} />
+						</Form.Field>
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Field>
+							<Checkbox
 								label='Delay Final Drop While Moving'
 								onChange={(e, data: CheckboxProps) => preferencesStore.handleChangeBoolean(e, 'delayFinalDrop', data.checked)}
 								checked={form.delayFinalDrop} />

@@ -41,6 +41,7 @@ export interface Preferences {
 	leftRightAccelAfterMS: number;
 	delayFinalDrop: boolean;
 	allowUndo: boolean;
+	showGrid: boolean;
 	startLevel: number;
 	rowsJunk: number;
 	width: number;
@@ -57,6 +58,7 @@ export interface PreferencesForm {
 	leftRightAccelAfterMS: string;
 	delayFinalDrop: boolean;
 	allowUndo: boolean;
+	showGrid: boolean;
 	width: string;
 	height: string;
 	boardType: BoardType;
@@ -89,6 +91,7 @@ const defaultPrefs: Preferences = {
 	leftRightAccelAfterMS: 250,
 	delayFinalDrop: true,
 	allowUndo: true,
+	showGrid: true,
 	startLevel: 1,
 	rowsJunk: 0,
 	width: 10,

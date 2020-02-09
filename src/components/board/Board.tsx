@@ -31,6 +31,7 @@ const Board = observer(() => {
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<BoardBackdrop
+					showGrid={preferencesStore.prefs.showGrid}
 					gridColor={prefsStyles.gridColor}
 					width={mainStore.width}
 					height={mainStore.height}
