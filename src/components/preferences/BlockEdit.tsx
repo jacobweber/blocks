@@ -57,7 +57,7 @@ const BlockEdit = observer(() => {
 								<label>Size</label>
 								<Button.Group>
 									{Array.from({ length: maxBlockSize }).map((val, idx) => (
-										<Button type='button' active={form.size === idx} key={idx} onClick={() => updateForm({ size: idx })}>
+										<Button type='button' active={form.size === idx + 1} key={idx} onClick={() => updateForm({ size: idx + 1 })}>
 											{idx + 1}
 										</Button>
 									))}
