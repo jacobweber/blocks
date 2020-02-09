@@ -108,7 +108,7 @@ const Preferences = observer(() => {
 					<Header as='h3' dividing>Keyboard Controls</Header>
 					<Keys />
 
-					<Header as='h3' dividing>Colors</Header>
+					<Header as='h3' dividing>Board Colors</Header>
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Background</label>
