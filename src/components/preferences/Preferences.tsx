@@ -46,7 +46,7 @@ const Preferences = observer(() => {
 					<PointDefs key={type} type={type} prefix={type + '-'} blockColors={preferencesStore.formBlockColors} />
 				))}
 				{boardTypes.map(type => (
-					<BoardDef key={type} type={type} prefix={type + '-'} />
+					<BoardDef key={type} type={type} color={preferencesStore.form.styles.boardColor} prefix={type + '-'} />
 				))}
 			</div>
 
@@ -120,6 +120,10 @@ const Preferences = observer(() => {
 						<Form.Field className={styles.cell}>
 							<label>Outline</label>
 							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'outlineColor')} value={prefsStyles.outlineColor} />
+						</Form.Field>
+						<Form.Field className={styles.cell}>
+							<label>Board</label>
+							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'boardColor')} value={prefsStyles.boardColor} />
 						</Form.Field>
 					</Form.Group>
 

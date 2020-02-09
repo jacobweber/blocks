@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BoardDefProps } from 'components/boards/BoardDef';
 
-const Black = React.memo(({ prefix = '' }: BoardDefProps) => {
+const Black = React.memo(({ prefix = '', color }: BoardDefProps) => {
 	return (
 		<svg>
 			<defs>

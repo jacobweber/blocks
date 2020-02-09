@@ -5,8 +5,8 @@ import { PositionedPoint } from 'stores/MainStore';
 import { BlockEditStore } from 'stores/BlockEditStore';
 import { BlockDef, BlockType, defaultBlockDefs, BlockColor } from 'utils/blocks';
 
-export type BoardType = 'Black' | 'White';
-export const boardTypes: Array<BoardType> = ['Black', 'White'];
+export type BoardType = 'Black' | 'Custom';
+export const boardTypes: Array<BoardType> = ['Black', 'Custom'];
 
 export type PointsType = 'Standard' | 'Plain' | 'Boxy';
 export const pointsTypes: Array<PointsType> = ['Standard', 'Plain', 'Boxy'];
@@ -30,6 +30,7 @@ interface StylesPrefs {
 	textColor: string;
 	gridColor: string;
 	outlineColor: string;
+	boardColor: string;
 }
 
 export interface Preferences {
@@ -80,7 +81,8 @@ const defaultPrefs: Preferences = {
 		backgroundColor: '#000000',
 		textColor: '#FFFFFF',
 		gridColor: '#FFFFFF',
-		outlineColor: '#FFFFFF'
+		outlineColor: '#FFFFFF',
+		boardColor: '#DDDDDD'
 	},
 	blockDefs: defaultBlockDefs,
 	name: 'Anonymous',
