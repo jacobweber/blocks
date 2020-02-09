@@ -83,6 +83,7 @@ class BlockEditStore {
 		this.blockType = null;
 		this.form = {
 			...defaultBlockDef,
+			id: String(this.preferencesStore.form.blockDefs.length),
 			odds: String(defaultBlockDef.odds),
 			points: pointsXYToBitmap(defaultBlockDef.points)
 		};
@@ -109,7 +110,7 @@ class BlockEditStore {
 		if (this.form !== null) {
 			const def: BlockDef = {
 				...this.form,
-				id: this.form.id || 'default', 
+				id: this.form.id,
 				odds: strToIntRange(this.form.odds, 0, 100),
 				points: pointBitmapToXY(this.form.points, this.form.size)
 			};

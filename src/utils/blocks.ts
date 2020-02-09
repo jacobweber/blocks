@@ -24,7 +24,7 @@ export interface BlockColor {
 export type PointSymbolID = string;
 
 export const defaultBlockDef: BlockDef = {
-	id: 'sample',
+	id: '',
 	color: palettes[0][0],
 	odds: 10,
 	size: 3,
@@ -35,7 +35,7 @@ export const defaultBlockDef: BlockDef = {
 };
 
 const line: BlockDef = {
-	id: 'line',
+	id: '0',
 	color: palettes[0][0],
 	odds: 10,
 	size: 4,
@@ -45,7 +45,7 @@ const line: BlockDef = {
 	rotate270: false
 };
 const square: BlockDef = {
-	id: 'square',
+	id: '1',
 	color: palettes[0][1],
 	odds: 10,
 	size: 2,
@@ -55,7 +55,7 @@ const square: BlockDef = {
 	rotate270: false
 };
 const are: BlockDef = {
-	id: 'are',
+	id: '2',
 	color: palettes[0][2],
 	odds: 10,
 	size: 3,
@@ -65,7 +65,7 @@ const are: BlockDef = {
 	rotate270: true
 };
 const ell: BlockDef = {
-	id: 'ell',
+	id: '3',
 	color: palettes[0][3],
 	odds: 10,
 	size: 3,
@@ -75,7 +75,7 @@ const ell: BlockDef = {
 	rotate270: true
 };
 const ess: BlockDef = {
-	id: 'ess',
+	id: '4',
 	color: palettes[0][4],
 	odds: 10,
 	size: 3,
@@ -85,7 +85,7 @@ const ess: BlockDef = {
 	rotate270: true
 };
 const zee: BlockDef = {
-	id: 'zee',
+	id: '5',
 	color: palettes[0][5],
 	odds: 10,
 	size: 3,
@@ -95,7 +95,7 @@ const zee: BlockDef = {
 	rotate270: true
 };
 const tee: BlockDef = {
-	id: 'tee',
+	id: '6',
 	color: palettes[0][6],
 	odds: 10,
 	size: 3,

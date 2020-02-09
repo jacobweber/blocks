@@ -47,11 +47,6 @@ const BlockEdit = observer(() => {
 				<Form>
 					<Form.Group>
 						<Form.Field>
-							<label>Symbol ID</label>
-							<Input onChange={e => updateForm({ id: e.target.value })} value={form.id} />
-						</Form.Field>
-
-						<Form.Field>
 							<label>Frequency</label>
 							<Input onChange={e => updateForm({ odds: e.target.value.replace(/[^0-9]/g, '') })} value={form.odds} />
 						</Form.Field>
