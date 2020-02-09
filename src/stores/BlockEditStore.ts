@@ -1,6 +1,6 @@
 import { decorate, observable, action, computed } from 'mobx';
 
-import { BlockDef, BlockType, defaultBlockDef, PointSymbolID, PointBitmap, pointsXYToBitmap, pointBitmapToXY, BlockColor } from 'utils/blocks';
+import { BlockDef, BlockType, defaultBlockDef, PointSymbolID, BlockColor, PointXY } from 'utils/blocks';
 import { PreferencesStore } from './PreferencesStore';
 import { strToIntRange } from 'utils/helpers';
 
@@ -13,6 +13,28 @@ export interface BlockEditForm {
 	rotate180: boolean;
 	rotate270: boolean;
 	points: PointBitmap;
+}
+
+export type PointBitmap = Array<Array<boolean>>;
+
+export function pointsXYToBitmap(points: Array<PointXY>): PointBitmap {
+	const result = Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => false));
+	points.forEach(point => {
+		result[point[0]][point[1]] = true;
+	});
+	return result;
+}
+
+export function pointBitmapToXY(bitmap: PointBitmap, size: number): Array<PointXY> {
+	const result: Array<PointXY> = [];
+	for (let x = 0; x < bitmap.length && x < size; x++) {
+		for (let y = 0; y < bitmap[x].length && y < size; y++) {
+			if (bitmap[x][y]) {
+				result.push([x, y]);
+			}
+		}
+	}
+	return result;
 }
 
 class BlockEditStore {

@@ -4,7 +4,8 @@ import { observer } from "mobx-react-lite"
 import styles from 'components/preferences/BlockBitmap.module.css';
 import { Point } from 'components/Point';
 import { svgPointSize } from 'utils/helpers';
-import { PointSymbolID, PointBitmap } from 'utils/blocks';
+import { PointSymbolID } from 'utils/blocks';
+import { PointBitmap } from 'stores/BlockEditStore';
 
 type BlockBitmapProps = {
 	prefix: string;
