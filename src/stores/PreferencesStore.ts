@@ -38,7 +38,6 @@ export interface Preferences {
 	blockDefs: Array<BlockDef>;
 	name: string;
 	leftRightAccelAfterMS: number;
-	downTimerPauseWhenMovingMS: number;
 	allowUndo: boolean;
 	startLevel: number;
 	rowsJunk: number;
@@ -84,7 +83,6 @@ const defaultPrefs: Preferences = {
 	blockDefs: defaultBlockDefs,
 	name: 'Anonymous',
 	leftRightAccelAfterMS: 250,
-	downTimerPauseWhenMovingMS: 500,
 	allowUndo: true,
 	startLevel: 1,
 	rowsJunk: 0,

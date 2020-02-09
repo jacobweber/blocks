@@ -11,6 +11,7 @@ const log = false;
 const numClearRowsBonus = 4;
 const animDelayMS = 5;
 const junkOdds = 3;
+const downTimerPauseWhenMovingMS = 500;
 
 export interface PositionedPoint {
 	x: number;
@@ -488,7 +489,6 @@ class MainStore {
 	}
 
 	recentlyAboveBlockedSpace(): boolean {
-		const downTimerPauseWhenMovingMS = this.prefs.downTimerPauseWhenMovingMS;
 		return this.lastMoveAboveBlockedSpace !== null && this.lastMoveAboveBlockedSpace.getTime() + downTimerPauseWhenMovingMS >= (new Date()).getTime();
 	}
 
