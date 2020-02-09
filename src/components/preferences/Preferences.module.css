@@ -13,7 +13,6 @@
 }
 .cell {
 	width: 200px;
-	flex-shrink: 0 !important;
 }
 .blocks {
 	overflow-x: auto;
