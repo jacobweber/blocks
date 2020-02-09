@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PointDefsProps } from 'components/points/PointDefsSelector';
+import { PointDefsProps } from 'components/points/PointDefs';
 
 const Boxy = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
 	return (

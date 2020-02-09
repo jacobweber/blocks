@@ -3,8 +3,8 @@ import { observer } from "mobx-react-lite"
 
 import styles from 'components/board/Board.module.css';
 import { useStore } from 'stores/MainStore';
-import { BoardDefSelector } from 'components/boards/BoardDefSelector';
-import { PointDefsSelector } from 'components/points/PointDefsSelector';
+import { BoardDef } from 'components/boards/BoardDef';
+import { PointDefs } from 'components/points/PointDefs';
 import { FrozenPoints } from 'components/board/FrozenPoints';
 import { PositionedBlock } from 'components/board/PositionedBlock';
 import { StatusOverlay } from 'components/board/StatusOverlay';
@@ -19,8 +19,8 @@ const Board = observer(() => {
 	return (
 		<div className={styles.root + (mainStore.gameState === GameState.Active ? ' ' + styles.hideCursor : '')}>
 			<div className={styles.pointDefs}>
-				<PointDefsSelector type={preferencesStore.prefs.pointsType} blockColors={mainStore.blockColors} />
-				<BoardDefSelector type={preferencesStore.prefs.boardType} />
+				<PointDefs type={preferencesStore.prefs.pointsType} blockColors={mainStore.blockColors} />
+				<BoardDef type={preferencesStore.prefs.boardType} />
 			</div>
 			<svg
 				version="1.1"

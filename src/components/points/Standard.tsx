@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { lightenColor } from 'utils/colors';
-import { PointDefsProps } from 'components/points/PointDefsSelector';
+import { PointDefsProps } from 'components/points/PointDefs';
 
 const Standard = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
 	return (

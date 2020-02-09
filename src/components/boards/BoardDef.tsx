@@ -20,9 +20,9 @@ const getBoardDefComp = function(type: BoardType): React.ComponentType<BoardDefP
 	}
 }
 
-const BoardDefSelector = React.memo(({ type, prefix = '' }: BoardDefSelectorProps) => {
+const BoardDef = React.memo(({ type, prefix = '' }: BoardDefSelectorProps) => {
 	const Comp = getBoardDefComp(type);
 	return <Comp prefix={prefix} />;
 });
 
-export { BoardDefSelector };
+export { BoardDef };

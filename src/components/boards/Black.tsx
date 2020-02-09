@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BoardDefProps } from 'components/boards/BoardDefSelector';
+import { BoardDefProps } from 'components/boards/BoardDef';
 
 const Black = React.memo(({ prefix = '' }: BoardDefProps) => {
 	return (

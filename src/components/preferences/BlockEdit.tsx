@@ -5,7 +5,7 @@ import { Button, Header, Icon, Modal, Form, Input, Confirm } from 'semantic-ui-r
 import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
-import { PointDefsSelector } from 'components/points/PointDefsSelector';
+import { PointDefs } from 'components/points/PointDefs';
 
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -30,7 +30,7 @@ const BlockEdit = observer(() => {
 
 	return (<>
 		<div className={styles.pointDefs}>
-			<PointDefsSelector type={preferencesStore.form.pointsType} prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
+			<PointDefs type={preferencesStore.form.pointsType} prefix={blockEditStore.symbolPrefix} blockColors={blockEditStore.formBlockColors} />
 		</div>
 
 		<Confirm

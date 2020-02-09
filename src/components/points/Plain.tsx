@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PointDefsProps } from './PointDefsSelector';
+import { PointDefsProps } from './PointDefs';
 
 const Plain = React.memo(({ prefix = '', blockColors }: PointDefsProps) => {
 	return (

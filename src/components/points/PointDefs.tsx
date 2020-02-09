@@ -24,9 +24,9 @@ const getPointsDefsComp = function(type: PointsType): React.ComponentType<PointD
 	}
 }
 
-const PointDefsSelector = React.memo(({ type, prefix = '', blockColors }: PointDefsSelectorProps) => {
+const PointDefs = React.memo(({ type, prefix = '', blockColors }: PointDefsSelectorProps) => {
 	const Comp = getPointsDefsComp(type);
 	return <Comp prefix={prefix} blockColors={blockColors} />;
 });
 
-export { PointDefsSelector };
+export { PointDefs };
