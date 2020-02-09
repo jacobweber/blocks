@@ -1,7 +1,7 @@
 import { decorate, observable, action, computed } from 'mobx';
 
-import { BlockDef, BlockType, defaultBlockDef, PointSymbolID, BlockColor, PointXY } from 'utils/blocks';
-import { PreferencesStore } from './PreferencesStore';
+import { BlockDef, BlockType, defaultBlockDef, PointSymbolID, BlockColor, PointXY, maxBlockSize } from 'utils/blocks';
+import { PreferencesStore } from 'stores/PreferencesStore';
 import { strToIntRange } from 'utils/helpers';
 
 export interface BlockEditForm {
@@ -18,7 +18,7 @@ export interface BlockEditForm {
 export type PointBitmap = Array<Array<boolean>>;
 
 export function pointsXYToBitmap(points: Array<PointXY>): PointBitmap {
-	const result = Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => false));
+	const result = Array.from({ length: maxBlockSize }, () => Array.from({ length: maxBlockSize }, () => false));
 	points.forEach(point => {
 		result[point[0]][point[1]] = true;
 	});

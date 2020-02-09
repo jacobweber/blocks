@@ -1,5 +1,6 @@
 import { palettes } from "./colors";
 
+export const maxBlockSize = 8;
 export type PointXY = [number, number];
 export type ExtentLTRB = [ number, number, number, number ];
 export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };

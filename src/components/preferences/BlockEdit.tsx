@@ -6,6 +6,7 @@ import styles from 'components/preferences/BlockEdit.module.css';
 import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
 import { PointDefs } from 'components/points/PointDefs';
+import { maxBlockSize } from 'utils/blocks';
 
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -55,9 +56,9 @@ const BlockEdit = observer(() => {
 							<Form.Field>
 								<label>Size</label>
 								<Button.Group>
-									{[1, 2, 3, 4, 5].map(val => (
-										<Button type='button' active={form.size === val} key={val} onClick={() => updateForm({ size: val })}>
-											{val}
+									{Array.from({ length: maxBlockSize }).map((val, idx) => (
+										<Button type='button' active={form.size === idx} key={idx} onClick={() => updateForm({ size: idx })}>
+											{idx}
 										</Button>
 									))}
 								</Button.Group>
