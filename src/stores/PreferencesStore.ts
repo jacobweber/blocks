@@ -276,10 +276,10 @@ class PreferencesStore {
 		});
 	}
 
-	handleChangeAllowUndo(e: React.FormEvent<HTMLInputElement>): void {
+	handleChangeBoolean(e: React.FormEvent<HTMLInputElement>, name: string, checked?: boolean): void {
 		this.setForm({
 			...this.form,
-			allowUndo: !this.form.allowUndo
+			[name]: checked
 		});
 	}
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { observer } from "mobx-react-lite"
-import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm } from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm, CheckboxProps } from 'semantic-ui-react'
 
 import styles from 'components/preferences/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
@@ -67,7 +67,7 @@ const Preferences = observer(() => {
 						<Form.Field>
 							<Checkbox
 								label='Allow Undo'
-								onChange={e => preferencesStore.handleChangeAllowUndo(e)}
+								onChange={(e, data: CheckboxProps) => preferencesStore.handleChangeBoolean(e, 'allowUndo', data.checked)}
 								checked={form.allowUndo} />
 						</Form.Field>
 					</Form.Group>
