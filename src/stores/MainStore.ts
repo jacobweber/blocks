@@ -1,4 +1,4 @@
-import { decorate, observable, computed, action, runInAction } from 'mobx';
+import { observable, computed, action, runInAction } from 'mobx';
 import { createContext, useContext } from 'react';
 
 import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
@@ -39,31 +39,31 @@ class MainStore {
 	highScoresStore: HighScoresStore = new HighScoresStore();
 	newGameStore: NewGameStore = new NewGameStore();
 
-	positionedBlock: PositionedBlock | null = null;
-	filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
+	@observable.ref positionedBlock: PositionedBlock | null = null;
+	@observable filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
 	undoStack: Array<UndoFrame> = [];
-	nextBlockTypes: Array<BlockType> = [];
+	@observable.ref nextBlockTypes: Array<BlockType> = [];
 
 	actionQueue: Array<Actions> = [];
 	heldAction: Actions | null = null;
 	heldKey: string | null = null;
 	heldTimeout: number | undefined = undefined;
 
-	gameState: GameState = GameState.Reset;
-	animating = false;
+	@observable gameState: GameState = GameState.Reset;
+	@observable animating = false;
 	downTimeout: number | undefined = undefined;
 	lastMoveAboveBlockedSpace: Date | null = null;
-	score = 0;
-	rows = 0;
-	startLevel = 1;
+	@observable score = 0;
+	@observable rows = 0;
+	@observable startLevel = 1;
 	totalTime = 0;
 	unpausedStart = 0;
 
-	gameBlockDefs: Array<BlockDef> = [];
-	width: number = 0;
-	height: number = 0;
-	windowWidth: number = 0;
-	windowHeight: number = 0;
+	@observable.ref gameBlockDefs: Array<BlockDef> = [];
+	@observable width: number = 0;
+	@observable height: number = 0;
+	@observable windowWidth: number = 0;
+	@observable windowHeight: number = 0;
 
 	constructor() {
 		this.preferencesStore.load();
@@ -89,18 +89,18 @@ class MainStore {
 		window.addEventListener('resize', e => this.updateWindowSize());
 	}
 
-	updateWindowSize() {
+	@action updateWindowSize() {
 		this.windowWidth = window.innerWidth;
 		this.windowHeight = window.innerHeight;
 	}
 
-	get actualPointSize(): number {
+	@computed get actualPointSize(): number {
 		const minWidth = Math.floor((this.windowWidth - extraWidth) / this.width);
 		const minHeight = Math.floor((this.windowHeight - extraHeight) / this.height);
 		return Math.min(Math.max(Math.min(minHeight, minWidth), 10), 30);
 	}
 
-	get prefs(): Preferences {
+	@computed get prefs(): Preferences {
 		return this.preferencesStore.prefs;
 	}
 
@@ -124,7 +124,7 @@ class MainStore {
 		});
 	}
 
-	get blockColors(): Array<BlockColor> {
+	@computed get blockColors(): Array<BlockColor> {
 		return [
 			{ id: 'flashOn', color: '#000000' },
 			{ id: 'flashOff', color: '#FFFFFF' },
@@ -132,15 +132,15 @@ class MainStore {
 		];
 	}
 
-	get gameBlockRotations(): Array<BlockRotations> {
+	@computed get gameBlockRotations(): Array<BlockRotations> {
 		return this.gameBlockDefs.map(def => calculateBlockRotations(def));
 	}
 
-	get weightedBlockTypes() {
+	@computed get weightedBlockTypes() {
 		return calculateBlockWeights(this.gameBlockDefs);
 	}
 
-	get blockMaxInitialHeight(): number {
+	@computed get blockMaxInitialHeight(): number {
 		const blockRotations = this.gameBlockRotations;
 		let max = 0;
 		blockRotations.forEach(rotations => {
@@ -154,11 +154,11 @@ class MainStore {
 		return this.weightedBlockTypes[index];
 	}
 
-	get downDelayMS(): number {
+	@computed get downDelayMS(): number {
 		return getDownDelayMS(this.level);
 	}
 
-	get nextBlockType(): BlockType | null {
+	@computed get nextBlockType(): BlockType | null {
 		if (this.nextBlockTypes.length === 0) return null;
 		return this.nextBlockTypes[this.nextBlockTypes.length - 1];
 	}
@@ -171,13 +171,13 @@ class MainStore {
 		return this.gameBlockRotations[type]!;
 	}
 
-	lockGamePrefs() {
+	@action lockGamePrefs() {
 		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
 		this.width = this.prefs.width;
 		this.height = this.prefs.height;
 	}
 
-	resetGameLeavingBoard(): void {
+	@action resetGameLeavingBoard(): void {
 		if (log) console.clear();
 		window.clearTimeout(this.downTimeout);
 		this.downTimeout = undefined;
@@ -194,7 +194,7 @@ class MainStore {
 		this.unpausedStart = 0;
 	}
 
-	resetGameCompletely() {
+	@action resetGameCompletely() {
 		this.resetGameLeavingBoard();
 		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
 		this.score = 0;
@@ -202,7 +202,7 @@ class MainStore {
 		this.totalTime = 0;
 	}
 
-	newGame(): void {
+	@action newGame(): void {
 		if (this.gameState === GameState.Paused || this.gameState === GameState.Active) return;
 		this.lockGamePrefs();
 		this.resetGameCompletely();
@@ -228,7 +228,7 @@ class MainStore {
 		);
 	}
 
-	fillRowsWithJunk() {
+	@action fillRowsWithJunk() {
 		if (this.prefs.rowsJunk === 0) return;
 		for (let y = this.height - 1; y >= this.height - this.prefs.rowsJunk; y--) {
 			for (let x = 0; x < this.width; x++) {
@@ -242,7 +242,7 @@ class MainStore {
 		}
 	}
 
-	endGame(): void {
+	@action endGame(): void {
 		if (this.gameState === GameState.Ended) {
 			this.gameState = GameState.Reset;
 			this.resetGameCompletely();
@@ -306,7 +306,7 @@ class MainStore {
 		}
 	}
 
-	pause(): void {
+	@action pause(): void {
 		if (this.gameState !== GameState.Active) return;
 		this.gameState = GameState.Paused;
 		const unpausedTime = (new Date()).getTime() - this.unpausedStart;
@@ -314,7 +314,7 @@ class MainStore {
 		this.updateDownTimer();
 	}
 
-	resume(): void {
+	@action resume(): void {
 		if (this.gameState !== GameState.Paused) return;
 		this.gameState = GameState.Active;
 		this.unpausedStart = (new Date()).getTime();
@@ -382,7 +382,7 @@ class MainStore {
 		});
 	}
 
-	newBlock(): void {
+	@action newBlock(): void {
 		let type;
 		if (this.nextBlockTypes.length > 0) {
 			type = this.nextBlockTypes[this.nextBlockTypes.length - 1];
@@ -452,7 +452,7 @@ class MainStore {
 		this.setAnimating(false);
 	}
 
-	clearRows(rows: number[]): void {
+	@action clearRows(rows: number[]): void {
 		if (rows.length === 0) return;
 		for (let row = rows.length - 1; row >= 0; row--) {
 			this.filledPoints.splice(rows[row], 1);
@@ -462,7 +462,7 @@ class MainStore {
 		}
 	}
 
-	async freezeBlock(points: number = 0): Promise<void> {
+	@action async freezeBlock(points: number = 0): Promise<void> {
 		if (!this.positionedBlock) return;
 		if (this.prefs.allowUndo) {
 			this.undoStack.push({
@@ -482,11 +482,11 @@ class MainStore {
 		});
 	}
 
-	scoreDrop(points: number): void {
+	@action scoreDrop(points: number): void {
 		this.score += points;
 	}
 
-	scoreClearedRows(rows: number): void {
+	@action scoreClearedRows(rows: number): void {
 		if (rows === 0) return;
 		const mult = (rows === 1 ? 40
 			: (rows === 2 ? 100
@@ -499,7 +499,7 @@ class MainStore {
 		this.startDownTimer();
 	}
 
-	get level(): number {
+	@computed get level(): number {
 		return Math.max(this.startLevel, getLevel(this.rows));
 	}
 
@@ -519,7 +519,7 @@ class MainStore {
 		return this.lastMoveAboveBlockedSpace !== null && this.lastMoveAboveBlockedSpace.getTime() + downTimerPauseWhenMovingMS >= (new Date()).getTime();
 	}
 
-	rotateCW(): void {
+	@action rotateCW(): void {
 		if (this.gameState !== GameState.Active || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockRotations(this.positionedBlock.type).length;
 		const nextRotation = this.positionedBlock.rotation + 1 >= numRotations ? 0 : this.positionedBlock.rotation + 1;
@@ -533,7 +533,7 @@ class MainStore {
 		}
 	}
 
-	rotateCCW(): void {
+	@action rotateCCW(): void {
 		if (this.gameState !== GameState.Active || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockRotations(this.positionedBlock.type).length;
 		const nextRotation = this.positionedBlock.rotation - 1 < 0 ? numRotations - 1 : this.positionedBlock.rotation - 1;
@@ -547,7 +547,7 @@ class MainStore {
 		}
 	}
 
-	left(): boolean {
+	@action left(): boolean {
 		if (this.gameState !== GameState.Active || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
@@ -561,7 +561,7 @@ class MainStore {
 		return false;
 	}
 
-	right(): boolean {
+	@action right(): boolean {
 		if (this.gameState !== GameState.Active || !this.positionedBlock) return false;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
@@ -595,7 +595,7 @@ class MainStore {
 		this.setAnimating(false);
 	}
 
-	async down(fromTimer: boolean = false): Promise<void> {
+	@action async down(fromTimer: boolean = false): Promise<void> {
 		if (this.gameState !== GameState.Active || !this.positionedBlock) return;
 		const nextBlock: PositionedBlock = {
 			...this.positionedBlock,
@@ -611,7 +611,7 @@ class MainStore {
 		}
 	}
 
-	async drop(): Promise<void> {
+	@action async drop(): Promise<void> {
 		if (this.gameState !== GameState.Active || !this.positionedBlock) return;
 		let done = false;
 		const nextDrop = () => {
@@ -639,7 +639,7 @@ class MainStore {
 		this.setAnimating(false);
 	}
 
-	async undo(): Promise<void> {
+	@action async undo(): Promise<void> {
 		if (this.gameState !== GameState.Active || !this.prefs.allowUndo || this.undoStack.length === 0) return;
 		if (this.positionedBlock) {
 			this.nextBlockTypes = [ ...this.nextBlockTypes, this.positionedBlock.type ];
@@ -836,52 +836,6 @@ class MainStore {
 		return { points, width, height }
 	}
 }
-
-decorate(MainStore, {
-	animating: observable,
-	score: observable,
-	rows: observable,
-	level: computed,
-	startLevel: observable,
-	downDelayMS: computed,
-	gameState: observable,
-	actualPointSize: computed,
-	positionedBlock: observable.ref,
-	gameBlockDefs: observable,
-	width: observable,
-	height: observable,
-	windowWidth: observable,
-	windowHeight: observable,
-	gameBlockRotations: computed,
-	weightedBlockTypes: computed,
-	blockMaxInitialHeight: computed,
-	prefs: computed,
-	nextBlockType: computed,
-	nextBlockTypes: observable.ref,
-	filledPoints: observable,
-	blockColors: computed,
-	lockGamePrefs: action,
-	updateWindowSize: action,
-	resetGameLeavingBoard: action,
-	resetGameCompletely: action,
-	newGame: action,
-	fillRowsWithJunk: action,
-	endGame: action,
-	pause: action,
-	resume: action,
-	newBlock: action,
-	freezeBlock: action,
-	scoreDrop: action,
-	scoreClearedRows: action,
-	clearRows: action,
-	undo: action,
-	rotateCW: action,
-	rotateCCW: action,
-	left: action,
-	right: action,
-	down: action,
-	drop: action
-});
 
 export { MainStore };
 

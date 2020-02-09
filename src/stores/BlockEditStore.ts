@@ -1,4 +1,4 @@
-import { decorate, observable, action, computed } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 import { BlockDef, BlockType, defaultBlockDef, PointSymbolID, BlockColor, PointXY, maxBlockSize } from 'utils/blocks';
 import { PreferencesStore } from 'stores/PreferencesStore';
@@ -38,10 +38,10 @@ export function pointBitmapToXY(bitmap: PointBitmap, size: number): Array<PointX
 }
 
 class BlockEditStore {
-	visible: boolean = false;
-	form: BlockEditForm;
-	blockType: BlockType | null = null;
-	symbolPrefix = 'edit-'; // will need to be blank if using static SVG for pieces
+	@observable visible: boolean = false;
+	@observable.ref form: BlockEditForm;
+	@observable blockType: BlockType | null = null;
+	@observable symbolPrefix = 'edit-'; // will need to be blank if using static SVG for pieces
 
 	preferencesStore: PreferencesStore;
 
@@ -54,7 +54,7 @@ class BlockEditStore {
 		};
 	}
 
-	get formBlockColors(): Array<BlockColor> {
+	@computed get formBlockColors(): Array<BlockColor> {
 		return [
 			{
 				id: this.form.id,
@@ -94,14 +94,14 @@ class BlockEditStore {
 		});
 	}
 
-	updateForm = (updates: Partial<BlockEditForm>): void => {
+	@action updateForm = (updates: Partial<BlockEditForm>): void => {
 		this.form = {
 			...this.form,
 			...updates
 		};
 	}
 
-	dialogShowAdd() {
+	@action dialogShowAdd() {
 		this.blockType = null;
 		this.form = {
 			...defaultBlockDef,
@@ -112,7 +112,7 @@ class BlockEditStore {
 		this.visible = true;
 	}
 
-	dialogShowEdit(type: BlockType, def: BlockDef) {
+	@action dialogShowEdit(type: BlockType, def: BlockDef) {
 		this.blockType = type;
 		this.form = {
 			...def,
@@ -122,12 +122,12 @@ class BlockEditStore {
 		this.visible = true;
 	}
 
-	dialogCancel() {
+	@action dialogCancel() {
 		this.visible = false;
 		this.blockType = null;
 	}
 
-	dialogSave() {
+	@action dialogSave() {
 		this.visible = false;
 		if (this.form !== null) {
 			const def: BlockDef = {
@@ -145,26 +145,12 @@ class BlockEditStore {
 		this.blockType = null;
 	}
 
-	dialogDelete() {
+	@action dialogDelete() {
 		this.visible = false;
 		if (this.blockType !== null) {
 			this.deleteBlockDef(this.blockType);
 		}
 	}
 }
-
-decorate(BlockEditStore, {
-	visible: observable,
-	form: observable.ref,
-	blockType: observable,
-	symbolPrefix: observable,
-	formBlockColors: computed,
-	updateForm: action,
-	dialogShowAdd: action,
-	dialogShowEdit: action,
-	dialogCancel: action,
-	dialogSave: action,
-	dialogDelete: action
-});
 
 export { BlockEditStore };

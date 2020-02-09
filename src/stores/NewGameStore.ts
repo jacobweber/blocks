@@ -1,21 +1,21 @@
-import { decorate, observable, action } from 'mobx';
+import { observable, action } from 'mobx';
 
 type DoneCallbackType = (result: boolean, level: number, rows: number) => void;
 
 class NewGameStore {
-	visible: boolean = false;
+	@observable visible: boolean = false;
 	doneCallback: DoneCallbackType | null = null;;
-	level: number = 1;
-	rows: number = 0;
+	@observable level: number = 1;
+	@observable rows: number = 0;
 
-	dialogShow(level: number, rows: number, doneCallback: DoneCallbackType) {
+	@action dialogShow(level: number, rows: number, doneCallback: DoneCallbackType) {
 		this.visible = true;
 		this.level = level;
 		this.rows = rows;
 		this.doneCallback = doneCallback;
 	}
 
-	dialogCancel() {
+	@action dialogCancel() {
 		this.visible = false;
 		if (this.doneCallback) {
 			this.doneCallback(false, 0, 0);
@@ -23,7 +23,7 @@ class NewGameStore {
 		}
 	}
 
-	dialogOK(level: number, rows: number) {
+	@action dialogOK(level: number, rows: number) {
 		this.visible = false;
 		if (this.doneCallback) {
 			this.doneCallback(true, level, rows);
@@ -31,14 +31,5 @@ class NewGameStore {
 		}
 	}
 }
-
-decorate(NewGameStore, {
-	visible: observable,
-	level: observable,
-	rows: observable,
-	dialogShow: action,
-	dialogCancel: action,
-	dialogOK: action
-});
 
 export { NewGameStore };

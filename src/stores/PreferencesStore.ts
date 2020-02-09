@@ -1,4 +1,4 @@
-import { decorate, observable, action, computed } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr, strToIntRange } from 'utils/helpers';
 import { PositionedPoint } from 'stores/MainStore';
@@ -105,18 +105,18 @@ type DoneCallbackType = () => void;
 class PreferencesStore {
 	blockEditStore: BlockEditStore = new BlockEditStore(this);
 
-	visible: boolean = false;
+	@observable visible: boolean = false;
 	doneCallback: DoneCallbackType | null = null;
-	prefs: Preferences = defaultPrefs;
-	form: PreferencesForm = this.prefsToForm(this.prefs);
-	sampleBlockType: BlockType | null = null;
+	@observable.ref prefs: Preferences = defaultPrefs;
+	@observable.ref form: PreferencesForm = this.prefsToForm(this.prefs);
+	@observable.ref sampleBlockType: BlockType | null = null;
 	sampleBlockTimer: number | null = null;
 
-	get styles() {
+	@computed get styles() {
 		return this.prefs.styles;
 	}
 
-	get formBlockColors(): Array<BlockColor> {
+	@computed get formBlockColors(): Array<BlockColor> {
 		return [
 			...this.form.blockDefs.map(def => ({
 				id: def.id,
@@ -125,7 +125,7 @@ class PreferencesStore {
 		];
 	}
 
-	get gameKeyMap(): { [key: string]: Actions } {
+	@computed get gameKeyMap(): { [key: string]: Actions } {
 		const keys = this.prefs.keys;
 		return {
 			[keys.newGame]: Actions.NewGame,
@@ -136,7 +136,7 @@ class PreferencesStore {
 		};
 	}
 
-	get moveKeyMap(): { [key: string]: Actions } {
+	@computed get moveKeyMap(): { [key: string]: Actions } {
 		const keys = this.prefs.keys;
 		return {
 			[keys.left]: Actions.Left,
@@ -148,7 +148,7 @@ class PreferencesStore {
 		};
 	}
 
-	load() {
+	@action load() {
 		const str = window.localStorage.getItem('preferences');
 		let prefs;
 		if (str) {
@@ -168,7 +168,7 @@ class PreferencesStore {
 		};
 	}
 
-	save() {
+	@action save() {
 		const str = JSON.stringify(this.prefs);
 		window.localStorage.setItem('preferences', str);
 	}
@@ -192,11 +192,11 @@ class PreferencesStore {
 		}
 	}
 
-	setForm(form: PreferencesForm): void {
+	@action setForm(form: PreferencesForm): void {
 		this.form = form;
 	}
 
-	updateSampleBlockType(): void {
+	@action updateSampleBlockType(): void {
 		if (this.sampleBlockType === null) {
 			this.sampleBlockType = 0;
 		} else if (this.sampleBlockType + 1 >= this.form.blockDefs.length) {
@@ -206,7 +206,7 @@ class PreferencesStore {
 		}
 	}
 
-	get sampleBlockDef(): BlockDef | null {
+	@computed get sampleBlockDef(): BlockDef | null {
 		if (this.sampleBlockType !== null && this.sampleBlockType < this.form.blockDefs.length) {
 			return this.form.blockDefs[this.sampleBlockType];
 		}
@@ -214,7 +214,7 @@ class PreferencesStore {
 		return null;
 	}
 
-	dialogShow(doneCallback?: DoneCallbackType) {
+	@action dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
 		this.form = this.prefsToForm(this.prefs);
 		if (doneCallback) {
@@ -229,7 +229,7 @@ class PreferencesStore {
 		}, 2000);
 	}
 
-	dialogCancel() {
+	@action dialogCancel() {
 		this.visible = false;
 		this.form = this.prefsToForm(this.prefs);
 		if (this.doneCallback) {
@@ -241,7 +241,7 @@ class PreferencesStore {
 		}
 	}
 
-	dialogSave() {
+	@action dialogSave() {
 		this.visible = false;
 		this.prefs = this.formToPrefs(this.form, this.prefs);
 		this.form = this.prefsToForm(this.prefs);
@@ -255,11 +255,11 @@ class PreferencesStore {
 		}
 	}
 
-	dialogReset() {
+	@action dialogReset() {
 		this.form = this.prefsToForm(defaultPrefs);
 	}
 
-	saveNewGameOptions(startLevel: number, rowsJunk: number): void {
+	@action saveNewGameOptions(startLevel: number, rowsJunk: number): void {
 		this.prefs = {
 			...this.prefs,
 			startLevel,
@@ -364,26 +364,5 @@ class PreferencesStore {
 		}));
 	}
 }
-
-decorate(PreferencesStore, {
-	visible: observable,
-	prefs: observable.ref,
-	form: observable.ref,
-	sampleBlockType: observable.ref,
-	sampleBlockDef: computed,
-	formBlockColors: computed,
-	styles: computed,
-	gameKeyMap: computed,
-	moveKeyMap: computed,
-	load: action,
-	save: action,
-	updateSampleBlockType: action,
-	setForm: action,
-	saveNewGameOptions: action,
-	dialogShow: action,
-	dialogCancel: action,
-	dialogSave: action,
-	dialogReset: action
-});
 
 export { PreferencesStore };

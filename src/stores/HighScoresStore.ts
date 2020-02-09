@@ -1,4 +1,4 @@
-import { decorate, observable, action } from 'mobx';
+import { observable, action } from 'mobx';
 
 export interface HighScore {
 	name: string;
@@ -24,13 +24,13 @@ const numScores = 10;
 type DoneCallbackType = () => void;
 
 class HighScoresStore {
-	visible: boolean = false;
+	@observable visible: boolean = false;
 	doneCallback: DoneCallbackType | null = null;
-	lastScoreName: string = '';
-	scores: HighScores = defaultScores;
-	lastPosition: number | null = null;
+	@observable lastScoreName: string = '';
+	@observable.ref scores: HighScores = defaultScores;
+	@observable lastPosition: number | null = null;
 
-	load() {
+	@action load() {
 		const str = window.localStorage.getItem('highScores');
 		let scores;
 		if (str) {
@@ -42,19 +42,19 @@ class HighScoresStore {
 		this.scores = Object.assign({}, defaultScores, scores || {});
 	}
 
-	save() {
+	@action save() {
 		const str = JSON.stringify(this.scores);
 		window.localStorage.setItem('highScores', str);
 	}
 
-	dialogShow(doneCallback?: DoneCallbackType) {
+	@action dialogShow(doneCallback?: DoneCallbackType) {
 		this.visible = true;
 		if (doneCallback) {
 			this.doneCallback = doneCallback;
 		}
 	}
 
-	dialogHide() {
+	@action dialogHide() {
 		if (this.lastPosition) {
 			const entries = [...this.scores.entries];
 			entries[this.lastPosition].name = this.lastScoreName;
@@ -70,7 +70,7 @@ class HighScoresStore {
 		}
 	}
 
-	dialogReset() {
+	@action dialogReset() {
 		this.setScores(defaultScores);
 		this.lastPosition = null;
 	}
@@ -92,7 +92,7 @@ class HighScoresStore {
 		return [ ...scores.slice(0, position), entry, ...scores.slice(position) ].slice(0, numScores);
 	}
 
-	recordIfHighScore(entry: HighScore): number | null {
+	@action recordIfHighScore(entry: HighScore): number | null {
 		if (entry.score < minHighScore) return null;
 		const position = this.getScorePosition(entry);
 		if (position !== null) {
@@ -107,29 +107,14 @@ class HighScoresStore {
 		}
 	}
 
-	handleChangeLastScoreName(e: React.ChangeEvent<HTMLInputElement>): void {
+	@action handleChangeLastScoreName(e: React.ChangeEvent<HTMLInputElement>): void {
 		this.lastScoreName = e.target.value;
 	}
 
-	setScores(scores: HighScores): void {
+	@action setScores(scores: HighScores): void {
 		this.scores = scores;
 		this.save();
 	}
 }
-
-decorate(HighScoresStore, {
-	visible: observable,
-	lastScoreName: observable,
-	scores: observable.ref,
-	lastPosition: observable,
-	load: action,
-	save: action,
-	setScores: action,
-	dialogShow: action,
-	dialogHide: action,
-	dialogReset: action,
-	handleChangeLastScoreName: action,
-	recordIfHighScore: action
-});
 
 export { HighScoresStore };
