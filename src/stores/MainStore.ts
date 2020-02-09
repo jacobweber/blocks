@@ -820,19 +820,20 @@ class MainStore {
 		})).filter(point => point.y >= 0);
 	}
 
-	getNextBlockPoints(): { points: Array<PositionedPoint>, width: number } {
-		if (this.nextBlockType === null) return { points: [], width: 0 };
+	getNextBlockPoints(): { points: Array<PositionedPoint>, width: number, height: number } {
+		if (this.nextBlockType === null) return { points: [], width: 0, height: 0 };
 		const rotation = this.getBlockRotations(this.nextBlockType)[0];
 		const top = rotation.extent[1];
 		const id = this.getBlockDef(this.nextBlockType).id;
 		const left = rotation.extent[0];
 		const width = rotation.extent[2] - left + 1;
+		const height = rotation.extent[3] - rotation.extent[1] + 1;
 		const points = rotation.points.map(point => ({
 			x: point[0] - left,
 			y: point[1] - top,
 			id: id
 		}));
-		return { points, width }
+		return { points, width, height }
 	}
 }
 
