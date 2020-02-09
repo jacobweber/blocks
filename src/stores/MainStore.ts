@@ -489,6 +489,7 @@ class MainStore {
 	}
 
 	recentlyAboveBlockedSpace(): boolean {
+		if (!this.prefs.delayFinalDrop) return false;
 		return this.lastMoveAboveBlockedSpace !== null && this.lastMoveAboveBlockedSpace.getTime() + downTimerPauseWhenMovingMS >= (new Date()).getTime();
 	}
 

@@ -74,6 +74,15 @@ const Preferences = observer(() => {
 
 					<Form.Group>
 						<Form.Field>
+							<Checkbox
+								label='Delay Final Drop While Moving'
+								onChange={(e, data: CheckboxProps) => preferencesStore.handleChangeBoolean(e, 'delayFinalDrop', data.checked)}
+								checked={form.delayFinalDrop} />
+						</Form.Field>
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Field>
 							<label>Accelerate Left/Right After Holding</label>
 							<Input
 								label={{ basic: true, content: 'ms' }}

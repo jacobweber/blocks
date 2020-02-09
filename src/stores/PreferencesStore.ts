@@ -38,6 +38,7 @@ export interface Preferences {
 	blockDefs: Array<BlockDef>;
 	name: string;
 	leftRightAccelAfterMS: number;
+	delayFinalDrop: boolean;
 	allowUndo: boolean;
 	startLevel: number;
 	rowsJunk: number;
@@ -53,6 +54,7 @@ export interface PreferencesForm {
 	blockDefs: Array<BlockDef>;
 	name: string;
 	leftRightAccelAfterMS: string;
+	delayFinalDrop: boolean;
 	allowUndo: boolean;
 	width: string;
 	height: string;
@@ -83,6 +85,7 @@ const defaultPrefs: Preferences = {
 	blockDefs: defaultBlockDefs,
 	name: 'Anonymous',
 	leftRightAccelAfterMS: 250,
+	delayFinalDrop: true,
 	allowUndo: true,
 	startLevel: 1,
 	rowsJunk: 0,
