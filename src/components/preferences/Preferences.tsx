@@ -4,21 +4,20 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm, CheckboxPr
 
 import styles from 'components/preferences/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
-import { KeyActionName, palettes } from 'utils/helpers';
+import { palettes } from 'utils/helpers';
 import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
 import { PointDefs } from 'components/points/PointDefs';
 import { boardTypes, pointsTypes } from 'stores/PreferencesStore';
 import { BoardDef } from 'components/boards/BoardDef';
+import { Keys } from 'components/preferences/Keys';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
 	const form = preferencesStore.form;
-	const keys = form.keys;
 	const prefsStyles = form.styles;
 	const cancel = () => preferencesStore.dialogCancel();
 	const save = () => preferencesStore.dialogSave();
-	const handleChangeKey = (name: KeyActionName) => (e: React.KeyboardEvent) => preferencesStore.handleChangeKey(e, name);
 	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
 		type: 'color',
 		className: styles.colorInput
@@ -102,58 +101,7 @@ const Preferences = observer(() => {
 					</Form.Group>
 
 					<Header as='h3' dividing>Keyboard Controls</Header>
-					<Form.Group>
-						<Form.Field className={styles.cell}>
-							<label>New Game</label>
-							<Input fluid onKeyDown={handleChangeKey('newGame')} name='newGame' value={keys.newGame} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>New Game with Options</label>
-							<Input fluid onKeyDown={handleChangeKey('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>End Game</label>
-							<Input fluid onKeyDown={handleChangeKey('endGame')} name='endGame' value={keys.endGame} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>Pause/Resume Game</label>
-							<Input fluid onKeyDown={handleChangeKey('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
-						</Form.Field>
-					</Form.Group>
-
-					<Form.Group>
-						<Form.Field className={styles.cell}>
-							<label>Left</label>
-							<Input fluid onKeyDown={handleChangeKey('left')} name='left' value={keys.left} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>Right</label>
-							<Input fluid onKeyDown={handleChangeKey('right')} name='right' value={keys.right} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>Down</label>
-							<Input fluid onKeyDown={handleChangeKey('down')} name='down' value={keys.down} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>Drop</label>
-							<Input fluid onKeyDown={handleChangeKey('drop')} name='drop' value={keys.drop} />
-						</Form.Field>
-					</Form.Group>
-
-					<Form.Group>
-						<Form.Field className={styles.cell}>
-							<label>Rotate Left</label>
-							<Input fluid onKeyDown={handleChangeKey('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>Rotate Right</label>
-							<Input fluid onKeyDown={handleChangeKey('rotateCW')} name='rotateCW' value={keys.rotateCW} />
-						</Form.Field>
-						<Form.Field className={styles.cell}>
-							<label>Undo</label>
-							<Input fluid onKeyDown={handleChangeKey('undo')} name='undo' value={keys.undo} />
-						</Form.Field>
-		          	</Form.Group>
+					<Keys />
 
 					<Header as='h3' dividing>Colors</Header>
 					<Form.Group>
