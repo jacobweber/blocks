@@ -4,6 +4,7 @@ export type PointXY = [number, number];
 export type ExtentLTRB = [ number, number, number, number ];
 export type Rotation = { points: Array<PointXY>, extent: ExtentLTRB };
 export type BlockRotations = Array<Rotation>; // 0, 90, 180, 270
+export type PointSymbolID = string;
 
 export interface BlockDef {
 	id: PointSymbolID;
@@ -20,8 +21,6 @@ export interface BlockColor {
 	id: PointSymbolID;
 	color: string;
 }
-
-export type PointSymbolID = string;
 
 export const defaultBlockDef: BlockDef = {
 	id: '',
