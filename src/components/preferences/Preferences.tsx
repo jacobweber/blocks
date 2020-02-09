@@ -4,7 +4,7 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm, CheckboxPr
 
 import styles from 'components/preferences/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
-import { palettes } from 'utils/helpers';
+import { palettes } from 'utils/colors';
 import { Block } from 'components/preferences/Block';
 import { BlockEdit } from 'components/preferences/BlockEdit';
 import { PointDefs } from 'components/points/PointDefs';

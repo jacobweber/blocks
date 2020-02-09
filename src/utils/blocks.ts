@@ -1,4 +1,4 @@
-import { palettes } from "./helpers";
+import { palettes } from "./colors";
 
 export type PointXY = [number, number];
 export type ExtentLTRB = [ number, number, number, number ];
