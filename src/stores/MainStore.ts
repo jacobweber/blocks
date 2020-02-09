@@ -8,7 +8,7 @@ import { GameState, Actions, logAction, getKeyStr, getModifiedKeyStr, getDownDel
 import { PointSymbolID, BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
 
 const extraHeight = 50;
-const extraWidth = 180;
+const extraWidth = 200;
 const log = false;
 const numClearRowsBonus = 4;
 const animDelayMS = 5;

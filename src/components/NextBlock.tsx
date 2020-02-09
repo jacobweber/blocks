@@ -4,14 +4,17 @@ import { observer } from "mobx-react-lite"
 import styles from 'components/NextBlock.module.css';
 import { useStore } from 'stores/MainStore';
 import { Point } from 'components/Point';
-import { svgPointSize } from 'utils/helpers';
+import { svgPointSize, GameState } from 'utils/helpers';
 
 const NextBlock = observer(() => {
 	const mainStore = useStore();
 	const { points, width } = mainStore.getNextBlockPoints();
+ 	const prefsStyles = mainStore.preferencesStore.styles;
+	if (mainStore.gameState === GameState.Reset) return null;
 
 	return (
-		<div className={styles.root}>
+		<div className={styles.root} style={{ color: prefsStyles.textColor, borderColor: prefsStyles.outlineColor }}>
+			<p>Next Block:</p>
 			<svg
 				version="1.1"
 				baseProfile="full"

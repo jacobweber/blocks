@@ -1,2 +1,17 @@
 .root {
+	width: 100%;
+	border-width: 1px;
+	border-style: solid;
+	border-collapse: collapse;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+}
+.root p {
+	display: block;
+	margin-bottom: 10px;
+}
+.root svg {
+	display: block;
+	align-self: center;
 }
