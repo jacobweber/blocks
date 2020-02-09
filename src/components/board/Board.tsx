@@ -8,7 +8,7 @@ import { PointDefs } from 'components/points/PointDefs';
 import { FrozenPoints } from 'components/board/FrozenPoints';
 import { PositionedBlock } from 'components/board/PositionedBlock';
 import { StatusOverlay } from 'components/board/StatusOverlay';
-import { GameState, pointSize } from 'utils/helpers';
+import { GameState, svgPointSize } from 'utils/helpers';
 import { BoardBackdrop } from './BoardBackdrop';
 
 const Board = observer(() => {
@@ -27,7 +27,7 @@ const Board = observer(() => {
 				baseProfile="full"
 				width={mainStore.actualPointSize * mainStore.width}
 				height={mainStore.actualPointSize * mainStore.height}
-				viewBox={`0 0 ${pointSize * mainStore.width} ${pointSize * mainStore.height}`}
+				viewBox={`0 0 ${svgPointSize * mainStore.width} ${svgPointSize * mainStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<BoardBackdrop

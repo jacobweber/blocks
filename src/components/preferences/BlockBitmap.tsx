@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 
 import styles from 'components/preferences/BlockBitmap.module.css';
 import { Point } from 'components/Point';
-import { pointSize } from 'utils/helpers';
+import { svgPointSize } from 'utils/helpers';
 import { PointSymbolID, PointBitmap } from 'utils/blocks';
 
 type BlockBitmapProps = {
@@ -29,11 +29,11 @@ const togglePoint = function(points: PointBitmap, x: number, y: number): PointBi
 const BlockBitmap = observer(({ prefix, id, size, points, onChangePoints }: BlockBitmapProps) => {
 	const xLines = [];
 	for (let i = 0; i < size; i++) {
-		xLines.push(<line key={i} stroke='black' strokeWidth='1' x1='0' y1={pointSize * i} x2='100%' y2={pointSize * i} />);
+		xLines.push(<line key={i} stroke='black' strokeWidth='1' x1='0' y1={svgPointSize * i} x2='100%' y2={svgPointSize * i} />);
 	}
 	const yLines = [];
 	for (let i = 0; i < size; i++) {
-		yLines.push(<line key={i} stroke='black' strokeWidth='1' x1={pointSize * i} y1='0' x2={pointSize * i} y2='100%' />);
+		yLines.push(<line key={i} stroke='black' strokeWidth='1' x1={svgPointSize * i} y1='0' x2={svgPointSize * i} y2='100%' />);
 	}
 
 	const blankComps = [];
@@ -43,7 +43,7 @@ const BlockBitmap = observer(({ prefix, id, size, points, onChangePoints }: Bloc
 			if (points[x][y]) {
 				pointComps.push(<Point onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} id={prefix + id} />);
 			} else {
-				blankComps.push(<rect onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * pointSize} y={y * pointSize} width={pointSize} height={pointSize} fill='white' stroke='none' />);
+				blankComps.push(<rect onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * svgPointSize} y={y * svgPointSize} width={svgPointSize} height={svgPointSize} fill='white' stroke='none' />);
 			}
 		}
 	}
@@ -55,7 +55,7 @@ const BlockBitmap = observer(({ prefix, id, size, points, onChangePoints }: Bloc
 				baseProfile="full"
 				width={30 * size}
 				height={30 * size}
-				viewBox={`0 0 ${pointSize * size} ${pointSize * size}`}
+				viewBox={`0 0 ${svgPointSize * size} ${svgPointSize * size}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				{blankComps}

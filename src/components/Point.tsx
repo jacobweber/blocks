@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PointSymbolID } from 'utils/blocks';
-import { pointSize } from 'utils/helpers';
+import { svgPointSize } from 'utils/helpers';
 
 type PointProps = {
 	id: PointSymbolID;
@@ -11,7 +11,7 @@ type PointProps = {
 };
 
 const Point = React.memo(({ id, x, y, onClick }: PointProps) => {
-	return <use x={x * pointSize} y={y * pointSize} onClick={onClick} width={pointSize} height={pointSize} href={'#' + id} />;
+	return <use x={x * svgPointSize} y={y * svgPointSize} onClick={onClick} width={svgPointSize} height={svgPointSize} href={'#' + id} />;
 });
 
 export { Point };
