@@ -811,16 +811,19 @@ class MainStore {
 		})).filter(point => point.y >= 0);
 	}
 
-	getNextBlockPoints(): Array<PositionedPoint> {
-		if (this.nextBlockType === null) return [];
+	getNextBlockPoints(): { points: Array<PositionedPoint>, width: number } {
+		if (this.nextBlockType === null) return { points: [], width: 0 };
 		const rotation = this.getBlockRotations(this.nextBlockType)[0];
 		const top = rotation.extent[1];
 		const id = this.getBlockDef(this.nextBlockType).id;
-		return rotation.points.map(point => ({
-			x: point[0],
+		const left = rotation.extent[0];
+		const width = rotation.extent[2] - left + 1;
+		const points = rotation.points.map(point => ({
+			x: point[0] - left,
 			y: point[1] - top,
 			id: id
 		}));
+		return { points, width }
 	}
 }
 
