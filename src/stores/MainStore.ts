@@ -790,7 +790,7 @@ class MainStore {
 			x: point[0],
 			y: point[1],
 			id
-		}));
+		})).filter(point => point.y >= 0);
 	}
 
 	getNextBlockPoints(): Array<PositionedPoint> {
