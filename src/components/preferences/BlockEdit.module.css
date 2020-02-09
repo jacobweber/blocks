@@ -11,3 +11,11 @@
 	height: 0;
 	overflow: hidden;
 }
+.content {
+	display: flex;
+}
+.content .left {
+	margin-right: 30px;
+}
+.content .right {
+}

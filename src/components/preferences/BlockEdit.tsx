@@ -45,47 +45,48 @@ const BlockEdit = observer(() => {
 			<Header icon='setting' content='Edit Block' />
 			<Modal.Content>
 				<Form>
-					<Form.Group>
-						<Form.Field>
-							<label>Frequency</label>
-							<Input onChange={e => updateForm({ odds: e.target.value.replace(/[^0-9]/g, '') })} value={form.odds} />
-						</Form.Field>
+					<div className={styles.content}>
+						<div className={styles.left}>
+							<Form.Field>
+								<label>Color</label>
+								<Input {...colorProps} onChange={e => updateForm({ color: e.target.value })} value={form.color} />
+							</Form.Field>
 
-						<Form.Field>
-							<label>Color</label>
-							<Input {...colorProps} onChange={e => updateForm({ color: e.target.value })} value={form.color} />
-						</Form.Field>
-					</Form.Group>
+							<Form.Field>
+								<label>Size</label>
+								<Button.Group>
+									{[1, 2, 3, 4, 5].map(val => (
+										<Button type='button' active={form.size === val} key={val} onClick={() => updateForm({ size: val })}>
+											{val}
+										</Button>
+									))}
+								</Button.Group>
+							</Form.Field>
 
-					<Form.Group>
-						<Form.Field>
-							<label>Size</label>
-							<Button.Group>
-								{[1, 2, 3, 4, 5].map(val => (
-									<Button type='button' active={form.size === val} key={val} onClick={() => updateForm({ size: val })}>
-										{val}
+							<Form.Field>
+								<label>Rotations</label>
+								<Button.Group>
+									<Button type='button' active={form.rotate90} onClick={() => updateForm({ rotate90: !form.rotate90 })}>
+										90&deg;
 									</Button>
-								))}
-							</Button.Group>
-						</Form.Field>
+									<Button type='button' active={form.rotate180} onClick={() => updateForm({ rotate180: !form.rotate180 })}>
+										180&deg;
+									</Button>
+									<Button type='button' active={form.rotate270} onClick={() => updateForm({ rotate270: !form.rotate270 })}>
+										270&deg;
+									</Button>
+								</Button.Group>
+							</Form.Field>
 
-						<Form.Field>
-							<label>Rotations</label>
-							<Button.Group>
-								<Button type='button' active={form.rotate90} onClick={() => updateForm({ rotate90: !form.rotate90 })}>
-									90&deg;
-								</Button>
-								<Button type='button' active={form.rotate180} onClick={() => updateForm({ rotate180: !form.rotate180 })}>
-									180&deg;
-								</Button>
-								<Button type='button' active={form.rotate270} onClick={() => updateForm({ rotate270: !form.rotate270 })}>
-									270&deg;
-								</Button>
-							</Button.Group>
-						</Form.Field>
-					</Form.Group>
-
-					<BlockBitmap prefix={blockEditStore.symbolPrefix} size={form.size} id={form.id} points={form.points} onChangePoints={points => updateForm({ points })} />
+							<Form.Field>
+								<label>Frequency</label>
+								<Input onChange={e => updateForm({ odds: e.target.value.replace(/[^0-9]/g, '') })} value={form.odds} />
+							</Form.Field>
+						</div>
+						<div className={styles.right}>
+							<BlockBitmap prefix={blockEditStore.symbolPrefix} size={form.size} id={form.id} points={form.points} onChangePoints={points => updateForm({ points })} />
+						</div>
+					</div>
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
