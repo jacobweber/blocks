@@ -111,11 +111,11 @@ const Preferences = observer(() => {
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Text</label>
-							<Input  {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'textColor')} value={prefsStyles.textColor} />
+							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'textColor')} value={prefsStyles.textColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Grid</label>
-							<Input  {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'gridColor')} value={prefsStyles.gridColor} />
+							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'gridColor')} value={prefsStyles.gridColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Outline</label>
