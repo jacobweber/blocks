@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { useStore } from 'stores/MainStore';
 import { Point } from 'components/Point';
 
-const Points = observer(() => {
+const FrozenPoints = observer(() => {
 	const mainStore = useStore();
 	const points = mainStore.getFrozenPoints();
 
@@ -13,4 +13,4 @@ const Points = observer(() => {
 	))}</>;
 });
 
-export { Points };
+export { FrozenPoints };

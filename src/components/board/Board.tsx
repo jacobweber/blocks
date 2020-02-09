@@ -5,7 +5,7 @@ import styles from 'components/board/Board.module.css';
 import { useStore } from 'stores/MainStore';
 import { BoardDefSelector } from 'components/boards/BoardDefSelector';
 import { PointDefsSelector } from 'components/points/PointDefsSelector';
-import { Points } from 'components/board/Points';
+import { FrozenPoints } from 'components/board/FrozenPoints';
 import { PositionedBlock } from 'components/board/PositionedBlock';
 import { StatusOverlay } from 'components/board/StatusOverlay';
 import { GameState, pointSize } from 'utils/helpers';
@@ -33,7 +33,7 @@ const Board = observer(() => {
 					width={mainStore.width}
 					height={mainStore.height}
 				/>
-				<Points />
+				<FrozenPoints />
 				<PositionedBlock />
 				<rect width="100%" height="100%" stroke={prefsStyles.outlineColor} strokeWidth='6' fillOpacity='0' />
 			</svg>
