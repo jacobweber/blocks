@@ -140,6 +140,15 @@ class MainStore {
 		return calculateBlockWeights(this.gameBlockDefs);
 	}
 
+	get blockMaxInitialHeight(): number {
+		const blockRotations = this.gameBlockRotations;
+		let max = 0;
+		blockRotations.forEach(rotations => {
+			max = Math.max(max, rotations[0].extent[3] - rotations[0].extent[1] + 1);
+		});
+		return max;
+	}
+
 	getRandomBlockType(): BlockType {
 		const index = Math.floor(Math.random() * this.weightedBlockTypes.length);
 		return this.weightedBlockTypes[index];
@@ -844,6 +853,7 @@ decorate(MainStore, {
 	windowHeight: observable,
 	gameBlockRotations: computed,
 	weightedBlockTypes: computed,
+	blockMaxInitialHeight: computed,
 	prefs: computed,
 	nextBlockType: computed,
 	nextBlockTypes: observable.ref,
