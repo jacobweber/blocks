@@ -14,7 +14,7 @@ const NextBlock = observer(() => {
 
 	return (
 		<div className={styles.root} style={{ color: prefsStyles.textColor, borderColor: prefsStyles.outlineColor }}>
-			<p>Next Block:</p>
+			<p>Next Block</p>
 			<div style={{ height: mainStore.actualPointSize * mainStore.blockMaxInitialHeight }}>
 				<svg
 					version="1.1"
