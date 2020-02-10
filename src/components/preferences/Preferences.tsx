@@ -57,8 +57,8 @@ const Preferences = observer(() => {
 				<Form>
 					<Form.Group>
 						<Form.Field>
-							<label>Your Name</label>
-							<Input onChange={e => preferencesStore.handleChangeText(e, 'name')} value={form.name} />
+							<label htmlFor='prefsName'>Your Name</label>
+							<Input id='prefsName' onChange={e => preferencesStore.handleChangeText(e, 'name')} value={form.name} />
 						</Form.Field>
 					</Form.Group>
 
@@ -87,8 +87,9 @@ const Preferences = observer(() => {
 
 					<Form.Group>
 						<Form.Field>
-							<label>Accelerate Left/Right After Holding</label>
+							<label htmlFor='prefsLeftRightAccelAfterMS'>Accelerate Left/Right After Holding</label>
 							<Input
+								id='prefsLeftRightAccelAfterMS'
 								label={{ basic: true, content: 'ms' }}
 								labelPosition='right'
 								onChange={e => preferencesStore.handleChangeInteger(e, 'leftRightAccelAfterMS')}
@@ -96,12 +97,12 @@ const Preferences = observer(() => {
 							/>
 						</Form.Field>
 						<Form.Field>
-							<label>Board Width</label>
-							<Input onChange={e => preferencesStore.handleChangeInteger(e, 'width')} value={form.width} />
+							<label htmlFor='prefsWidth'>Board Width</label>
+							<Input id='prefsWidth' onChange={e => preferencesStore.handleChangeInteger(e, 'width')} value={form.width} />
 						</Form.Field>
 						<Form.Field>
-							<label>Board Height</label>
-							<Input onChange={e => preferencesStore.handleChangeInteger(e, 'height')} value={form.height} />
+							<label htmlFor='prefsHeight'>Board Height</label>
+							<Input id='prefsHeight' onChange={e => preferencesStore.handleChangeInteger(e, 'height')} value={form.height} />
 						</Form.Field>
 					</Form.Group>
 

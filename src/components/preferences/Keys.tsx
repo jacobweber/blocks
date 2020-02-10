@@ -15,54 +15,54 @@ const Keys = observer(() => {
 	return (<>
 		<Form.Group>
 			<Form.Field className={styles.cell}>
-				<label>New Game</label>
-				<Input fluid onKeyDown={handleChangeKey('newGame')} name='newGame' value={keys.newGame} />
+				<label htmlFor='keyNewGame'>New Game</label>
+				<Input id='keyNewGame' fluid onKeyDown={handleChangeKey('newGame')} name='newGame' value={keys.newGame} />
 			</Form.Field>
 			<Form.Field className={styles.cell}>
-				<label>New Game with Options</label>
-				<Input fluid onKeyDown={handleChangeKey('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
+				<label htmlFor='keyNewGameOptions'>New Game with Options</label>
+				<Input id='keyNewGameOptions' fluid onKeyDown={handleChangeKey('newGameOptions')} name='newGameOptions' value={keys.newGameOptions} />
 			</Form.Field>
 			<Form.Field className={styles.cell}>
-				<label>End Game</label>
-				<Input fluid onKeyDown={handleChangeKey('endGame')} name='endGame' value={keys.endGame} />
+				<label htmlFor='keyEndGame'>End Game</label>
+				<Input id='keyEndGame' fluid onKeyDown={handleChangeKey('endGame')} name='endGame' value={keys.endGame} />
 			</Form.Field>
 			<Form.Field className={styles.cell}>
-				<label>Pause/Resume Game</label>
-				<Input fluid onKeyDown={handleChangeKey('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
-			</Form.Field>
-		</Form.Group>
-
-		<Form.Group>
-			<Form.Field className={styles.cell}>
-				<label>Left</label>
-				<Input fluid onKeyDown={handleChangeKey('left')} name='left' value={keys.left} />
-			</Form.Field>
-			<Form.Field className={styles.cell}>
-				<label>Right</label>
-				<Input fluid onKeyDown={handleChangeKey('right')} name='right' value={keys.right} />
-			</Form.Field>
-			<Form.Field className={styles.cell}>
-				<label>Down</label>
-				<Input fluid onKeyDown={handleChangeKey('down')} name='down' value={keys.down} />
-			</Form.Field>
-			<Form.Field className={styles.cell}>
-				<label>Drop</label>
-				<Input fluid onKeyDown={handleChangeKey('drop')} name='drop' value={keys.drop} />
+				<label htmlFor='keyPauseResumeGame'>Pause/Resume Game</label>
+				<Input id='keyPauseResumeGame' fluid onKeyDown={handleChangeKey('pauseResumeGame')} name='pauseResumeGame' value={keys.pauseResumeGame} />
 			</Form.Field>
 		</Form.Group>
 
 		<Form.Group>
 			<Form.Field className={styles.cell}>
-				<label>Rotate Left</label>
-				<Input fluid onKeyDown={handleChangeKey('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
+				<label htmlFor='keyLeft'>Left</label>
+				<Input id='keyLeft' fluid onKeyDown={handleChangeKey('left')} name='left' value={keys.left} />
 			</Form.Field>
 			<Form.Field className={styles.cell}>
-				<label>Rotate Right</label>
-				<Input fluid onKeyDown={handleChangeKey('rotateCW')} name='rotateCW' value={keys.rotateCW} />
+				<label htmlFor='keyRight'>Right</label>
+				<Input id='keyRight' fluid onKeyDown={handleChangeKey('right')} name='right' value={keys.right} />
 			</Form.Field>
 			<Form.Field className={styles.cell}>
-				<label>Undo</label>
-				<Input fluid onKeyDown={handleChangeKey('undo')} name='undo' value={keys.undo} />
+				<label htmlFor='keyDown'>Down</label>
+				<Input id='keyDown' fluid onKeyDown={handleChangeKey('down')} name='down' value={keys.down} />
+			</Form.Field>
+			<Form.Field className={styles.cell}>
+				<label htmlFor='keyDrop'>Drop</label>
+				<Input id='keyDrop' fluid onKeyDown={handleChangeKey('drop')} name='drop' value={keys.drop} />
+			</Form.Field>
+		</Form.Group>
+
+		<Form.Group>
+			<Form.Field className={styles.cell}>
+				<label htmlFor='keyRotateCCW'>Rotate Left</label>
+				<Input id='keyRotateCCW' fluid onKeyDown={handleChangeKey('rotateCCW')} name='rotateCCW' value={keys.rotateCCW} />
+			</Form.Field>
+			<Form.Field className={styles.cell}>
+				<label htmlFor='keyRotateCW'>Rotate Right</label>
+				<Input id='keyRotateCW' fluid onKeyDown={handleChangeKey('rotateCW')} name='rotateCW' value={keys.rotateCW} />
+			</Form.Field>
+			<Form.Field className={styles.cell}>
+				<label htmlFor='keyUndo'>Undo</label>
+				<Input id='keyUndo' fluid onKeyDown={handleChangeKey('undo')} name='undo' value={keys.undo} />
 			</Form.Field>
 		</Form.Group>
 	</>);
