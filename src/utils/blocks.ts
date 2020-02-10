@@ -25,7 +25,7 @@ export interface BlockColor {
 
 export const defaultBlockDef: BlockDef = {
 	id: '',
-	color: palettes[0][0],
+	color: '#cccccc',
 	odds: 10,
 	size: 3,
 	points: [],
