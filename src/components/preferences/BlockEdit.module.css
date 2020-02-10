@@ -1,11 +1,5 @@
 .root {
 }
-.colorInput {
-	width: 150px !important;
-}
-.colorInput input {
-	padding: initial !important;
-}
 .pointDefs {
 	width: 0;
 	height: 0;
