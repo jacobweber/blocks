@@ -7,7 +7,7 @@ import { GameState } from 'utils/helpers';
 
 const ScoreBoard = observer(() => {
 	const mainStore = useStore();
- 	const prefsStyles = mainStore.preferencesStore.styles;
+ 	const prefsStyles = mainStore.preferencesStore.prefs.styles;
 
 	return (
 		<div className={styles.root} style={{ color: prefsStyles.textColor }}>

@@ -14,13 +14,13 @@ import { BoardBackdrop } from './BoardBackdrop';
 const Board = observer(() => {
 	const mainStore = useStore();
  	const preferencesStore = mainStore.preferencesStore;
-	const prefsStyles = preferencesStore.styles;
+	const prefsStyles = preferencesStore.prefs.styles;
 
 	return (
 		<div className={styles.root + (mainStore.gameState === GameState.Active ? ' ' + styles.hideCursor : '')}>
 			<div className={styles.pointDefs}>
 				<PointDefs type={preferencesStore.prefs.pointsType} blockColors={mainStore.blockColors} />
-				<BoardDef type={preferencesStore.prefs.boardType} color={preferencesStore.prefs.styles.boardColor} />
+				<BoardDef type={preferencesStore.prefs.boardType} color={prefsStyles.boardColor} />
 			</div>
 			<svg
 				version="1.1"

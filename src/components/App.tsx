@@ -18,7 +18,7 @@ const App = observer(() => {
 	const newGameStore = mainStore.newGameStore;
 
 	return (
-		<div className={styles.root} style={{ backgroundColor: preferencesStore.styles.backgroundColor }}>
+		<div className={styles.root} style={{ backgroundColor: preferencesStore.prefs.styles.backgroundColor }}>
 			<div className={styles.layout}>
 				<div className={styles.left}>
 					<Board />

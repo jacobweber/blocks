@@ -112,10 +112,6 @@ class PreferencesStore {
 	@observable.ref sampleBlockType: BlockType | null = null;
 	sampleBlockTimer: number | null = null;
 
-	@computed get styles() {
-		return this.prefs.styles;
-	}
-
 	@computed get formBlockColors(): Array<BlockColor> {
 		return [
 			...this.form.blockDefs.map(def => ({
