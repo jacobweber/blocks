@@ -312,7 +312,7 @@ class PreferencesStore {
 		e.nativeEvent.preventDefault();
 	}
 
-	handleChangeColor(e: React.ChangeEvent<HTMLInputElement>, name: string): void {
+	handleChangeColor(value: string, name: string): void {
 		let boardType = this.form.boardType;
 		if (name === 'boardColor') {
 			boardType = 'Custom';
@@ -322,7 +322,7 @@ class PreferencesStore {
 			boardType,
 			styles: {
 				...this.form.styles,
-				[name]: e.target.value
+				[name]: value
 			}
 		});
 	}

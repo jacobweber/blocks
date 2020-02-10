@@ -7,19 +7,14 @@ import { useStore } from 'stores/MainStore';
 import { BlockBitmap } from 'components/preferences/BlockBitmap';
 import { PointDefs } from 'components/points/PointDefs';
 import { maxBlockSize } from 'utils/blocks';
+import { ColorPicker } from './ColorPicker';
 
 const BlockEdit = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
 	const blockEditStore = preferencesStore.blockEditStore;
 	const { form, updateForm } = blockEditStore;
 
-	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
-		type: 'color',
-		className: styles.colorInput
-	}; // breaks on safari
-
 	const [ confirmOpen, setConfirmOpen ] = useState(false);
-
 	const cancel = () => blockEditStore.dialogCancel();
 	const ok = () => blockEditStore.dialogSave();
 	const del = () => setConfirmOpen(true);
@@ -50,7 +45,7 @@ const BlockEdit = observer(() => {
 						<div className={styles.left}>
 							<Form.Field>
 								<label>Color</label>
-								<Input {...colorProps} onChange={e => updateForm({ color: e.target.value })} value={form.color} />
+								<ColorPicker onChange={(color: string) => updateForm({ color })} value={form.color} />
 							</Form.Field>
 
 							<Form.Field>

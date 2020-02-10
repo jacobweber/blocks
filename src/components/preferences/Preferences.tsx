@@ -11,6 +11,7 @@ import { PointDefs } from 'components/points/PointDefs';
 import { boardTypes, pointsTypes } from 'stores/PreferencesStore';
 import { BoardDef } from 'components/boards/BoardDef';
 import { Keys } from 'components/preferences/Keys';
+import { ColorPicker } from './ColorPicker';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -18,10 +19,6 @@ const Preferences = observer(() => {
 	const prefsStyles = form.styles;
 	const cancel = () => preferencesStore.dialogCancel();
 	const save = () => preferencesStore.dialogSave();
-	const colorProps = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? {} : {
-		type: 'color',
-		className: styles.colorInput
-	}; // breaks on safari
 
 	const [ confirmOpen, setConfirmOpen ] = useState(false);
 	const reset = () => setConfirmOpen(true);
@@ -113,23 +110,23 @@ const Preferences = observer(() => {
 					<Form.Group>
 						<Form.Field className={styles.cell}>
 							<label>Background</label>
-							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'backgroundColor')} value={prefsStyles.backgroundColor} />
+							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'backgroundColor')} value={prefsStyles.backgroundColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Text</label>
-							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'textColor')} value={prefsStyles.textColor} />
+							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'textColor')} value={prefsStyles.textColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Grid</label>
-							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'gridColor')} value={prefsStyles.gridColor} />
+							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'gridColor')} value={prefsStyles.gridColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Outline</label>
-							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'outlineColor')} value={prefsStyles.outlineColor} />
+							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'outlineColor')} value={prefsStyles.outlineColor} />
 						</Form.Field>
 						<Form.Field className={styles.cell}>
 							<label>Board</label>
-							<Input {...colorProps} onChange={e => preferencesStore.handleChangeColor(e, 'boardColor')} value={prefsStyles.boardColor} />
+							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'boardColor')} value={prefsStyles.boardColor} />
 						</Form.Field>
 					</Form.Group>
 
