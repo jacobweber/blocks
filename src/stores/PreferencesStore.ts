@@ -356,6 +356,38 @@ class PreferencesStore {
 		});
 	}
 
+
+	addBlockDef(def: BlockDef): void {
+		this.setForm({
+			...this.form,
+			blockDefs: [
+				...this.form.blockDefs,
+				def
+			]
+		});
+	}
+
+	updateBlockDef(type: BlockType, def: BlockDef): void {
+		this.setForm({
+			...this.form,
+			blockDefs: [
+				...this.form.blockDefs.slice(0, type),
+				def,
+				...this.form.blockDefs.slice(type + 1)
+			]
+		});
+	}
+
+	deleteBlockDef(type: BlockType): void {
+		this.setForm({
+			...this.form,
+			blockDefs: [
+				...this.form.blockDefs.slice(0, type),
+				...this.form.blockDefs.slice(type + 1)
+			]
+		});
+	}
+
 	getBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
 		return blockDef.points.map(point => ({
 			x: point[0],

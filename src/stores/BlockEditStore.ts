@@ -63,37 +63,6 @@ class BlockEditStore {
 		];
 	}
 
-	addBlockDef(def: BlockDef): void {
-		this.preferencesStore.setForm({
-			...this.preferencesStore.form,
-			blockDefs: [
-				...this.preferencesStore.form.blockDefs,
-				def
-			]
-		});
-	}
-
-	updateBlockDef(type: BlockType, def: BlockDef): void {
-		this.preferencesStore.setForm({
-			...this.preferencesStore.form,
-			blockDefs: [
-				...this.preferencesStore.form.blockDefs.slice(0, type),
-				def,
-				...this.preferencesStore.form.blockDefs.slice(type + 1)
-			]
-		});
-	}
-
-	deleteBlockDef(type: BlockType): void {
-		this.preferencesStore.setForm({
-			...this.preferencesStore.form,
-			blockDefs: [
-				...this.preferencesStore.form.blockDefs.slice(0, type),
-				...this.preferencesStore.form.blockDefs.slice(type + 1)
-			]
-		});
-	}
-
 	@action updateForm = (updates: Partial<BlockEditForm>): void => {
 		this.form = {
 			...this.form,
@@ -137,9 +106,9 @@ class BlockEditStore {
 				points: pointBitmapToXY(this.form.points, this.form.size)
 			};
 			if (this.blockType === null) {
-				this.addBlockDef(def);
+				this.preferencesStore.addBlockDef(def);
 			} else {
-				this.updateBlockDef(this.blockType, def);
+				this.preferencesStore.updateBlockDef(this.blockType, def);
 			}
 		}
 		this.blockType = null;
@@ -148,7 +117,7 @@ class BlockEditStore {
 	@action dialogDelete() {
 		this.visible = false;
 		if (this.blockType !== null) {
-			this.deleteBlockDef(this.blockType);
+			this.preferencesStore.deleteBlockDef(this.blockType);
 		}
 	}
 }
