@@ -159,6 +159,10 @@ class PreferencesStore {
 				...defaultPrefs.keys,
 				...prefs.keys
 			},
+			styles: {
+				...defaultPrefs.styles,
+				...prefs.styles
+			},
 			...defaultPrefs,
 			...(prefs || {})
 		};
