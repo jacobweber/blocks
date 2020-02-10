@@ -499,11 +499,11 @@ class MainStore {
 
 	checkAboveBlockedSpace(): void {
 		if (!this.positionedBlock) return;
-		const nextBlock: PositionedBlock = {
+		const movedBlock: PositionedBlock = {
 			...this.positionedBlock,
 			y: this.positionedBlock.y + 1
 		}
-		if (!this.inBounds(nextBlock) || !this.positionFree(nextBlock)) {
+		if (!this.inBounds(movedBlock) || !this.positionFree(movedBlock)) {
 			this.lastMoveAboveBlockedSpace = new Date();
 		}
 	}
@@ -517,13 +517,13 @@ class MainStore {
 		if (this.gameState !== GameState.Active || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockRotations(this.positionedBlock.type).length;
 		const nextRotation = this.positionedBlock.rotation + 1 >= numRotations ? 0 : this.positionedBlock.rotation + 1;
-		const nextBlock: PositionedBlock = {
+		const movedBlock: PositionedBlock = {
 			...this.positionedBlock,
 			rotation: nextRotation
 		}
-		if (this.positionFree(nextBlock)) {
+		if (this.positionFree(movedBlock)) {
 			this.checkAboveBlockedSpace();
-			this.positionedBlock = nextBlock;
+			this.positionedBlock = movedBlock;
 		}
 	}
 
@@ -531,25 +531,25 @@ class MainStore {
 		if (this.gameState !== GameState.Active || !this.positionedBlock || !this.canRotate(this.positionedBlock)) return;
 		const numRotations = this.getBlockRotations(this.positionedBlock.type).length;
 		const nextRotation = this.positionedBlock.rotation - 1 < 0 ? numRotations - 1 : this.positionedBlock.rotation - 1;
-		const nextBlock: PositionedBlock = {
+		const movedBlock: PositionedBlock = {
 			...this.positionedBlock,
 			rotation: nextRotation
 		}
-		if (this.positionFree(nextBlock)) {
+		if (this.positionFree(movedBlock)) {
 			this.checkAboveBlockedSpace();
-			this.positionedBlock = nextBlock;
+			this.positionedBlock = movedBlock;
 		}
 	}
 
 	@action left(): boolean {
 		if (this.gameState !== GameState.Active || !this.positionedBlock) return false;
-		const nextBlock: PositionedBlock = {
+		const movedBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x - 1
 		}
-		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
+		if (this.inBounds(movedBlock) && this.positionFree(movedBlock)) {
 			this.checkAboveBlockedSpace();
-			this.positionedBlock = nextBlock;
+			this.positionedBlock = movedBlock;
 			return true;
 		}
 		return false;
@@ -557,13 +557,13 @@ class MainStore {
 
 	@action right(): boolean {
 		if (this.gameState !== GameState.Active || !this.positionedBlock) return false;
-		const nextBlock: PositionedBlock = {
+		const movedBlock: PositionedBlock = {
 			...this.positionedBlock,
 			x: this.positionedBlock.x + 1
 		}
-		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
+		if (this.inBounds(movedBlock) && this.positionFree(movedBlock)) {
 			this.checkAboveBlockedSpace();
-			this.positionedBlock = nextBlock;
+			this.positionedBlock = movedBlock;
 			return true;
 		}
 		return false;
@@ -591,15 +591,15 @@ class MainStore {
 
 	@action async down(fromTimer: boolean = false): Promise<void> {
 		if (this.gameState !== GameState.Active || !this.positionedBlock) return;
-		const nextBlock: PositionedBlock = {
+		const movedBlock: PositionedBlock = {
 			...this.positionedBlock,
 			y: this.positionedBlock.y + 1
 		}
 		if (fromTimer && this.recentlyAboveBlockedSpace()) {
 			return;
 		}
-		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
-			this.positionedBlock = nextBlock;
+		if (this.inBounds(movedBlock) && this.positionFree(movedBlock)) {
+			this.positionedBlock = movedBlock;
 		} else {
 			this.undoStack = []; 
 			await this.freezeBlock();
@@ -611,12 +611,12 @@ class MainStore {
 		let done = false;
 		const nextDrop = () => {
 			if (!this.positionedBlock) return;
-			const nextBlock: PositionedBlock = {
+			const movedBlock: PositionedBlock = {
 				...this.positionedBlock,
 				y: this.positionedBlock.y + 1
 			}
-			if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
-				this.positionedBlock = nextBlock;
+			if (this.inBounds(movedBlock) && this.positionFree(movedBlock)) {
+				this.positionedBlock = movedBlock;
 			} else {
 				done = true;
 			}
@@ -656,11 +656,11 @@ class MainStore {
 		let done = false;
 		let y = unfrozenBlock.y - 1;
 		const nextLift = () => {
-			const nextBlock: PositionedBlock = {
+			const movedBlock: PositionedBlock = {
 				...unfrozenBlock,
 				y
 			};
-			this.positionedBlock = nextBlock;
+			this.positionedBlock = movedBlock;
 			if (y <= lastY) {
 				done = true;
 			} else {
