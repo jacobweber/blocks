@@ -10,6 +10,7 @@ import { ScoreBoard } from 'components/ScoreBoard';
 import { Preferences } from 'components/preferences/Preferences';
 import { HighScores } from 'components/HighScores';
 import { NewGame } from 'components/NewGame';
+import { GameState } from 'utils/helpers';
 
 const App = observer(() => {
 	const mainStore = useStore();
@@ -32,7 +33,9 @@ const App = observer(() => {
 							<ScoreBoard />
 						</div>
 						<div className={styles.button}>
-							<Button fluid onClick={e => mainStore.newGame()}>New Game</Button>
+							{mainStore.gameState === GameState.Active
+								? <Button fluid onClick={e => mainStore.endGame()}>End Game</Button>
+								: <Button fluid onClick={e => mainStore.newGame()}>New Game</Button>}
 						</div>
 						<div className={styles.button}>
 							<Button fluid onClick={e => mainStore.showHighScores()}>High Scores</Button>
