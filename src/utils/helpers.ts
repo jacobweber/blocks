@@ -71,7 +71,7 @@ export function getKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
 		case ' ':
 			return 'Space';
 		default:
-			return e.key;
+			return e.key.toLowerCase();
 	}
 }
 
