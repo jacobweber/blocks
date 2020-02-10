@@ -68,7 +68,7 @@ export interface PreferencesForm {
 const defaultPrefs: Preferences = {
 	keys: {
 		newGame: 'n',
-		newGameOptions: 'Shift+N',
+		newGameOptions: 'Shift+n',
 		endGame: 'k',
 		pauseResumeGame: 'p',
 		left: 'ArrowLeft',
