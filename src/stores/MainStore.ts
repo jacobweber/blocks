@@ -464,12 +464,6 @@ class MainStore {
 
 	@action async freezeBlock(points: number = 0): Promise<void> {
 		if (!this.positionedBlock) return;
-		if (this.prefs.allowUndo) {
-			this.undoStack.push({
-				block: this.positionedBlock,
-				score: this.score
-			});
-		}
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
 		this.positionedBlock = null;
@@ -607,6 +601,7 @@ class MainStore {
 		if (this.inBounds(nextBlock) && this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
 		} else {
+			this.undoStack = []; 
 			await this.freezeBlock();
 		}
 	}
@@ -634,6 +629,13 @@ class MainStore {
 		while (!done) {
 			runInAction(nextDrop);
 			await this.delay(animDelayMS);
+		}
+
+		if (this.prefs.allowUndo) {
+			this.undoStack.push({
+				block: this.positionedBlock,
+				score: this.score
+			});
 		}
 		await this.freezeBlock(points);
 		this.setAnimating(false);
