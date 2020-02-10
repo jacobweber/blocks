@@ -155,6 +155,8 @@ class PreferencesStore {
 		}
 		if (!prefs) prefs = {};
 		this.prefs = {
+			...defaultPrefs,
+			...(prefs || {}),
 			keys: {
 				...defaultPrefs.keys,
 				...prefs.keys
@@ -162,9 +164,7 @@ class PreferencesStore {
 			styles: {
 				...defaultPrefs.styles,
 				...prefs.styles
-			},
-			...defaultPrefs,
-			...(prefs || {})
+			}
 		};
 	}
 
