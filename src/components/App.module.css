@@ -38,9 +38,6 @@
 	align-self: stretch;
 	overflow: hidden;
 }
-.highScores {
-	margin-top: 30px;
-}
-.preferences {
+.button {
 	margin-top: 30px;
 }

@@ -31,12 +31,15 @@ const App = observer(() => {
 						<div className={styles.scoreBoard}>
 							<ScoreBoard />
 						</div>
-						<div className={styles.highScores}>
-							<Button onClick={e => mainStore.showHighScores()}>High Scores</Button>
+						<div className={styles.button}>
+							<Button fluid onClick={e => mainStore.newGame()}>New Game</Button>
+						</div>
+						<div className={styles.button}>
+							<Button fluid onClick={e => mainStore.showHighScores()}>High Scores</Button>
 							{highScoresStore.visible && <HighScores />}
 						</div>
-						<div className={styles.preferences}>
-							<Button onClick={e => mainStore.showPrefs()}>Preferences</Button>
+						<div className={styles.button}>
+							<Button fluid onClick={e => mainStore.showPrefs()}>Preferences</Button>
 							{preferencesStore.visible && <Preferences />}
 						</div>
 					</div>
