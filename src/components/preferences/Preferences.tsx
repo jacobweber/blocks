@@ -5,7 +5,7 @@ import { Button, Header, Icon, Modal, Form, Input, Checkbox, Confirm, CheckboxPr
 import styles from 'components/preferences/Preferences.module.css';
 import { useStore } from 'stores/MainStore';
 import { palettes } from 'utils/colors';
-import { Block } from 'components/preferences/Block';
+import { SampleBlock } from 'components/preferences/SampleBlock';
 import { BlockEdit } from 'components/preferences/BlockEdit';
 import { PointDefs } from 'components/points/PointDefs';
 import { boardTypes, pointsTypes } from 'stores/PreferencesStore';
@@ -158,7 +158,7 @@ const Preferences = observer(() => {
 						{pointsTypes.map((type, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button active={form.pointsType === type} type='button' basic onClick={e => preferencesStore.handleChangePointsType(type)}>
-									{preferencesStore.sampleBlockDef && <Block def={preferencesStore.sampleBlockDef} prefix={type + '-'} />}
+									{preferencesStore.sampleBlockDef && <SampleBlock def={preferencesStore.sampleBlockDef} prefix={type + '-'} />}
 								</Button>
 							</div>
 						))}
@@ -190,7 +190,7 @@ const Preferences = observer(() => {
 						{form.blockDefs.map((def, idx) => (
 							<div key={idx} className={styles.block}>
 								<Button type='button' basic onClick={e => preferencesStore.blockEditStore.dialogShowEdit(idx, def)}>
-									<Block def={def} prefix={form.pointsType + '-'} />
+									<SampleBlock def={def} prefix={form.pointsType + '-'} />
 								</Button>
 							</div>
 						))}

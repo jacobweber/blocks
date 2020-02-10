@@ -6,12 +6,12 @@ import { Point } from 'components/Point';
 import { svgPointSize } from 'utils/helpers';
 import { BlockDef, maxBlockSize } from 'utils/blocks';
 
-type BlockProps = {
+type SampleBlockProps = {
 	def: BlockDef;
 	prefix: string;
 };
 
-const Block = observer(({ def, prefix = '' }: BlockProps) => {
+const SampleBlock = observer(({ def, prefix = '' }: SampleBlockProps) => {
 	const preferencesStore = useStore().preferencesStore;
 	const points = preferencesStore.getBlockPoints(def);
 
@@ -29,4 +29,4 @@ const Block = observer(({ def, prefix = '' }: BlockProps) => {
 	);
 });
 
-export { Block };
+export { SampleBlock };
