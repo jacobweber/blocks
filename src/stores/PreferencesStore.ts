@@ -388,7 +388,7 @@ class PreferencesStore {
 		});
 	}
 
-	getBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
+	getSampleBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
 		return blockDef.points.map(point => ({
 			x: point[0],
 			y: point[1],

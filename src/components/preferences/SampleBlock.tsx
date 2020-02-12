@@ -13,7 +13,7 @@ type SampleBlockProps = {
 
 const SampleBlock = observer(({ def, prefix = '' }: SampleBlockProps) => {
 	const preferencesStore = useStore().preferencesStore;
-	const points = preferencesStore.getBlockPoints(def);
+	const points = preferencesStore.getSampleBlockPoints(def);
 
 	return (
 		<svg
