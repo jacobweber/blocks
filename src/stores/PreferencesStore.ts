@@ -112,6 +112,14 @@ class PreferencesStore {
 	@observable.ref sampleBlockType: BlockType | null = null;
 	sampleBlockTimer: number | null = null;
 
+	getSampleBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
+		return blockDef.points.map(point => ({
+			x: point[0],
+			y: point[1],
+			id: blockDef.id
+		}));
+	}
+
 	@computed get formBlockColors(): Array<BlockColor> {
 		return [
 			...this.form.blockDefs.map(def => ({
@@ -356,7 +364,6 @@ class PreferencesStore {
 		});
 	}
 
-
 	addBlockDef(def: BlockDef): void {
 		this.setForm({
 			...this.form,
@@ -386,14 +393,6 @@ class PreferencesStore {
 				...this.form.blockDefs.slice(type + 1)
 			]
 		});
-	}
-
-	getSampleBlockPoints(blockDef: BlockDef): Array<PositionedPoint> {
-		return blockDef.points.map(point => ({
-			x: point[0],
-			y: point[1],
-			id: blockDef.id
-		}));
 	}
 }
 
