@@ -8,7 +8,7 @@ import { svgPointSize, GameState } from 'utils/helpers';
 
 const NextBlock = observer(() => {
 	const mainStore = useStore();
-	const { points, width, height } = mainStore.getNextBlockPoints();
+	const { points, width, height } = mainStore.getNextBlockInfo();
  	const prefsStyles = mainStore.preferencesStore.prefs.styles;
 	if (mainStore.gameState === GameState.Reset) return null;
 

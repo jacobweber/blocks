@@ -822,7 +822,7 @@ class MainStore {
 		})).filter(point => point.y >= 0);
 	}
 
-	getNextBlockPoints(): { points: Array<PositionedPoint>, width: number, height: number } {
+	getNextBlockInfo(): { points: Array<PositionedPoint>, width: number, height: number } {
 		if (this.nextBlockType === null) return { points: [], width: 0, height: 0 };
 		const rotation = this.getBlockRotations(this.nextBlockType)[0];
 		const top = rotation.extent[1];
