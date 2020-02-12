@@ -1,4 +1,5 @@
 export const svgPointSize = 60;
+export const svgPrefix = 'blocks-';
 
 export enum GameState { Reset, Ended, Active, Paused };
 

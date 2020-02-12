@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { svgPointSize } from 'utils/helpers';
+import { svgPointSize, svgPrefix } from 'utils/helpers';
 
 const lineOffset = 0.5; // seems to help with antialiasing on small sizes
 
@@ -24,7 +24,7 @@ const BoardBackdrop = React.memo(({ showGrid, gridColor, height, width }: BoardB
 	}
 
 	return (<>
-		<use x='0' y='0' width='100%' height='100%' href='#board' />
+		<use x='0' y='0' width='100%' height='100%' href={'#' + svgPrefix + 'board'} />
 		{xLines}
 		{yLines}
 	</>);

@@ -12,6 +12,7 @@ import { boardTypes, pointsTypes } from 'stores/PreferencesStore';
 import { BoardDef } from 'components/boards/BoardDef';
 import { Keys } from 'components/preferences/Keys';
 import { ColorPicker } from './ColorPicker';
+import { svgPrefix } from 'utils/helpers';
 
 const Preferences = observer(() => {
 	const preferencesStore = useStore().preferencesStore;
@@ -172,7 +173,7 @@ const Preferences = observer(() => {
 										viewBox={`0 0 150 150`}
 										xmlns="http://www.w3.org/2000/svg"
 									>
-										<use x='25%' y='0' width='50%' height='100%' href={`#${type}-board`} />
+										<use x='25%' y='0' width='50%' height='100%' href={'#' + svgPrefix + type + '-board'} />
 									</svg>
 								</Button>
 							</div>

@@ -20,7 +20,7 @@ const PointsSample = observer(({ prefix = '' }: PointsSampleProps) => {
 			viewBox={`0 0 ${svgPointSize * 5} ${svgPointSize * 5}`}
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<Point x={1 * svgPointSize} y={1 * svgPointSize} id={prefix + defs[0].id} />
+			<Point x={1 * svgPointSize} y={1 * svgPointSize} prefix={prefix} id={defs[0].id} />
 		</svg>
 	);
 });

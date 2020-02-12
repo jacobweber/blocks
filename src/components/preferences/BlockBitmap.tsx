@@ -42,7 +42,7 @@ const BlockBitmap = observer(({ prefix, id, size, points, onChangePoints }: Bloc
 	for (let x = 0; x < size; x++) {
 		for (let y = 0; y < size; y++) {
 			if (points[x][y]) {
-				pointComps.push(<Point onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} id={prefix + id} />);
+				pointComps.push(<Point onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x} y={y} prefix={prefix} id={id} />);
 			} else {
 				blankComps.push(<rect onClick={e => onChangePoints(togglePoint(points, x, y))} key={x + '-' + y} x={x * svgPointSize} y={y * svgPointSize} width={svgPointSize} height={svgPointSize} fill='white' stroke='none' />);
 			}

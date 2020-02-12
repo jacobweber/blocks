@@ -23,7 +23,7 @@ const SampleBlock = observer(({ def, prefix = '' }: SampleBlockProps) => {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			{points.map(point => (
-				<Point key={point.x + '-' + point.y} x={point.x} y={point.y} id={prefix + point.id} />
+				<Point key={point.x + '-' + point.y} x={point.x} y={point.y} prefix={prefix} id={point.id} />
 			))}
 		</svg>
 	);
