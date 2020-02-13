@@ -77,22 +77,15 @@ export function getKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
 }
 
 export function getShortKeyStr(keyStr: string) {
-	switch (keyStr) {
-		case 'ArrowLeft':
-			return '\u2190';
-		case 'ArrowRight':
-			return '\u2192';
-		case 'ArrowUp':
-			return '\u2191';
-		case 'ArrowDown':
-			return '\u2193';
-		default:
-			return keyStr
-				.replace('Shift+', '\u21E7')
-				.replace('Ctrl+', '\u2303')
-				.replace('Alt+', '\u2325')
-				.replace('Meta+', '\u2318');
-	}
+	return keyStr
+		.replace('ArrowLeft', '\u2190')
+		.replace('ArrowRight', '\u2192')
+		.replace('ArrowUp', '\u2191')
+		.replace('ArrowDown', '\u2193')
+		.replace('Shift+', '\u21E7')
+		.replace('Ctrl+', '\u2303')
+		.replace('Alt+', '\u2325')
+		.replace('Meta+', '\u2318');
 }
 
 export function getModifiedKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
