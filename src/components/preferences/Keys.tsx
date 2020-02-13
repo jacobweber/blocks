@@ -61,7 +61,7 @@ const Keys = observer(() => {
 				<Input id='keyRotateCW' fluid onKeyDown={handleChangeKey('rotateCW')} name='rotateCW' value={keys.rotateCW} />
 			</Form.Field>
 			<Form.Field className={styles.cell}>
-				<label htmlFor='keyUndo'>Undo</label>
+				<label htmlFor='keyUndo'>Undo Drop</label>
 				<Input id='keyUndo' fluid onKeyDown={handleChangeKey('undo')} name='undo' value={keys.undo} />
 			</Form.Field>
 		</Form.Group>

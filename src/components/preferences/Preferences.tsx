@@ -63,7 +63,7 @@ const Preferences = observer(() => {
 					<Form.Group inline>
 						<Form.Field>
 							<Checkbox
-								label='Allow Undo'
+								label='Allow Undo Drop'
 								onChange={(e, data: CheckboxProps) => preferencesStore.handleChangeBoolean(e, 'allowUndo', data.checked)}
 								checked={form.allowUndo} />
 						</Form.Field>
@@ -133,7 +133,7 @@ const Preferences = observer(() => {
 
 					<Header as='h3' dividing>
 						Block Colors
-						<Header.Subheader>Will replace any customized colors.</Header.Subheader>
+						<Header.Subheader>Will replace any customized colors. Changes will apply to next game.</Header.Subheader>
 					</Header>
 					<div className={styles.blocks + ' ' + styles.colors}>
 						{palettes.map((palette, idx) => (
