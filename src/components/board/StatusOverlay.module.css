@@ -16,6 +16,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	overflow: hidden;
 }
 .root .overlay.paused {
 	background-color: #e7dd83;
@@ -29,7 +30,6 @@
 .overlay.welcome h3 {
 	display: flex;
 	align-items: center;
-	overflow: hidden;
 }
 .overlay.welcome svg {
 	margin-right: 10px;
