@@ -76,6 +76,21 @@ export function getKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
 	}
 }
 
+export function getDisplayKeyStr(keyStr: string) {
+	switch (keyStr) {
+		case 'ArrowLeft':
+			return '\u2190';
+		case 'ArrowRight':
+			return '\u2192';
+		case 'ArrowUp':
+			return '\u2191';
+		case 'ArrowDown':
+			return '\u2193';
+		default:
+			return keyStr;
+	}
+}
+
 export function getModifiedKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
 	return (e.shiftKey ? 'Shift+' : '')
 		+ (e.ctrlKey ? 'Ctrl+' : '')

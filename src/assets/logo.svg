@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" version="1.1" viewBox="0 0 240 240">
+	<defs>
+		<symbol id="blocks-logo-line">
+			<linearGradient id="blocks-logo-g0" x1="0%" x2="100%" y1="0%" y2="100%">
+				<stop offset="0%" stop-color="#7bcd00"/>
+				<stop offset="80%" stop-color="#ADFF2F"/>
+			</linearGradient>
+			<rect fill="url(#blocks-logo-g0)" height="100%" stroke="black" stroke-width="1" width="100%"/>
+		</symbol>
+		<symbol id="blocks-logo-square">
+			<linearGradient id="blocks-logo-g1" x1="0%" x2="100%" y1="0%" y2="100%">
+				<stop offset="0%" stop-color="#be4e4e"/>
+				<stop offset="80%" stop-color="#F08080"/>
+			</linearGradient>
+			<rect fill="url(#blocks-logo-g1)" height="100%" stroke="black" stroke-width="1" width="100%"/>
+		</symbol>
+		<symbol id="blocks-logo-are">
+			<linearGradient id="blocks-logo-g2" x1="0%" x2="100%" y1="0%" y2="100%">
+				<stop offset="0%" stop-color="#beb45a"/>
+				<stop offset="80%" stop-color="#F0E68C"/>
+			</linearGradient>
+			<rect fill="url(#blocks-logo-g2)" height="100%" stroke="black" stroke-width="1" width="100%"/>
+		</symbol>
+		<symbol id="blocks-logo-ell">
+			<linearGradient id="blocks-logo-g3" x1="0%" x2="100%" y1="0%" y2="100%">
+				<stop offset="0%" stop-color="#ac8655"/>
+				<stop offset="80%" stop-color="#DEB887"/>
+			</linearGradient>
+			<rect fill="url(#blocks-logo-g3)" height="100%" stroke="black" stroke-width="1" width="100%"/>
+		</symbol>
+		<symbol id="blocks-logo-ess">
+			<linearGradient id="blocks-logo-g4" x1="0%" x2="100%" y1="0%" y2="100%">
+				<stop offset="0%" stop-color="#3263bb"/>
+				<stop offset="80%" stop-color="#6495ED"/>
+			</linearGradient>
+			<rect fill="url(#blocks-logo-g4)" height="100%" stroke="black" stroke-width="1" width="100%"/>
+		</symbol>
+		<symbol id="blocks-logo-zee">
+			<linearGradient id="blocks-logo-g5" x1="0%" x2="100%" y1="0%" y2="100%">
+				<stop offset="0%" stop-color="#cd848f"/>
+				<stop offset="80%" stop-color="#FFB6C1"/>
+			</linearGradient>
+			<rect fill="url(#blocks-logo-g5)" height="100%" stroke="black" stroke-width="1" width="100%"/>
+		</symbol>
+		<symbol id="blocks-logo-tee">
+			<linearGradient id="blocks-logo-g6" x1="0%" x2="100%" y1="0%" y2="100%">
+				<stop offset="0%" stop-color="#4dcda2"/>
+				<stop offset="80%" stop-color="#7FFFD4"/>
+			</linearGradient>
+			<rect fill="url(#blocks-logo-g6)" height="100%" stroke="black" stroke-width="1" width="100%"/>
+		</symbol>
+	</defs>
+	<use height="60" href="#blocks-logo-ell" width="60" x="0" y="0"/>
+	<use height="60" href="#blocks-logo-ell" width="60" x="60" y="0"/>
+	<use height="60" href="#blocks-logo-ell" width="60" x="120" y="0"/>
+	<use height="60" href="#blocks-logo-ell" width="60" x="0" y="60"/>
+	<use height="60" href="#blocks-logo-square" width="60" x="60" y="60"/>
+	<use height="60" href="#blocks-logo-square" width="60" x="120" y="60"/>
+	<use height="60" href="#blocks-logo-square" width="60" x="60" y="120"/>
+	<use height="60" href="#blocks-logo-square" width="60" x="120" y="120"/>
+	<use height="60" href="#blocks-logo-line" width="60" x="180" y="0"/>
+	<use height="60" href="#blocks-logo-line" width="60" x="180" y="60"/>
+	<use height="60" href="#blocks-logo-line" width="60" x="180" y="120"/>
+	<use height="60" href="#blocks-logo-line" width="60" x="180" y="180"/>
+	<use height="60" href="#blocks-logo-are" width="60" x="0" y="120"/>
+	<use height="60" href="#blocks-logo-are" width="60" x="0" y="180"/>
+	<use height="60" href="#blocks-logo-are" width="60" x="60" y="180"/>
+	<use height="60" href="#blocks-logo-are" width="60" x="120" y="180"/>
+</svg>
