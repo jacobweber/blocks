@@ -24,7 +24,10 @@ const StatusOverlay = observer(() => {
 					<p>Use {getShortKeyStr(keys.left)}/{getShortKeyStr(keys.right)}/{getShortKeyStr(keys.down)}/{getShortKeyStr(keys.drop)} to
 					move/drop, {getShortKeyStr(keys.rotateCCW)}/{getShortKeyStr(keys.rotateCW)} to rotate, and {getShortKeyStr(keys.pauseResumeGame)} to pause.</p>
 					<p>You can customize these keys and more in Preferences.</p>
-					<p><a href="https://github.com/jacobweber/blocks" rel="noopener noreferrer" target="_blank">source</a></p>
+					<p>
+						<a href="https://github.com/jacobweber/blocks" rel="noopener noreferrer" target="_blank">source</a>
+						<a href="https://github.com/jacobweber/blocks/issues/new" rel="noopener noreferrer" target="_blank">report bug</a>
+					</p>
 				</div>
 			) : null))}
 		</div>
