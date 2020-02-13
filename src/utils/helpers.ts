@@ -76,7 +76,7 @@ export function getKeyStr(e: KeyboardEvent | React.KeyboardEvent) {
 	}
 }
 
-export function getDisplayKeyStr(keyStr: string) {
+export function getShortKeyStr(keyStr: string) {
 	switch (keyStr) {
 		case 'ArrowLeft':
 			return '\u2190';

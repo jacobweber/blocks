@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 
 import styles from 'components/board/StatusOverlay.module.css';
 import { useStore } from 'stores/MainStore';
-import { GameState, getDisplayKeyStr } from 'utils/helpers';
+import { GameState, getShortKeyStr } from 'utils/helpers';
 import { ReactComponent as Logo } from 'assets/logo.svg';
 
 const StatusOverlay = observer(() => {
@@ -21,8 +21,8 @@ const StatusOverlay = observer(() => {
 			) : (mainStore.gameState === GameState.Reset ? (
 				<div className={styles.overlay + ' ' + styles.welcome} style={{ borderColor: prefsStyles.gridColor }}>
 					<h3><Logo /> Welcome to Blocks!</h3>
-					<p>Use {getDisplayKeyStr(keys.left)}/{getDisplayKeyStr(keys.right)}/{getDisplayKeyStr(keys.down)}/{getDisplayKeyStr(keys.drop)} 
-					to move/drop, and {getDisplayKeyStr(keys.rotateCCW)}/{getDisplayKeyStr(keys.rotateCW)} to rotate.</p>
+					<p>Use {getShortKeyStr(keys.left)}/{getShortKeyStr(keys.right)}/{getShortKeyStr(keys.down)}/{getShortKeyStr(keys.drop)} 
+					to move/drop, and {getShortKeyStr(keys.rotateCCW)}/{getShortKeyStr(keys.rotateCW)} to rotate.</p>
 					<p>You can customize these keys and more in Preferences.</p>
 				</div>
 			) : null))}
