@@ -87,7 +87,11 @@ export function getShortKeyStr(keyStr: string) {
 		case 'ArrowDown':
 			return '\u2193';
 		default:
-			return keyStr;
+			return keyStr
+				.replace('Shift+', '\u21E7')
+				.replace('Ctrl+', '\u2303')
+				.replace('Alt+', '\u2325')
+				.replace('Meta+', '\u2318');
 	}
 }
 

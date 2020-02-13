@@ -35,3 +35,6 @@
 	margin-right: 10px;
 	width: 30px;
 }
+.overlay.welcome p {
+	align-self: flex-start;
+}
