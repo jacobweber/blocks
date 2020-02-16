@@ -1,9 +1,9 @@
 import { observable, action, computed } from 'mobx';
 
 import { KeyActionName, Actions, validKey, getKeyStr, getModifiedKeyStr, strToIntRange } from 'utils/helpers';
-import { PositionedPoint } from 'stores/MainStore';
 import { BlockEditStore } from 'stores/BlockEditStore';
 import { BlockDef, BlockType, defaultBlockDefs, BlockColor } from 'utils/blocks';
+import { PositionedPoint } from './BoardStore';
 
 export type BoardType = 'Black' | 'Custom';
 export const boardTypes: Array<BoardType> = ['Black', 'Custom'];

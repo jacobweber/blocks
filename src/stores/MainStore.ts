@@ -5,21 +5,14 @@ import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
 import { NewGameStore } from 'stores/NewGameStore';
 import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
 import { GameState, Actions, logAction, getKeyStr, getModifiedKeyStr, getDownDelayMS, getLevel } from 'utils/helpers';
-import { PointSymbolID, BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
+import { BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
+import { BoardStore, PositionedPoint } from './BoardStore';
 
-const extraHeight = 50;
-const extraWidth = 200;
 const log = false;
 const numClearRowsBonus = 4;
 const animDelayMS = 5;
 const junkOdds = 3;
 const downTimerPauseWhenMovingMS = 500;
-
-export interface PositionedPoint {
-	x: number;
-	y: number;
-	id: PointSymbolID;
-}
 
 export interface PositionedBlock {
 	type: BlockType;
@@ -30,17 +23,13 @@ export interface PositionedBlock {
 
 type UndoFrame = { block: PositionedBlock; score: number };
 
-export interface FilledPoint {
-	id: PointSymbolID;
-}
-
 class MainStore {
+	boardStore: BoardStore = new BoardStore();
 	preferencesStore: PreferencesStore = new PreferencesStore();
 	highScoresStore: HighScoresStore = new HighScoresStore();
 	newGameStore: NewGameStore = new NewGameStore();
 
 	@observable.ref positionedBlock: PositionedBlock | null = null;
-	@observable filledPoints: Array<Array<FilledPoint | null>> = []; // [y][x]
 	undoStack: Array<UndoFrame> = [];
 	@observable.ref nextBlockTypes: Array<BlockType> = [];
 
@@ -60,10 +49,6 @@ class MainStore {
 	unpausedStart = 0;
 
 	@observable.ref gameBlockDefs: Array<BlockDef> = [];
-	@observable width: number = 0;
-	@observable height: number = 0;
-	@observable windowWidth: number = 0;
-	@observable windowHeight: number = 0;
 
 	constructor() {
 		this.preferencesStore.load();
@@ -73,7 +58,7 @@ class MainStore {
 	}
 
 	initWindowEvents() {
-		this.updateWindowSize();
+		this.boardStore.initWindowEvents();
 		let wasActive = false;
 		window.addEventListener('blur', e => {
 			wasActive = this.gameState === GameState.Active;
@@ -86,18 +71,6 @@ class MainStore {
 		});
 		window.addEventListener('keydown', e => this.keyDown(e));
 		window.addEventListener('keyup', e => this.keyUp(e));
-		window.addEventListener('resize', e => this.updateWindowSize());
-	}
-
-	@action updateWindowSize() {
-		this.windowWidth = window.innerWidth;
-		this.windowHeight = window.innerHeight;
-	}
-
-	@computed get actualPointSize(): number {
-		const minWidth = Math.floor((this.windowWidth - extraWidth) / this.width);
-		const minHeight = Math.floor((this.windowHeight - extraHeight) / this.height);
-		return Math.min(Math.max(Math.min(minHeight, minWidth), 10), 30);
 	}
 
 	@computed get prefs(): Preferences {
@@ -173,8 +146,7 @@ class MainStore {
 
 	@action lockGamePrefs() {
 		this.gameBlockDefs = [ ...this.prefs.blockDefs ];
-		this.width = this.prefs.width;
-		this.height = this.prefs.height;
+		this.boardStore.lockSize(this.prefs.width, this.prefs.height);
 	}
 
 	@action resetGameLeavingBoard(): void {
@@ -196,7 +168,7 @@ class MainStore {
 
 	@action resetGameCompletely() {
 		this.resetGameLeavingBoard();
-		this.filledPoints = Array.from({ length: this.height }, () => Array.from({ length: this.width }));
+		this.boardStore.reset();
 		this.score = 0;
 		this.rows = 0;
 		this.totalTime = 0;
@@ -230,13 +202,13 @@ class MainStore {
 
 	@action fillRowsWithJunk() {
 		if (this.prefs.rowsJunk === 0) return;
-		for (let y = this.height - 1; y >= this.height - this.prefs.rowsJunk; y--) {
-			for (let x = 0; x < this.width; x++) {
+		for (let y = this.boardStore.height - 1; y >= this.boardStore.height - this.prefs.rowsJunk; y--) {
+			for (let x = 0; x < this.boardStore.width; x++) {
 				if (Math.floor(Math.random() * junkOdds) === 0) {
 					const type = this.getRandomBlockType();
-					this.filledPoints[y][x] = {
+					this.boardStore.fillPoint(x, y, {
 						id: this.getBlockDef(type).id
-					};
+					});
 				}
 			}
 		}
@@ -339,47 +311,30 @@ class MainStore {
 	canRotate(block: PositionedBlock) {
 		const def = this.getBlockDef(block.type);
 		return block.x >= 0
-			&& block.x + def.size <= this.width
-			&& block.y + def.size <= this.height;
+			&& block.x + def.size <= this.boardStore.width
+			&& block.y + def.size <= this.boardStore.height;
 	}
 
 	inBounds(block: PositionedBlock): boolean {
 		const extent = this.getBlockRotations(block.type)[block.rotation].extent;
 		return block.x + extent[0] >= 0
 			// && block.y - extent[1] >= 0
-			&& block.x + extent[2] < this.width
-			&& block.y + extent[3] < this.height;
+			&& block.x + extent[2] < this.boardStore.width
+			&& block.y + extent[3] < this.boardStore.height;
 	}
 
 	positionFree(block: PositionedBlock): boolean {
-		const points = this.getPoints(block);
-		for (let i = 0; i < points.length; i++) {
-			const point = points[i];
-			if (point[1] >= 0 && this.filledPoints[point[1]][point[0]]) {
-				return false;
-			}
-		}
-		return true;
+		return this.boardStore.pointsFree(this.getPoints(block));
 	}
 
 	markPositionFilled(block: PositionedBlock): void {
-		const points = this.getPoints(block);
-		points.forEach(point => {
-			if (point[1] >= 0) {
-				this.filledPoints[point[1]][point[0]] = {
-					id: this.getBlockDef(block.type).id
-				}
-			}
+		this.boardStore.markPointsFilled(this.getPoints(block), {
+			id: this.getBlockDef(block.type).id
 		});
 	}
 
 	markPositionUnfilled(block: PositionedBlock): void {
-		const points = this.getPoints(block);
-		points.forEach(point => {
-			if (point[1] >= 0) {
-				this.filledPoints[point[1]][point[0]] = null;
-			}
-		});
+		this.boardStore.markPointsFilled(this.getPoints(block), null);
 	}
 
 	@action newBlock(): void {
@@ -396,7 +351,7 @@ class MainStore {
 		const rotation = 0;
 		const extent = this.getBlockRotations(type)[rotation].extent;
 		const blockWidth = extent[2] - extent[0] + 1;
-		const x = Math.ceil((this.width - blockWidth) / 2);
+		const x = Math.ceil((this.boardStore.width - blockWidth) / 2);
 		const y = -extent[1];
 		const nextBlock = { x, y, type, rotation };
 		if (this.positionFree(nextBlock)) {
@@ -411,16 +366,7 @@ class MainStore {
 		if (!this.positionedBlock) return rows;
 		for (let checkOffset = 0; checkOffset < this.getBlockDef(this.positionedBlock.type).size; checkOffset++) {
 			const y = this.positionedBlock.y + checkOffset;
-			if (y < 0 || y >= this.height) continue;
-			const checkRow = this.filledPoints[y];
-			let rowComplete = true;
-			for (let x = 0; x < this.width; x++) {
-				if (!checkRow[x]) {
-					rowComplete = false;
-					break;
-				}
-			}
-			if (rowComplete) {
+			if (this.boardStore.isRowFilled(y)) {
 				rows.push(y);
 			}
 		}
@@ -433,15 +379,15 @@ class MainStore {
 		const hasBonus = rows.length === numClearRowsBonus;
 		const numFlashes = hasBonus ? 1 : 1;
 		let count = 0;
-		const flash = action(() => {
+		const flash = () => {
 			const id = count % 2 === 0 ? 'flashOn' : 'flashOff';
 			for (let row = 0; row < rows.length; row++) {
-				this.filledPoints[rows[row]] = Array.from({ length: this.width }, () => ({
+				this.boardStore.fillRow(rows[row], {
 					id: id
-				}));
+				});
 			}
 			count++;
-		});
+		};
 
 		this.setAnimating(true);
 		flash();
@@ -450,16 +396,6 @@ class MainStore {
 			flash();
 		}
 		this.setAnimating(false);
-	}
-
-	@action clearRows(rows: number[]): void {
-		if (rows.length === 0) return;
-		for (let row = rows.length - 1; row >= 0; row--) {
-			this.filledPoints.splice(rows[row], 1);
-		}
-		for (let row = 0; row < rows.length; row++) {
-			this.filledPoints.unshift(Array.from({ length: this.width }));
-		}
 	}
 
 	@action async freezeBlock(points: number = 0): Promise<void> {
@@ -471,7 +407,7 @@ class MainStore {
 		this.scoreClearedRows(clearedRows.length);
 		await this.clearRowsDisplay(clearedRows);
 		runInAction(() => {
-			this.clearRows(clearedRows);
+			this.boardStore.clearRows(clearedRows);
 			this.newBlock();
 		});
 	}
@@ -623,7 +559,7 @@ class MainStore {
 		};
 
 		const extent = this.getBlockRotations(this.positionedBlock.type)[this.positionedBlock.rotation].extent;
-		const points = this.height - (this.positionedBlock.y + extent[3]) - 1;
+		const points = this.boardStore.height - (this.positionedBlock.y + extent[3]) - 1;
 
 		this.setAnimating(true);
 		while (!done) {
@@ -792,23 +728,6 @@ class MainStore {
 		if (this.heldKey !== null && this.heldKey === keyStr) {
 			this.cancelHeldAction();
 		}
-	}
-
-	getFrozenPoints(): Array<PositionedPoint> {
-		const points: Array<PositionedPoint> = [];
-		for (let x = 0; x < this.width; x++) {
-			for (let y = 0; y < this.height; y++) {
-				const point = this.filledPoints[y][x];
-				if (point) {
-					points.push({
-						x,
-						y,
-						id: point.id
-					});
-				}
-			}
-		}
-		return points;
 	}
 
 	getPositionedBlockPoints(): Array<PositionedPoint> {

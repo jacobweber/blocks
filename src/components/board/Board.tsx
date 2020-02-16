@@ -13,6 +13,7 @@ import { BoardBackdrop } from './BoardBackdrop';
 
 const Board = observer(() => {
 	const mainStore = useStore();
+	const boardStore = mainStore.boardStore;
  	const preferencesStore = mainStore.preferencesStore;
 	const prefsStyles = preferencesStore.prefs.styles;
 
@@ -25,16 +26,16 @@ const Board = observer(() => {
 			<svg
 				version="1.1"
 				baseProfile="full"
-				width={mainStore.actualPointSize * mainStore.width}
-				height={mainStore.actualPointSize * mainStore.height}
-				viewBox={`0 0 ${svgPointSize * mainStore.width} ${svgPointSize * mainStore.height}`}
+				width={boardStore.actualPointSize * boardStore.width}
+				height={boardStore.actualPointSize * boardStore.height}
+				viewBox={`0 0 ${svgPointSize * boardStore.width} ${svgPointSize * boardStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<BoardBackdrop
 					showGrid={preferencesStore.prefs.showGrid}
 					gridColor={prefsStyles.gridColor}
-					width={mainStore.width}
-					height={mainStore.height}
+					width={boardStore.width}
+					height={boardStore.height}
 				/>
 				<FrozenPoints />
 				<PositionedBlock />

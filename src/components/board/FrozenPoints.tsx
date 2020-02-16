@@ -6,7 +6,7 @@ import { Point } from 'components/Point';
 
 const FrozenPoints = observer(() => {
 	const mainStore = useStore();
-	const points = mainStore.getFrozenPoints();
+	const points = mainStore.boardStore.getFrozenPoints();
 
 	return <>{points.map(point => (
 		<Point key={point.x + '-' + point.y} x={point.x} y={point.y} id={point.id} />
