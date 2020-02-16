@@ -1,3 +1,3 @@
 # Blocks
 
-http://jacobweber.com/blocks/
+https://jacobweber.com/blocks/
