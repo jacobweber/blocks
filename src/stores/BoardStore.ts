@@ -113,10 +113,6 @@ class BoardStore {
 		}
 		return points;
 	}
-
-	inBounds(x: number, y: number): boolean {
-		return x <= this.width && y <= this.height;
-	}
 }
 
 export { BoardStore };
