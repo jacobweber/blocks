@@ -398,12 +398,12 @@ class MainStore {
 		this.setAnimating(false);
 	}
 
-	@action async freezeBlock(points: number = 0): Promise<void> {
+	@action async freezeBlock(scorePoints: number = 0): Promise<void> {
 		if (!this.positionedBlock) return;
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
 		this.positionedBlock = null;
-		this.scoreDrop(points);
+		this.scoreDrop(scorePoints);
 		this.scoreClearedRows(clearedRows.length);
 		await this.clearRowsDisplay(clearedRows);
 		runInAction(() => {
@@ -412,8 +412,8 @@ class MainStore {
 		});
 	}
 
-	@action scoreDrop(points: number): void {
-		this.score += points;
+	@action scoreDrop(scorePoints: number): void {
+		this.score += scorePoints;
 	}
 
 	@action scoreClearedRows(rows: number): void {
@@ -559,7 +559,7 @@ class MainStore {
 		};
 
 		const extent = this.getBlockRotations(this.positionedBlock.type)[this.positionedBlock.rotation].extent;
-		const points = this.boardStore.height - (this.positionedBlock.y + extent[3]) - 1;
+		const scorePoints = this.boardStore.height - (this.positionedBlock.y + extent[3]) - 1;
 
 		this.setAnimating(true);
 		while (!done) {
@@ -573,7 +573,7 @@ class MainStore {
 				score: this.score
 			});
 		}
-		await this.freezeBlock(points);
+		await this.freezeBlock(scorePoints);
 		this.setAnimating(false);
 	}
 
