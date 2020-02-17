@@ -349,8 +349,19 @@ class MainStore {
 		if (this.positionFree(nextBlock)) {
 			this.positionedBlock = nextBlock;
 		} else {
+			this.markPositionFilled(this.moveUpUntilFree(nextBlock));
 			this.endGame();
 		}
+	}
+
+	moveUpUntilFree(block: PositionedBlock): PositionedBlock {
+		do {
+			block = { 
+				...block,
+				y: block.y - 1
+			};
+		} while (!this.positionFree(block));
+		return block;
 	}
 
 	getClearedRows(): number[] {
