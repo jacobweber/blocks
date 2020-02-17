@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
 import { NewGameStore } from 'stores/NewGameStore';
 import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
-import { GameState, getDownDelayMS, getLevel, Actions } from 'utils/helpers';
+import { GameState, getDownDelayMS, getLevel, Actions, getClearRowsScore } from 'utils/helpers';
 import { BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
 import { BoardStore, PositionedPoint } from './BoardStore';
 import { KeyStore } from './KeyStore';
@@ -397,11 +397,7 @@ class MainStore {
 
 	@action scoreClearedRows(rows: number): void {
 		if (rows === 0) return;
-		const mult = (rows === 1 ? 40
-			: (rows === 2 ? 100
-				: (rows === 3 ? 300
-					: (rows === 4 ? 1200 : 0))));
-		this.score += this.level * mult;
+		this.score += getClearRowsScore(rows, this.level);
 		// score based on level before adding rows
 		this.rows += rows;
 		this.undoStack = [];

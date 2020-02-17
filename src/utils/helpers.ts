@@ -25,6 +25,14 @@ export function logAction(action: Actions): string {
 	}
 }
 
+export function getClearRowsScore(rows: number, level: number): number {
+	const mult = (rows === 1 ? 40
+		: (rows === 2 ? 100
+			: (rows === 3 ? 300
+				: (rows === 4 ? 1200 : 0))));
+	return level * mult;
+}
+
 export function getLevel(rows: number): number {
 	if (rows < 10) return 1;
 	if (rows < 30) return 2;
