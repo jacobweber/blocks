@@ -9,7 +9,6 @@ import { BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBloc
 import { BoardStore, PositionedPoint } from './BoardStore';
 import { KeyStore } from './KeyStore';
 
-const numClearRowsBonus = 4;
 const animDelayMS = 5;
 const junkOdds = 3;
 const downTimerPauseWhenMovingMS = 500;
@@ -94,8 +93,7 @@ class MainStore {
 
 	@computed get blockColors(): Array<BlockColor> {
 		return [
-			{ id: 'flashOn', color: '#000000' },
-			{ id: 'flashOff', color: '#FFFFFF' },
+			{ id: 'flash', color: '#000000' },
 			...this.gameBlockDefs
 		];
 	}
@@ -369,26 +367,13 @@ class MainStore {
 
 	async clearRowsDisplay(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
-		this.undoStack = [];
-		const hasBonus = rows.length === numClearRowsBonus;
-		const numFlashes = hasBonus ? 1 : 1;
-		let count = 0;
-		const flash = () => {
-			const id = count % 2 === 0 ? 'flashOn' : 'flashOff';
-			for (let row = 0; row < rows.length; row++) {
-				this.boardStore.fillRow(rows[row], {
-					id: id
-				});
-			}
-			count++;
-		};
-
 		this.setAnimating(true);
-		flash();
-		for (var i = 0; i < numFlashes; i++) {
-			await this.delay(100);
-			flash();
+		for (let row = 0; row < rows.length; row++) {
+			this.boardStore.fillRow(rows[row], {
+				id: 'flash'
+			});
 		}
+		await this.delay(100);
 		this.setAnimating(false);
 	}
 
@@ -419,6 +404,7 @@ class MainStore {
 		this.score += this.level * mult;
 		// score based on level before adding rows
 		this.rows += rows;
+		this.undoStack = [];
 		this.stopDownTimer();
 		this.startDownTimer();
 	}
