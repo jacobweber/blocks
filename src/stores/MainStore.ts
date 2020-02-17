@@ -93,7 +93,7 @@ class MainStore {
 
 	@computed get blockColors(): Array<BlockColor> {
 		return [
-			{ id: 'flash', color: '#000000' },
+			{ id: 'cleared', color: '#000000' },
 			...this.gameBlockDefs
 		];
 	}
@@ -370,7 +370,7 @@ class MainStore {
 		this.setAnimating(true);
 		for (let row = 0; row < rows.length; row++) {
 			this.boardStore.fillRow(rows[row], {
-				id: 'flash'
+				id: 'cleared'
 			});
 		}
 		await this.delay(100);
