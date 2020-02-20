@@ -3,6 +3,8 @@ import { MainStore } from './MainStore';
 import { PreferencesStore } from './PreferencesStore';
 
 const log = false;
+const moveMinPx = 30;
+const dropMinPx = 100;
 
 class KeyStore {
 	mainStore: MainStore;
@@ -11,6 +13,8 @@ class KeyStore {
 	heldAction: Actions | null = null;
 	heldKey: string | null = null;
 	heldTimeout: number | undefined = undefined;
+	xDown: number | null = null;
+	yDown: number | null = null;
 
 	constructor(mainStore: MainStore, preferencesStore: PreferencesStore) {
 		this.mainStore = mainStore;
@@ -83,6 +87,72 @@ class KeyStore {
 
 		// in case any more actions were queued
 		this.handleQueuedAction();
+	}
+
+	touchStart = (e: React.TouchEvent) => {
+		this.xDown = e.changedTouches[0].clientX;
+		this.yDown = e.changedTouches[0].clientY; 
+	}
+
+	touchEnd = (e: React.TouchEvent) => {
+		if (this.xDown === null || this.yDown === null) return;
+		const xUp = e.changedTouches[0].clientX;
+		const yUp = e.changedTouches[0].clientY;
+
+		const xDiff = this.xDown - xUp;
+		const yDiff = this.yDown - yUp;
+		const xDiffAbs = Math.abs(xDiff);
+		const yDiffAbs = Math.abs(yDiff);
+
+		let action = null;
+		let isTap = false;
+		if (xDiffAbs > yDiffAbs) {
+			if (xDiffAbs > moveMinPx) {
+				if (xDiff > 0) {
+					action = Actions.LeftAccel;
+				} else {
+					action = Actions.RightAccel;
+				}
+			} else {
+				isTap = true;
+			}
+		} else {
+			if (yDiffAbs > moveMinPx) {
+				if (yDiff > 0) {
+					action = Actions.Undo;
+				} else if (yDiffAbs < dropMinPx) {
+					action = Actions.Down;
+				} else {
+					action = Actions.Drop;
+				}
+			} else {
+				isTap = true;
+			}
+		}
+		this.xDown = null;
+		this.yDown = null;
+
+		if (isTap) {
+			const quarterWidth = document.body.clientWidth / 4;
+			if (xUp < quarterWidth) {
+				action = Actions.RotateCCW;
+			} else if (xUp < quarterWidth * 2) {
+				action = Actions.RotateCW;
+			} else if (xUp < quarterWidth * 3) {
+				action = Actions.Left;
+			} else {
+				action = Actions.Right;
+			}
+		}
+
+		if (!action) return;		
+
+		if (this.mainStore.animating || this.heldAction) {
+			if (log) console.log('queue', logAction(action));
+			this.actionQueue.push(action);
+		} else {
+			this.handleAction(action);
+		}
 	}
 
 	keyDown(e: KeyboardEvent) {

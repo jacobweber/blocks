@@ -12,6 +12,7 @@ import { LayoutVert } from 'components/LayoutVert';
 const App = observer(() => {
 	const mainStore = useStore();
 	const boardStore = mainStore.boardStore;
+	const keyStore = mainStore.keyStore;
 	const preferencesStore = mainStore.preferencesStore;
 	const highScoresStore = mainStore.highScoresStore;
 	const newGameStore = mainStore.newGameStore;
@@ -20,6 +21,8 @@ const App = observer(() => {
 		<div
 			className={styles.root}
 			style={{ backgroundColor: preferencesStore.prefs.styles.backgroundColor }}
+			onTouchStart={keyStore.touchStart}
+			onTouchEnd={keyStore.touchEnd}
 		>
 			{boardStore.vertical ? <LayoutVert /> : <LayoutHoriz />}
 			{newGameStore.visible && <NewGame />}
