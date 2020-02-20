@@ -35,7 +35,7 @@ const NewGame = observer(() => {
 				</Button.Group>
 			</Modal.Content>
 			<Modal.Actions>
-				<Button onClick={cancel} color='red'>
+				<Button onClick={cancel} color='black'>
 					<Icon name='cancel' /> Cancel
 				</Button>
 				<Button onClick={ok} color='green'>

@@ -86,10 +86,10 @@ const BlockEdit = observer(() => {
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
-				<Button onClick={cancel} color='red'>
+				<Button onClick={cancel} color='black'>
 					<Icon name='cancel' /> Cancel
 				</Button>
-				<Button onClick={del} color='black'>
+				<Button onClick={del} color='red'>
 					<Icon name='trash' /> Delete Block
 				</Button>
 				<Button onClick={ok} color='green'>
