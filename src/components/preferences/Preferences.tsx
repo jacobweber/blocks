@@ -29,6 +29,8 @@ const Preferences = observer(() => {
 		preferencesStore.dialogReset();
 	}
 
+	const useTouch = 'ontouchstart' in window;
+
 	return (
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
 			<Confirm
@@ -103,6 +105,13 @@ const Preferences = observer(() => {
 							<Input id='prefsHeight' onChange={e => preferencesStore.handleChangeInteger(e, 'height')} value={form.height} />
 						</Form.Field>
 					</Form.Group>
+
+					{useTouch && (<>
+						<Header as='h3' dividing>Touch Controls</Header>
+						<p>Tap on the left half of the screen to rotate, and the right half to move
+						left/right. Swipe left/right to move to the edges.</p>
+						<p>Swipe down to drop, and up to undo.</p>
+					</>)}
 
 					<Header as='h3' dividing>Keyboard Controls</Header>
 					<Keys />

@@ -22,10 +22,11 @@ const StatusOverlay = observer(() => {
 			) : (mainStore.gameState === GameState.Reset ? (
 				<div className={styles.overlay + ' ' + styles.welcome} style={{ borderColor: prefsStyles.gridColor }}>
 					<h3><Logo /> Welcome to Blocks!</h3>
-					{useTouch ? (
+					{useTouch ? (<>
 						<p>Tap on the left half of the screen to rotate, and the right half to move
-						left/right. Swipe down to drop, and up to undo.</p>
-					) : (<>
+						left/right. Swipe left/right to move to the edges.</p>
+						<p>Swipe down to drop, and up to undo.</p>
+					</>) : (<>
 						<p>Use {getShortKeyStr(keys.left)}/{getShortKeyStr(keys.right)}/{getShortKeyStr(keys.down)}/{getShortKeyStr(keys.drop)} to
 						move/drop, {getShortKeyStr(keys.rotateCCW)}/{getShortKeyStr(keys.rotateCW)} to rotate, and {getShortKeyStr(keys.pauseResumeGame)} to pause.</p>
 						<p>You can customize these keys and more in Preferences.</p>
