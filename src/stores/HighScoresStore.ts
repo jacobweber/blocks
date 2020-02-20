@@ -18,7 +18,7 @@ const defaultScores: HighScores = {
 	entries: []
 }
 
-const minHighScore = 2000;
+const minHighScore = 0;
 const numScores = 10;
 
 type DoneCallbackType = () => void;
@@ -55,7 +55,7 @@ class HighScoresStore {
 	}
 
 	@action dialogHide() {
-		if (this.lastPosition) {
+		if (this.lastPosition !== null) {
 			const entries = [...this.scores.entries];
 			entries[this.lastPosition].name = this.lastScoreName;
 			this.setScores({
