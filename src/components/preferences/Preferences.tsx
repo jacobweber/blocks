@@ -202,10 +202,10 @@ const Preferences = observer(() => {
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
-				<Button onClick={cancel} color='red'>
+				<Button onClick={cancel} color='black'>
 					<Icon name='cancel' /> Cancel
 				</Button>
-				<Button onClick={reset} color='black'>
+				<Button onClick={reset} color='red'>
 					<Icon name='undo' /> Reset
 				</Button>
 				<Button onClick={save} color='green'>
