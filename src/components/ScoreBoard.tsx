@@ -5,12 +5,16 @@ import styles from 'components/ScoreBoard.module.css';
 import { useStore } from 'stores/MainStore';
 import { GameState } from 'utils/helpers';
 
-const ScoreBoard = observer(() => {
+type ScoreBoardProps = {
+	className?: string;
+};
+
+const ScoreBoard = observer(({ className = '' }: ScoreBoardProps) => {
 	const mainStore = useStore();
  	const prefsStyles = mainStore.preferencesStore.prefs.styles;
 
 	return (
-		<div className={styles.root} style={{ color: prefsStyles.textColor }}>
+		<div className={styles.root + ' ' + className} style={{ color: prefsStyles.textColor }}>
 			<table className={styles.score} style={{ borderColor: prefsStyles.outlineColor }}>
 				<tbody>
 					{mainStore.gameState !== GameState.Reset && (<>

@@ -18,7 +18,13 @@ const Board = observer(() => {
 	const prefsStyles = preferencesStore.prefs.styles;
 
 	return (
-		<div className={styles.root + (mainStore.gameState === GameState.Active ? ' ' + styles.hideCursor : '')}>
+		<div
+			className={styles.root + (mainStore.gameState === GameState.Active ? ' ' + styles.hideCursor : '')}
+			style={{
+				width: boardStore.actualPointSize * boardStore.width,
+				height: boardStore.actualPointSize * boardStore.height
+			}}
+		>
 			<div className={styles.pointDefs}>
 				<PointDefs type={preferencesStore.prefs.pointsType} blockColors={mainStore.blockColors} />
 				<BoardDef type={preferencesStore.prefs.boardType} color={prefsStyles.boardColor} />
@@ -26,8 +32,8 @@ const Board = observer(() => {
 			<svg
 				version="1.1"
 				baseProfile="full"
-				width={boardStore.actualPointSize * boardStore.width}
-				height={boardStore.actualPointSize * boardStore.height}
+				width='100%'
+				height='100%'
 				viewBox={`0 0 ${svgPointSize * boardStore.width} ${svgPointSize * boardStore.height}`}
 				xmlns="http://www.w3.org/2000/svg"
 			>

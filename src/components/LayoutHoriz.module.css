@@ -1,0 +1,42 @@
+.root {
+	display: flex;
+	max-width: 90vw;
+	max-height: 90vh;
+}
+.left {
+	max-width: 100%;
+}
+.right {
+	margin-left: 30px;
+	width: 150px;
+	min-width: 130px;
+	overflow: hidden;
+	position: relative;
+}
+.right .content {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.nextBlock {
+	align-self: stretch;
+}
+.scoreBoard {
+	margin-top: 30px;
+	flex: 1;
+	align-self: stretch;
+	overflow: hidden;
+}
+.button {
+	width: 80%;
+	min-width: 100px;
+	margin-top: 30px;
+	white-space: nowrap;
+}
+.button :global(.ui.button) {
+	padding-left: unset;
+	padding-right: unset;
+}

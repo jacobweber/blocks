@@ -1,8 +1,10 @@
 import { observable, computed, action } from 'mobx';
 import { PointXY, PointSymbolID } from 'utils/blocks';
 
-const extraHeight = 50;
-const extraWidth = 200;
+const extraHeightHoriz = 50;
+const extraWidthHoriz = 200;
+const extraHeightVert = 200;
+const extraWidthVert = 50;
 
 export interface FilledPoint {
 	id: PointSymbolID;
@@ -31,10 +33,24 @@ class BoardStore {
 		this.windowHeight = window.innerHeight;
 	}
 
+	@computed get actualPointSizeHoriz(): number {
+		const minWidth = Math.floor((this.windowWidth - extraWidthHoriz) / this.width);
+		const minHeight = Math.floor((this.windowHeight - extraHeightHoriz) / this.height);
+		return Math.min(minHeight, minWidth);
+	}
+
+	@computed get actualPointSizeVert(): number {
+		const minWidth = Math.floor((this.windowWidth - extraWidthVert) / this.width);
+		const minHeight = Math.floor((this.windowHeight - extraHeightVert) / this.height);
+		return Math.min(minHeight, minWidth);
+	}
+
 	@computed get actualPointSize(): number {
-		const minWidth = Math.floor((this.windowWidth - extraWidth) / this.width);
-		const minHeight = Math.floor((this.windowHeight - extraHeight) / this.height);
-		return Math.min(Math.max(Math.min(minHeight, minWidth), 10), 30);
+		return Math.min(Math.max(this.vertical ? this.actualPointSizeVert : this.actualPointSizeHoriz, 10), 30);
+	}
+
+	@computed get vertical(): boolean {
+		return this.actualPointSizeVert > this.actualPointSizeHoriz;
 	}
 
 	@action lockSize(width: number, height: number) {

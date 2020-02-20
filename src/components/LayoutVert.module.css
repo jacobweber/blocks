@@ -1,0 +1,51 @@
+.root {
+	width: 90vw;
+	height: 90vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.top {
+	width: 100%;
+	margin-bottom: 10px;
+	height: 150px;
+	min-height: 130px;
+	overflow: hidden;
+	position: relative;
+}
+.top .content {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.nextBlock {
+	align-self: stretch;
+}
+.scoreBoard {
+	margin-left: 10px;
+	width: 150px;
+	align-self: stretch;
+	overflow: hidden;
+}
+.scoreBoard > table {
+	height: 100%;
+}
+.buttonsLeft {
+	height: 100%;;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.buttonsRight {
+	height: 100%;;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-left: 10px;
+}
+.bottom {
+	max-width: 100%;
+}
