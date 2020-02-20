@@ -23,17 +23,17 @@ const LayoutVert = observer(() => {
 							</div>
 						) : (
 							<div className={styles.button}>
-								<Button icon='play' onClick={e => mainStore.newGame()} />}
+								<Button icon='play' onClick={e => mainStore.newGame()} />
 							</div>
 						)}
 						{mainStore.gameState === GameState.Active && (
 							<div className={styles.button}>
-								<Button icon='pause' onClick={e => mainStore.pause()} />}
+								<Button icon='pause' onClick={e => mainStore.pause()} />
 							</div>
 						)}
 						{mainStore.gameState === GameState.Paused && (
 							<div className={styles.button}>
-								<Button icon='play' onClick={e => mainStore.resume()} />}
+								<Button icon='play' onClick={e => mainStore.resume()} />
 							</div>
 						)}
 					</div>

@@ -18,29 +18,24 @@
 	height: 100%;
 	width: 100%;
 	display: flex;
-	align-items: center;
 	justify-content: space-between;
 }
 .nextBlock {
-	align-self: stretch;
 }
 .scoreBoard {
 	margin-left: 10px;
 	width: 150px;
-	align-self: stretch;
 	overflow: hidden;
 }
 .scoreBoard > table {
 	height: 100%;
 }
 .buttonsLeft {
-	height: 100%;;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 }
 .buttonsRight {
-	height: 100%;;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
