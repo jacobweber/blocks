@@ -18,7 +18,7 @@ const defaultScores: HighScores = {
 	entries: []
 }
 
-const minHighScore = 0;
+const minHighScore = 2000;
 const numScores = 10;
 
 type DoneCallbackType = () => void;
