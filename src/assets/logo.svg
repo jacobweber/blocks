@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" version="1.1" viewBox="0 0 240 240">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" baseProfile="full" version="1.1" viewBox="0 0 240 240">
 	<defs>
 		<linearGradient id="blocks-logo-g0" x1="0%" x2="100%" y1="0%" y2="100%">
 			<stop offset="0%" stop-color="#7bcd00"/>
@@ -51,20 +51,20 @@
 			<rect fill="url(#blocks-logo-g6)" height="100%" stroke="black" stroke-width="1" width="100%"/>
 		</symbol>
 	</defs>
-	<use height="60" href="#blocks-logo-ell" width="60" x="0" y="0"/>
-	<use height="60" href="#blocks-logo-ell" width="60" x="60" y="0"/>
-	<use height="60" href="#blocks-logo-ell" width="60" x="120" y="0"/>
-	<use height="60" href="#blocks-logo-ell" width="60" x="0" y="60"/>
-	<use height="60" href="#blocks-logo-square" width="60" x="60" y="60"/>
-	<use height="60" href="#blocks-logo-square" width="60" x="120" y="60"/>
-	<use height="60" href="#blocks-logo-square" width="60" x="60" y="120"/>
-	<use height="60" href="#blocks-logo-square" width="60" x="120" y="120"/>
-	<use height="60" href="#blocks-logo-line" width="60" x="180" y="0"/>
-	<use height="60" href="#blocks-logo-line" width="60" x="180" y="60"/>
-	<use height="60" href="#blocks-logo-line" width="60" x="180" y="120"/>
-	<use height="60" href="#blocks-logo-line" width="60" x="180" y="180"/>
-	<use height="60" href="#blocks-logo-are" width="60" x="0" y="120"/>
-	<use height="60" href="#blocks-logo-are" width="60" x="0" y="180"/>
-	<use height="60" href="#blocks-logo-are" width="60" x="60" y="180"/>
-	<use height="60" href="#blocks-logo-are" width="60" x="120" y="180"/>
+	<use height="60" xlink:href="#blocks-logo-ell" width="60" x="0" y="0"/>
+	<use height="60" xlink:href="#blocks-logo-ell" width="60" x="60" y="0"/>
+	<use height="60" xlink:href="#blocks-logo-ell" width="60" x="120" y="0"/>
+	<use height="60" xlink:href="#blocks-logo-ell" width="60" x="0" y="60"/>
+	<use height="60" xlink:href="#blocks-logo-square" width="60" x="60" y="60"/>
+	<use height="60" xlink:href="#blocks-logo-square" width="60" x="120" y="60"/>
+	<use height="60" xlink:href="#blocks-logo-square" width="60" x="60" y="120"/>
+	<use height="60" xlink:href="#blocks-logo-square" width="60" x="120" y="120"/>
+	<use height="60" xlink:href="#blocks-logo-line" width="60" x="180" y="0"/>
+	<use height="60" xlink:href="#blocks-logo-line" width="60" x="180" y="60"/>
+	<use height="60" xlink:href="#blocks-logo-line" width="60" x="180" y="120"/>
+	<use height="60" xlink:href="#blocks-logo-line" width="60" x="180" y="180"/>
+	<use height="60" xlink:href="#blocks-logo-are" width="60" x="0" y="120"/>
+	<use height="60" xlink:href="#blocks-logo-are" width="60" x="0" y="180"/>
+	<use height="60" xlink:href="#blocks-logo-are" width="60" x="60" y="180"/>
+	<use height="60" xlink:href="#blocks-logo-are" width="60" x="120" y="180"/>
 </svg>
