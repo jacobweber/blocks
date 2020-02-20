@@ -39,7 +39,7 @@ const BlockEdit = observer(() => {
 			/>
 
 			<Header icon='setting' content='Edit Block' />
-			<Modal.Content>
+			<Modal.Content scrolling>
 				<Form>
 					<div className={styles.content}>
 						<div className={styles.left}>
