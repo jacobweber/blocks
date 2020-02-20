@@ -123,3 +123,24 @@ export function strToIntRange(str: string, min?: number, max?: number, def?: num
 	}
 	return num;
 }
+
+export function debounce(fn: Function, wait: number, immediate: boolean = false): () => void {
+	let timeout: number | null = null;
+
+	return (...args) => {
+		const later = () => {
+			timeout = null;
+			if (!immediate) fn(...args);
+		};
+
+		const callNow = immediate && !timeout;
+
+		if (timeout !== null) {
+			window.clearTimeout(timeout);
+		}
+
+		timeout = window.setTimeout(later, wait);
+
+		if (callNow) fn(...args);
+	};
+};

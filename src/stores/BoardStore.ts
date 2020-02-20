@@ -1,5 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { PointXY, PointSymbolID } from 'utils/blocks';
+import { debounce } from 'utils/helpers';
 
 const extraHeightHoriz = 50;
 const extraWidthHoriz = 200;
@@ -25,7 +26,7 @@ class BoardStore {
 
 	initWindowEvents() {
 		this.updateWindowSize();
-		window.addEventListener('resize', e => this.updateWindowSize());
+		window.addEventListener('resize', debounce(() => this.updateWindowSize(), 100));
 	}
 
 	@action updateWindowSize() {
