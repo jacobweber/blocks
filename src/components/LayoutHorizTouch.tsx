@@ -9,6 +9,8 @@ import { NextBlock } from 'components/NextBlock';
 import { ScoreBoard } from 'components/ScoreBoard';
 import { GameState } from 'utils/helpers';
 
+const cancelTouch = (e: React.TouchEvent) => e.stopPropagation();
+
 const LayoutHorizTouch = observer(() => {
 	const mainStore = useStore();
 
@@ -22,20 +24,20 @@ const LayoutHorizTouch = observer(() => {
 					<div className={styles.buttons}>
 						<div className={styles.buttonsCol}>
 							{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
-								<Button icon='stop' onClick={e => mainStore.endGame()} />
+								<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
 							) : (
-								<Button icon='play' onClick={e => mainStore.newGame()} />
+								<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
 							)}
 							{mainStore.gameState === GameState.Active && (
-								<Button icon='pause' onClick={e => mainStore.pause()} />
+								<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
 							)}
 							{mainStore.gameState === GameState.Paused && (
-								<Button icon='play' onClick={e => mainStore.resume()} />
+								<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
 							)}
 						</div>
 						<div className={styles.buttonsCol}>
-							<Button icon='trophy' onClick={e => mainStore.showHighScores()} />
-							<Button icon='setting' onClick={e => mainStore.showPrefs()} />
+							<Button icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
+							<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
 						</div>
 					</div>
 					<NextBlock className={styles.nextBlock} />
