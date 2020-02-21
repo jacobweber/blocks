@@ -22,16 +22,19 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 }
-.buttonsTop {
+.buttons {
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 10px;
+	height: 80px;
+}
+.buttonsCol {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 .nextBlock {
 }
 .scoreBoard {
-	margin-top: 10px;
-	flex: 1;
-	overflow: hidden;
 }
