@@ -22,19 +22,21 @@ const LayoutHorizTouch = observer(() => {
 			<div className={styles.right}>
 				<div className={styles.content}>
 					<div className={styles.buttons}>
-						<div className={styles.buttonsCol}>
-							{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
+						{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
+							<div className={styles.buttonsCol}>
 								<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
-							) : (
+								{mainStore.gameState === GameState.Active ? (
+									<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
+								) : (
+									<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
+								)}
+							</div>
+						) : (
+							<div className={styles.buttonsCol}>
 								<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
-							)}
-							{mainStore.gameState === GameState.Active && (
-								<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
-							)}
-							{mainStore.gameState === GameState.Paused && (
-								<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
-							)}
-						</div>
+								<Button icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+							</div>
+						)}
 						<div className={styles.buttonsCol}>
 							<Button icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
 							<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />

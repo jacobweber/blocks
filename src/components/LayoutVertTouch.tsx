@@ -18,19 +18,21 @@ const LayoutVertTouch = observer(() => {
 		<div className={styles.root}>
 			<div className={styles.top}>
 				<div className={styles.content}>
-					<div className={styles.buttonsLeft}>
-						{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
+					{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
+						<div className={styles.buttonsLeft}>
 							<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
-						) : (
+							{mainStore.gameState === GameState.Active ? (
+								<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
+							) : (
+								<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
+							)}
+						</div>
+					) : (
+						<div className={styles.buttonsLeft}>
 							<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
-						)}
-						{mainStore.gameState === GameState.Active && (
-							<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
-						)}
-						{mainStore.gameState === GameState.Paused && (
-							<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
-						)}
-					</div>
+							<Button icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+						</div>
+					)}
 					<NextBlock className={styles.nextBlock} />
 					<ScoreBoard className={styles.scoreBoard} />
 					<div className={styles.buttonsRight}>
