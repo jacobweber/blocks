@@ -1,12 +1,15 @@
 .root {
 	display: flex;
-	max-width: 90vw;
-	max-height: 90vh;
+	width: 90vw;
+	height: 90vh;
+	align-items: center;
+	justify-content: center;
 }
 .left {
 	max-width: 100%;
 }
 .right {
+	height: 100%;
 	margin-left: 30px;
 	width: 150px;
 	min-width: 130px;
