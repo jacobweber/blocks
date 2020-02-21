@@ -9,15 +9,6 @@
 .top {
 	width: 100%;
 	margin-bottom: 10px;
-	height: 150px;
-	min-height: 130px;
-	overflow: hidden;
-	position: relative;
-}
-.top .content {
-	position: absolute;
-	height: 100%;
-	width: 100%;
 	display: flex;
 	justify-content: space-between;
 }
@@ -29,6 +20,10 @@
 }
 .scoreBoard > table {
 	height: 100%;
+}
+.scoreBoard > table td {
+	padding-top: unset;
+	padding-bottom: unset;
 }
 .buttonsLeft {
 	display: flex;

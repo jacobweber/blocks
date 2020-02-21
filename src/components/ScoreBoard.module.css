@@ -12,7 +12,8 @@
 .score tr + tr td {
 	padding-top: 0;
 }
-.score td:first-child {
+.score td + td {
+	padding-left: 0;
 }
 .score td:last-child {
 	text-align: right;

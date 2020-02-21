@@ -19,32 +19,27 @@ const LayoutHorizTouch = observer(() => {
 			<div className={styles.left}>
 				<Board />
 			</div>
-			<div className={styles.right}>
-				<div className={styles.content}>
-					<div className={styles.buttons}>
-						{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
-							<div className={styles.buttonsCol}>
-								<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
-								{mainStore.gameState === GameState.Active ? (
-									<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
-								) : (
-									<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
-								)}
-							</div>
-						) : (
-							<div className={styles.buttonsCol}>
-								<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
-								<Button icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
-							</div>
-						)}
-						<div className={styles.buttonsCol}>
-							<Button icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
-							<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
-						</div>
-					</div>
-					<NextBlock className={styles.nextBlock} />
-					<ScoreBoard className={styles.scoreBoard} />
+			<div className={styles.right} style={{ minWidth: mainStore.touchSidebarSize[0] }}>
+				<div className={styles.buttons}>
+					{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
+						<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
+					) : (
+						<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
+					)}
+					<Button icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
 				</div>
+				<div className={styles.buttons}>
+					{mainStore.gameState === GameState.Active ? (
+						<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
+					) : (mainStore.gameState === GameState.Paused ? (
+						<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
+					) : (
+						<Button icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+					))}
+					<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
+				</div>
+				<NextBlock className={styles.nextBlock} />
+				<ScoreBoard className={styles.scoreBoard} />
 			</div>
 		</div>
 	);

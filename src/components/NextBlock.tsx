@@ -15,10 +15,13 @@ const NextBlock = observer(({ className = '' }: NextBlockProps) => {
 	const boardStore = mainStore.boardStore;
 	const { points, width, height } = mainStore.getNextBlockInfo();
  	const prefsStyles = mainStore.preferencesStore.prefs.styles;
-	if (mainStore.gameState === GameState.Reset) return null;
 
 	return (
-		<div className={styles.root + ' ' + className} style={{ color: prefsStyles.textColor, borderColor: prefsStyles.outlineColor }}>
+		<div className={styles.root + ' ' + className} style={{
+			visibility: mainStore.gameState === GameState.Reset ? 'hidden' : 'visible',
+			color: prefsStyles.textColor,
+			borderColor: prefsStyles.outlineColor
+		}}>
 			<p>Next Block</p>
 			<div style={{
 				height: boardStore.actualPointSize * mainStore.blockMaxInitialHeight,

@@ -14,14 +14,15 @@ const ScoreBoard = observer(({ className = '' }: ScoreBoardProps) => {
  	const prefsStyles = mainStore.preferencesStore.prefs.styles;
 
 	return (
-		<div className={styles.root + ' ' + className} style={{ color: prefsStyles.textColor }}>
+		<div className={styles.root + ' ' + className} style={{
+			visibility: mainStore.gameState === GameState.Reset ? 'hidden' : 'visible',
+			color: prefsStyles.textColor
+		}}>
 			<table className={styles.score} style={{ borderColor: prefsStyles.outlineColor }}>
 				<tbody>
-					{mainStore.gameState !== GameState.Reset && (<>
-						<tr><td>Score</td><td>{mainStore.score.toLocaleString()}</td></tr>
-						<tr><td>Lines</td><td>{mainStore.rows}</td></tr>
-						<tr><td>Level</td><td>{mainStore.level}</td></tr>
-					</>)}
+					<tr><td>Score</td><td>{mainStore.score.toLocaleString()}</td></tr>
+					<tr><td>Lines</td><td>{mainStore.rows}</td></tr>
+					<tr><td>Level</td><td>{mainStore.level}</td></tr>
 				</tbody>
 			</table>
 		</div>

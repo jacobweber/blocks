@@ -16,29 +16,27 @@ const LayoutVertTouch = observer(() => {
 
 	return (
 		<div className={styles.root}>
-			<div className={styles.top}>
-				<div className={styles.content}>
-					{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
-						<div className={styles.buttonsLeft}>
-							<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
-							{mainStore.gameState === GameState.Active ? (
-								<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
-							) : (
-								<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
-							)}
-						</div>
-					) : (
-						<div className={styles.buttonsLeft}>
-							<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
-							<Button icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
-						</div>
-					)}
-					<NextBlock className={styles.nextBlock} />
-					<ScoreBoard className={styles.scoreBoard} />
-					<div className={styles.buttonsRight}>
-						<Button icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
-						<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
+			<div className={styles.top} style={{ minHeight: mainStore.touchSidebarSize[1] }}>
+				{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
+					<div className={styles.buttonsLeft}>
+						<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
+						{mainStore.gameState === GameState.Active ? (
+							<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
+						) : (
+							<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
+						)}
 					</div>
+				) : (
+					<div className={styles.buttonsLeft}>
+						<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
+						<Button icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+					</div>
+				)}
+				<NextBlock className={styles.nextBlock} />
+				<ScoreBoard className={styles.scoreBoard} />
+				<div className={styles.buttonsRight}>
+					<Button icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
+					<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
 				</div>
 			</div>
 			<div className={styles.bottom}>
