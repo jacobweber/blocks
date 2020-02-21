@@ -22,24 +22,31 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+}
+.buttonsTop {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
 }
 .nextBlock {
-	align-self: stretch;
 }
 .scoreBoard {
 	margin-top: 30px;
 	flex: 1;
-	align-self: stretch;
 	overflow: hidden;
 }
-.button {
+.buttonsBottom {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.buttonsBottom .button {
 	width: 80%;
 	min-width: 100px;
 	margin-top: 30px;
 	white-space: nowrap;
 }
-.button :global(.ui.button) {
+.buttonsBottom .button :global(.ui.button) {
 	padding-left: unset;
 	padding-right: unset;
 }

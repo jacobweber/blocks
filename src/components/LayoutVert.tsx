@@ -18,34 +18,22 @@ const LayoutVert = observer(() => {
 				<div className={styles.content}>
 					<div className={styles.buttonsLeft}>
 						{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
-							<div className={styles.button}>
-								<Button icon='stop' onClick={e => mainStore.endGame()} />
-							</div>
+							<Button icon='stop' onClick={e => mainStore.endGame()} />
 						) : (
-							<div className={styles.button}>
-								<Button icon='play' onClick={e => mainStore.newGame()} />
-							</div>
+							<Button icon='play' onClick={e => mainStore.newGame()} />
 						)}
 						{mainStore.gameState === GameState.Active && (
-							<div className={styles.button}>
-								<Button icon='pause' onClick={e => mainStore.pause()} />
-							</div>
+							<Button icon='pause' onClick={e => mainStore.pause()} />
 						)}
 						{mainStore.gameState === GameState.Paused && (
-							<div className={styles.button}>
-								<Button icon='play' onClick={e => mainStore.resume()} />
-							</div>
+							<Button icon='play' onClick={e => mainStore.resume()} />
 						)}
 					</div>
 					<NextBlock className={styles.nextBlock} />
 					<ScoreBoard className={styles.scoreBoard} />
 					<div className={styles.buttonsRight}>
-						<div className={styles.button}>
-							<Button icon='trophy' onClick={e => mainStore.showHighScores()} />
-						</div>
-						<div className={styles.button}>
-							<Button icon='setting' onClick={e => mainStore.showPrefs()} />
-						</div>
+						<Button icon='trophy' onClick={e => mainStore.showHighScores()} />
+						<Button icon='setting' onClick={e => mainStore.showPrefs()} />
 					</div>
 				</div>
 			</div>
