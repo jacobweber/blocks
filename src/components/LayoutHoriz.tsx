@@ -20,23 +20,6 @@ const LayoutHoriz = observer(() => {
 			</div>
 			<div className={styles.right}>
 				<div className={styles.content}>
-					{useTouch && (<div className={styles.buttonsTop}>
-						{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
-							<Button icon='stop' onClick={e => mainStore.endGame()} />
-						) : (
-							<Button icon='play' onClick={e => mainStore.newGame()} />
-						)}
-						{mainStore.gameState === GameState.Active && (
-							<Button icon='pause' onClick={e => mainStore.pause()} />
-						)}
-						{mainStore.gameState === GameState.Paused && (
-							<Button icon='play' onClick={e => mainStore.resume()} />
-						)}
-					</div>)}
-					{useTouch && (<div className={styles.buttonsTop}>
-						<Button icon='trophy' onClick={e => mainStore.showHighScores()} />
-						<Button icon='setting' onClick={e => mainStore.showPrefs()} />
-					</div>)}
 					<NextBlock className={styles.nextBlock} />
 					<ScoreBoard className={styles.scoreBoard} />
 					{!useTouch && (<div className={styles.buttonsBottom}>

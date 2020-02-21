@@ -8,6 +8,7 @@ import { HighScores } from 'components/HighScores';
 import { NewGame } from 'components/NewGame';
 import { LayoutHoriz } from 'components/LayoutHoriz';
 import { LayoutVert } from 'components/LayoutVert';
+import { LayoutHorizTouch } from './LayoutHorizTouch';
 
 const App = observer(() => {
 	const mainStore = useStore();
@@ -16,6 +17,7 @@ const App = observer(() => {
 	const preferencesStore = mainStore.preferencesStore;
 	const highScoresStore = mainStore.highScoresStore;
 	const newGameStore = mainStore.newGameStore;
+	const useTouch = 'ontouchstart' in window;
 
 	return (
 		<div
@@ -24,7 +26,7 @@ const App = observer(() => {
 			onTouchStart={keyStore.touchStart}
 			onTouchEnd={keyStore.touchEnd}
 		>
-			{boardStore.vertical ? <LayoutVert /> : <LayoutHoriz />}
+			{boardStore.vertical ? <LayoutVert /> : (useTouch ? <LayoutHorizTouch /> : <LayoutHoriz />)}
 			{newGameStore.visible && <NewGame />}
 			{highScoresStore.visible && <HighScores />}
 			{preferencesStore.visible && <Preferences />}
