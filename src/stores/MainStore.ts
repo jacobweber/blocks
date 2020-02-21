@@ -115,6 +115,15 @@ class MainStore {
 		return max;
 	}
 
+	@computed get blockMaxInitialWidth(): number {
+		const blockRotations = this.gameBlockRotations;
+		let max = 0;
+		blockRotations.forEach(rotations => {
+			max = Math.max(max, rotations[0].extent[2] - rotations[0].extent[0] + 1);
+		});
+		return max;
+	}
+
 	getRandomBlockType(): BlockType {
 		const index = Math.floor(Math.random() * this.weightedBlockTypes.length);
 		return this.weightedBlockTypes[index];
