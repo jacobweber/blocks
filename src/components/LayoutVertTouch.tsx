@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from "mobx-react-lite"
 import { Button } from 'semantic-ui-react'
 
-import styles from 'components/LayoutVert.module.css';
+import styles from 'components/LayoutVertTouch.module.css';
 import { useStore } from 'stores/MainStore';
 import { Board } from 'components/board/Board';
 import { NextBlock } from 'components/NextBlock';
@@ -11,7 +11,7 @@ import { GameState } from 'utils/helpers';
 
 const cancelTouch = (e: React.TouchEvent) => e.stopPropagation();
 
-const LayoutVert = observer(() => {
+const LayoutVertTouch = observer(() => {
 	const mainStore = useStore();
 
 	return (
@@ -46,4 +46,4 @@ const LayoutVert = observer(() => {
 	);
 });
 
-export { LayoutVert };
+export { LayoutVertTouch };

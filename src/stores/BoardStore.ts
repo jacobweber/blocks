@@ -51,7 +51,7 @@ class BoardStore {
 	}
 
 	@computed get vertical(): boolean {
-		return this.actualPointSizeVert > this.actualPointSizeHoriz + 4; // bias toward horiz
+		return this.windowHeight > this.windowWidth;
 	}
 
 	@action lockSize(width: number, height: number) {

@@ -7,7 +7,7 @@ import { Preferences } from 'components/preferences/Preferences';
 import { HighScores } from 'components/HighScores';
 import { NewGame } from 'components/NewGame';
 import { LayoutHoriz } from 'components/LayoutHoriz';
-import { LayoutVert } from 'components/LayoutVert';
+import { LayoutVertTouch } from 'components/LayoutVertTouch';
 import { LayoutHorizTouch } from './LayoutHorizTouch';
 
 const App = observer(() => {
@@ -26,7 +26,7 @@ const App = observer(() => {
 			onTouchStart={keyStore.touchStart}
 			onTouchEnd={keyStore.touchEnd}
 		>
-			{boardStore.vertical ? <LayoutVert /> : (useTouch ? <LayoutHorizTouch /> : <LayoutHoriz />)}
+			{useTouch ? (boardStore.vertical ? <LayoutVertTouch /> : <LayoutHorizTouch />) : <LayoutHoriz />}
 			{newGameStore.visible && <NewGame />}
 			{highScoresStore.visible && <HighScores />}
 			{preferencesStore.visible && <Preferences />}
