@@ -9,6 +9,9 @@
 .score td {
 	padding: 10px;
 }
+.score tr + tr td {
+	padding-top: 0;
+}
 .score td:first-child {
 }
 .score td:last-child {
