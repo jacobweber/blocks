@@ -13,7 +13,7 @@ import { LayoutHorizTouch } from './LayoutHorizTouch';
 const App = observer(() => {
 	const mainStore = useStore();
 	const boardStore = mainStore.boardStore;
-	const keyStore = mainStore.keyStore;
+	const inputStore = mainStore.inputStore;
 	const preferencesStore = mainStore.preferencesStore;
 	const highScoresStore = mainStore.highScoresStore;
 	const newGameStore = mainStore.newGameStore;
@@ -23,8 +23,8 @@ const App = observer(() => {
 		<div
 			className={styles.root}
 			style={{ backgroundColor: preferencesStore.prefs.styles.backgroundColor }}
-			onTouchStart={keyStore.touchStart}
-			onTouchEnd={keyStore.touchEnd}
+			onTouchStart={inputStore.touchStart}
+			onTouchEnd={inputStore.touchEnd}
 		>
 			{useTouch ? (boardStore.vertical ? <LayoutVertTouch /> : <LayoutHorizTouch />) : <LayoutHoriz />}
 			{newGameStore.visible && <NewGame />}

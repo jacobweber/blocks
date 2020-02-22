@@ -6,7 +6,7 @@ const log = false;
 const moveMinPx = 30;
 const dropMinPx = 100;
 
-class KeyStore {
+class InputStore {
 	mainStore: MainStore;
 	preferencesStore: PreferencesStore;
 	actionQueue: Array<Actions> = [];
@@ -199,4 +199,4 @@ class KeyStore {
 	}
 }
 
-export { KeyStore };
+export { InputStore };

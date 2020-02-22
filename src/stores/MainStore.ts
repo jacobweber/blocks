@@ -7,7 +7,7 @@ import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
 import { GameState, getDownDelayMS, getLevel, Actions, getClearRowsScore } from 'utils/helpers';
 import { BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
 import { BoardStore, PositionedPoint } from './BoardStore';
-import { KeyStore } from './KeyStore';
+import { InputStore } from './InputStore';
 
 const animDelayMS = 5;
 const junkOdds = 3;
@@ -27,7 +27,7 @@ class MainStore {
 	preferencesStore: PreferencesStore = new PreferencesStore();
 	highScoresStore: HighScoresStore = new HighScoresStore();
 	newGameStore: NewGameStore = new NewGameStore();
-	keyStore: KeyStore = new KeyStore(this, this.preferencesStore);
+	inputStore: InputStore = new InputStore(this, this.preferencesStore);
 
 	@observable.ref positionedBlock: PositionedBlock | null = null;
 	undoStack: Array<UndoFrame> = [];
@@ -55,7 +55,7 @@ class MainStore {
 
 	initWindowEvents() {
 		this.boardStore.initWindowEvents();
-		this.keyStore.initWindowEvents();
+		this.inputStore.initWindowEvents();
 		let wasActive = false;
 		window.addEventListener('blur', e => {
 			wasActive = this.gameState === GameState.Active;
@@ -155,7 +155,7 @@ class MainStore {
 	@action resetGameLeavingBoard(): void {
 		window.clearTimeout(this.downTimeout);
 		this.downTimeout = undefined;
-		this.keyStore.reset();
+		this.inputStore.reset();
 		this.pauseTimer = false;
 		this.ignoreInput = false;
 		this.positionedBlock = null;
@@ -277,7 +277,7 @@ class MainStore {
 	setIgnoreInput(ignoreInput: boolean): void {
 		this.ignoreInput = ignoreInput;
 		if (!ignoreInput) {
-			this.keyStore.handleQueuedAction();
+			this.inputStore.handleQueuedAction();
 		}
 	}
 
