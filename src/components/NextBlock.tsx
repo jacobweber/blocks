@@ -31,7 +31,7 @@ const NextBlock = observer(({ className = '', pointSize }: NextBlockProps) => {
 			>
 				<use x='0' y='0' width='100%' height='100%' href={'#' + svgPrefix + 'board'} />
 			</svg>
-			<p>Next Block</p>
+			<p>Next</p>
 			<div style={{
 				height: actualPointSize * mainStore.blockMaxInitialHeight,
 				width: actualPointSize * mainStore.blockMaxInitialWidth
