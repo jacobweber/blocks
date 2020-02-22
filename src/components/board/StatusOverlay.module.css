@@ -39,5 +39,6 @@
 	align-self: flex-start;
 }
 .overlay.welcome a {
+	display: inline-block;
 	margin-right: 20px;
 }
