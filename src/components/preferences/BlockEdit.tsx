@@ -86,7 +86,7 @@ const BlockEdit = observer(() => {
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
-				<Button onClick={cancel} color='black'>
+				<Button onClick={cancel}>
 					<Icon name='cancel' /> Cancel
 				</Button>
 				{blockEditStore.blockType !== null && (<Button onClick={del} color='red'>
