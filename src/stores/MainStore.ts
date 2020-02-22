@@ -34,7 +34,8 @@ class MainStore {
 	@observable.ref nextBlockTypes: Array<BlockType> = [];
 
 	@observable gameState: GameState = GameState.Reset;
-	@observable animating = false;
+	@observable pauseTimer = false;
+	@observable ignoreInput = false;
 	downTimeout: number | undefined = undefined;
 	lastMoveAboveBlockedSpace: Date | null = null;
 	@observable score = 0;
@@ -155,7 +156,8 @@ class MainStore {
 		window.clearTimeout(this.downTimeout);
 		this.downTimeout = undefined;
 		this.keyStore.reset();
-		this.animating = false;
+		this.pauseTimer = false;
+		this.ignoreInput = false;
 		this.positionedBlock = null;
 		this.undoStack = [];
 		this.nextBlockTypes = [];
@@ -243,7 +245,7 @@ class MainStore {
 	}
 
 	updateDownTimer(): void {
-		if (this.gameState !== GameState.Active || this.animating) {
+		if (this.gameState !== GameState.Active || this.pauseTimer) {
 			if (this.downTimeout) {
 				this.stopDownTimer();
 			}
@@ -267,10 +269,14 @@ class MainStore {
 		}, this.downDelayMS);
 	}
 
-	setAnimating(animating: boolean): void {
-		this.animating = animating;
+	setPauseTimer(pauseTimer: boolean): void {
+		this.pauseTimer = pauseTimer;
 		this.updateDownTimer();
-		if (!animating) {
+	}
+
+	setIgnoreInput(ignoreInput: boolean): void {
+		this.ignoreInput = ignoreInput;
+		if (!ignoreInput) {
 			this.keyStore.handleQueuedAction();
 		}
 	}
@@ -387,14 +393,16 @@ class MainStore {
 
 	async clearRowsDisplay(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
-		this.setAnimating(true);
+		this.setPauseTimer(true);
+		this.setIgnoreInput(true);
 		for (let row = 0; row < rows.length; row++) {
 			this.boardStore.fillRow(rows[row], {
 				id: 'cleared'
 			});
 		}
 		await this.delay(100);
-		this.setAnimating(false);
+		this.setPauseTimer(false);
+		this.setIgnoreInput(false);
 	}
 
 	@action async freezeBlock(scorePoints: number = 0): Promise<void> {
@@ -502,23 +510,23 @@ class MainStore {
 	}
 
 	async leftAccel(): Promise<void> {
-		this.setAnimating(true);
+		this.setIgnoreInput(true);
 		let done = false;
 		while (!done) {
 			done = !this.left();
 			await this.delay(animDelayMS);
 		}
-		this.setAnimating(false);
+		this.setIgnoreInput(false);
 	}
 
 	async rightAccel(): Promise<void> {
-		this.setAnimating(true);
+		this.setIgnoreInput(true);
 		let done = false;
 		while (!done) {
 			done = !this.right();
 			await this.delay(animDelayMS);
 		}
-		this.setAnimating(false);
+		this.setIgnoreInput(false);
 	}
 
 	@action async down(fromTimer: boolean = false): Promise<void> {
@@ -557,7 +565,8 @@ class MainStore {
 		const extent = this.getBlockRotations(this.positionedBlock.type)[this.positionedBlock.rotation].extent;
 		const scorePoints = this.boardStore.height - (this.positionedBlock.y + extent[3]) - 1;
 
-		this.setAnimating(true);
+		this.setPauseTimer(true);
+		this.setIgnoreInput(true);
 		while (!done) {
 			runInAction(nextDrop);
 			await this.delay(animDelayMS);
@@ -570,7 +579,8 @@ class MainStore {
 			});
 		}
 		await this.freezeBlock(scorePoints);
-		this.setAnimating(false);
+		this.setPauseTimer(false);
+		this.setIgnoreInput(false);
 	}
 
 	@action async undo(): Promise<void> {
@@ -600,12 +610,14 @@ class MainStore {
 			}
 		};
 
-		this.setAnimating(true);
+		this.setPauseTimer(true);
+		this.setIgnoreInput(true);
 		while (!done) {
 			runInAction(nextLift);
 			await this.delay(animDelayMS);
 		}
-		this.setAnimating(false);
+		this.setPauseTimer(false);
+		this.setIgnoreInput(false);
 	}
 
 	delay(ms: number): Promise<void> {
