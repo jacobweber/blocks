@@ -2,12 +2,13 @@
 	min-width: 120px;
 }
 .score {
+	height: 100%;
 	width: 100%;
 	background: rgb(97,117,135);
 	background: linear-gradient(135deg, rgba(97,117,135,1) 0%, rgba(0,0,0,1) 80%);
 }
 .score td {
-	padding: 10px;
+	padding: 1px 10px;
 }
 .score tr + tr td {
 	padding-top: 0;

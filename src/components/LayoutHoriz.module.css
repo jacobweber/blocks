@@ -20,11 +20,13 @@
 .nextBlock {
 }
 .scoreBoard {
+	max-height: 130px;
 	margin-top: 30px;
 	flex: 1;
 	overflow: hidden;
 }
 .buttonsBottom {
+	margin-top: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

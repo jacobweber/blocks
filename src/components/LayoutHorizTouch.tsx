@@ -22,7 +22,7 @@ const LayoutHorizTouch = observer(() => {
 			</div>
 			<div className={styles.right}
 				style={{
-					height: Math.min(450, Math.max(310, boardStore.actualPointSize * boardStore.height))
+					height: Math.min(400, Math.max(310, boardStore.actualPointSize * boardStore.height))
 				}}
 			>
 				<div className={styles.buttons}>

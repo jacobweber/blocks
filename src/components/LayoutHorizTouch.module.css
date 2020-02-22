@@ -17,11 +17,6 @@
 	flex-direction: column;
 	justify-content: space-between;
 }
-@media (min-height: 400px) {
-	.right {
-		max-height: 400px;
-	}
-}
 .buttons {
 	display: flex;
 	justify-content: space-between;
