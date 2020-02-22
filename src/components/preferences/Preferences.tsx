@@ -178,7 +178,6 @@ const Preferences = observer(() => {
 								<Button active={form.boardType === type} type='button' basic onClick={e => preferencesStore.handleChangeBoardType(type)}>
 									<svg
 										version="1.1"
-										baseProfile="full"
 										viewBox={`0 0 150 150`}
 										xmlns="http://www.w3.org/2000/svg"
 									>

@@ -18,7 +18,6 @@ const SampleBlock = observer(({ def, prefix = '' }: SampleBlockProps) => {
 	return (
 		<svg
 			version="1.1"
-			baseProfile="full"
 			viewBox={`0 0 ${svgPointSize * maxBlockSize} ${svgPointSize * maxBlockSize}`}
 			xmlns="http://www.w3.org/2000/svg"
 		>

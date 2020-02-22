@@ -31,7 +31,6 @@ const NextBlock = observer(({ className = '', pointSize }: NextBlockProps) => {
 			}}>
 				<svg
 					version="1.1"
-					baseProfile="full"
 					width={actualPointSize * width}
 					height={actualPointSize * height}
 					viewBox={`0 0 ${svgPointSize * width} ${svgPointSize * height}`}
