@@ -23,3 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 
 .vscode
+
+/cordova/node_modules
+/cordova/platforms
+/cordova/plugins
+/cordova/www/*
+/cordova/build.json

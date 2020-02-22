@@ -12,6 +12,7 @@
     "@types/react": "^16.9.0",
     "@types/react-color": "^3.0.1",
     "@types/react-dom": "^16.9.0",
+    "cordova": "^9.0.0",
     "fomantic-ui-css": "^2.8.3",
     "mobx": "^5.15.2",
     "mobx-react": "^6.1.5",
@@ -27,7 +28,10 @@
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cordova-prepare": "yarn run build && rm -rf cordova/www && cp -r build cordova/www && cd cordova && cordova prepare",
+    "ios": "yarn run cordova-prepare && cd cordova && cordova run ios",
+    "android": "yarn run cordova-prepare && cd cordova && cordova run android"
   },
   "eslintConfig": {
     "extends": "react-app"
