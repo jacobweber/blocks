@@ -29,7 +29,7 @@ const LayoutVertTouch = observer(() => {
 				) : (
 					<div className={styles.buttons}>
 						<CustomButton outlined icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
-						<CustomButton outlined icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+						<CustomButton outlined icon='puzzle piece' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
 					</div>
 				)}
 				<NextBlock pointSize={15} className={styles.nextBlock} />

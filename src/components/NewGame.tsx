@@ -14,7 +14,7 @@ const NewGame = observer(() => {
 
 	return (<>
 		<Modal className={styles.root} open={true} closeIcon onClose={cancel}>
-			<Header icon='setting' content='New Game' />
+			<Header icon='puzzle piece' content='New Game' />
 			<Modal.Content scrolling>
 				<Header as='h3' dividing>Start at Level</Header>
 				<Button.Group>
