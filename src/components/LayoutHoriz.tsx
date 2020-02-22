@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import { Button } from 'semantic-ui-react'
 
 import styles from 'components/LayoutHoriz.module.css';
 import { useStore } from 'stores/MainStore';
@@ -8,6 +7,7 @@ import { Board } from 'components/board/Board';
 import { NextBlock } from 'components/NextBlock';
 import { ScoreBoard } from 'components/ScoreBoard';
 import { GameState } from 'utils/helpers';
+import { CustomButton } from 'components/CustomButton';
 
 const LayoutHoriz = observer(() => {
 	const mainStore = useStore();
@@ -28,14 +28,14 @@ const LayoutHoriz = observer(() => {
 				<div className={styles.buttonsBottom}>
 					<div className={styles.button}>
 						{mainStore.gameState === GameState.Active
-							? <Button fluid onClick={e => mainStore.endGame()}>End Game</Button>
-							: <Button fluid onClick={e => mainStore.newGame()}>New Game</Button>}
+							? <CustomButton fluid onClick={e => mainStore.endGame()}>End Game</CustomButton>
+							: <CustomButton fluid onClick={e => mainStore.newGame()}>New Game</CustomButton>}
 					</div>
 					<div className={styles.button}>
-						<Button fluid onClick={e => mainStore.showHighScores()}>High Scores</Button>
+						<CustomButton fluid onClick={e => mainStore.showHighScores()}>High Scores</CustomButton>
 					</div>
 					<div className={styles.button}>
-						<Button fluid onClick={e => mainStore.showPrefs()}>Preferences</Button>
+						<CustomButton fluid onClick={e => mainStore.showPrefs()}>Preferences</CustomButton>
 					</div>
 				</div>
 			</div>
