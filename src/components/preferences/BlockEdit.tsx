@@ -89,9 +89,9 @@ const BlockEdit = observer(() => {
 				<Button onClick={cancel} color='black'>
 					<Icon name='cancel' /> Cancel
 				</Button>
-				<Button onClick={del} color='red'>
+				{blockEditStore.blockType !== null && (<Button onClick={del} color='red'>
 					<Icon name='trash' /> Delete Block
-				</Button>
+				</Button>)}
 				<Button onClick={ok} color='green'>
 					<Icon name='checkmark' /> Save Block
 				</Button>
