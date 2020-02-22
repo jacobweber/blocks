@@ -11,13 +11,18 @@ import { GameState } from 'utils/helpers';
 
 const LayoutHoriz = observer(() => {
 	const mainStore = useStore();
+	const boardStore = mainStore.boardStore;
 
 	return (
 		<div className={styles.root}>
 			<div className={styles.left}>
 				<Board />
 			</div>
-			<div className={styles.right}>
+			<div className={styles.right}
+				style={{
+					height: Math.max(600, boardStore.actualPointSize * boardStore.height)
+				}}
+			>
 				<NextBlock className={styles.nextBlock} />
 				<ScoreBoard className={styles.scoreBoard} />
 				<div className={styles.buttonsBottom}>

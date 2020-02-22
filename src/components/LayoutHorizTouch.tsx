@@ -13,13 +13,18 @@ const cancelTouch = (e: React.TouchEvent) => e.stopPropagation();
 
 const LayoutHorizTouch = observer(() => {
 	const mainStore = useStore();
+	const boardStore = mainStore.boardStore;
 
 	return (
 		<div className={styles.root}>
 			<div className={styles.left}>
 				<Board />
 			</div>
-			<div className={styles.right}>
+			<div className={styles.right}
+				style={{
+					height: Math.min(450, Math.max(310, boardStore.actualPointSize * boardStore.height))
+				}}
+			>
 				<div className={styles.buttons}>
 					{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
 						<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
