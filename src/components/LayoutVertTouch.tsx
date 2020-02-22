@@ -18,7 +18,7 @@ const LayoutVertTouch = observer(() => {
 		<div className={styles.root}>
 			<div className={styles.top}>
 				{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
-					<div className={styles.buttonsLeft}>
+					<div className={styles.buttons}>
 						<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
 						{mainStore.gameState === GameState.Active ? (
 							<Button icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
@@ -27,14 +27,14 @@ const LayoutVertTouch = observer(() => {
 						)}
 					</div>
 				) : (
-					<div className={styles.buttonsLeft}>
+					<div className={styles.buttons}>
 						<Button icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
 						<Button icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
 					</div>
 				)}
 				<NextBlock pointSize={15} className={styles.nextBlock} />
 				<ScoreBoard className={styles.scoreBoard} />
-				<div className={styles.buttonsRight}>
+				<div className={styles.buttons}>
 					<Button icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
 					<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
 				</div>

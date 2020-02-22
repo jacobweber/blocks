@@ -28,15 +28,13 @@
 	padding-top: unset;
 	padding-bottom: unset;
 }
-.buttonsLeft {
+.buttons {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 }
-.buttonsRight {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+.buttons :global(.ui.button) {
+	margin-right: unset; /* undo fomantic style */
 }
 .bottom {
 	max-width: 100%;

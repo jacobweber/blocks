@@ -23,6 +23,9 @@
 	display: flex;
 	justify-content: space-between;
 }
+.buttons :global(.ui.button) {
+	margin-right: unset; /* undo fomantic style */
+}
 .nextBlock {
 	height: 130px;
 	width: 100%;
