@@ -1,0 +1,13 @@
+/* similar to fomantic's inverted but without focus/hover, and without margin */
+.root:global(.ui.button) {
+	margin-right: unset;
+	border: 1px solid #fff;
+	background: transparent none;
+	color: #fff;
+	text-shadow: none! important;
+}
+.root:global(.ui.button):active {
+	border: 1px solid #fff;
+	background: #fff;
+	color: rgba(0, 0, 0, .8);
+}
