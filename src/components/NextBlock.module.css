@@ -1,20 +1,32 @@
 .root {
-	background: rgb(97,117,135);
-	background: linear-gradient(135deg, rgba(97,117,135,1) 0%, rgba(0,0,0,1) 80%);
 	padding: 10px;
+	border: 1px solid white;
 	display: flex;
 	flex-direction: column;
+	position: relative;
+}
+.root > svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 }
 .root > p {
+	position: relative;
 	display: block;
 	margin-bottom: 10px;
 }
 .root > div {
+	position: relative;
 	margin: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-.root svg {
+.root > div > svg {
 	display: block;
 }

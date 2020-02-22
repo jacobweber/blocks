@@ -1,11 +1,22 @@
 .root {
 	min-width: 120px;
+	position: relative;
+	border: 1px solid white;
+}
+.root > svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 }
 .score {
+	position: relative;
 	height: 100%;
 	width: 100%;
-	background: rgb(97,117,135);
-	background: linear-gradient(135deg, rgba(97,117,135,1) 0%, rgba(0,0,0,1) 80%);
 }
 .score td {
 	padding: 1px 10px;

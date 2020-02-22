@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import styles from 'components/NextBlock.module.css';
 import { useStore } from 'stores/MainStore';
 import { Point } from 'components/Point';
-import { svgPointSize, GameState } from 'utils/helpers';
+import { svgPrefix, svgPointSize, GameState } from 'utils/helpers';
 
 type NextBlockProps = {
 	className?: string;
@@ -24,6 +24,13 @@ const NextBlock = observer(({ className = '', pointSize }: NextBlockProps) => {
 			color: prefsStyles.textColor,
 			borderColor: prefsStyles.outlineColor
 		}}>
+			<svg
+				version="1.1"
+				preserveAspectRatio='none'
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<use x='0' y='0' width='100%' height='100%' href={'#' + svgPrefix + 'board'} />
+			</svg>
 			<p>Next Block</p>
 			<div style={{
 				height: actualPointSize * mainStore.blockMaxInitialHeight,
