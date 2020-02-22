@@ -16,7 +16,7 @@ const LayoutVertTouch = observer(() => {
 
 	return (
 		<div className={styles.root}>
-			<div className={styles.top} style={{ minHeight: mainStore.touchSidebarSize[1] }}>
+			<div className={styles.top} style={{ minHeight: mainStore.sidebarHeight }}>
 				{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
 					<div className={styles.buttonsLeft}>
 						<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />

@@ -124,11 +124,12 @@ class MainStore {
 		return max;
 	}
 
-	@computed get touchSidebarSize(): [ number, number ] {
-		return [
-			Math.max(120, this.boardStore.actualPointSize * this.blockMaxInitialWidth + 30),
-			this.boardStore.actualPointSize * this.blockMaxInitialHeight + 50
-		];
+	@computed get sidebarWidth(): number {
+		return Math.max(120, this.boardStore.actualPointSize * this.blockMaxInitialWidth + 30);
+	}
+
+	@computed get sidebarHeight(): number {
+		return this.boardStore.actualPointSize * this.blockMaxInitialHeight + 50;
 	}
 
 	getRandomBlockType(): BlockType {

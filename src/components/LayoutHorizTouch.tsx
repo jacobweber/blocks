@@ -19,7 +19,7 @@ const LayoutHorizTouch = observer(() => {
 			<div className={styles.left}>
 				<Board />
 			</div>
-			<div className={styles.right} style={{ minWidth: mainStore.touchSidebarSize[0] }}>
+			<div className={styles.right} style={{ minWidth: mainStore.sidebarWidth }}>
 				<div className={styles.buttons}>
 					{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
 						<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
