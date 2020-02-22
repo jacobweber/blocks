@@ -11,7 +11,6 @@ import { GameState } from 'utils/helpers';
 
 const LayoutHoriz = observer(() => {
 	const mainStore = useStore();
-	const useTouch = 'ontouchstart' in window;
 
 	return (
 		<div className={styles.root}>
@@ -19,22 +18,20 @@ const LayoutHoriz = observer(() => {
 				<Board />
 			</div>
 			<div className={styles.right}>
-				<div className={styles.content}>
-					<NextBlock className={styles.nextBlock} />
-					<ScoreBoard className={styles.scoreBoard} />
-					{!useTouch && (<div className={styles.buttonsBottom}>
-						<div className={styles.button}>
-							{mainStore.gameState === GameState.Active
-								? <Button fluid onClick={e => mainStore.endGame()}>End Game</Button>
-								: <Button fluid onClick={e => mainStore.newGame()}>New Game</Button>}
-						</div>
-						<div className={styles.button}>
-							<Button fluid onClick={e => mainStore.showHighScores()}>High Scores</Button>
-						</div>
-						<div className={styles.button}>
-							<Button fluid onClick={e => mainStore.showPrefs()}>Preferences</Button>
-						</div>
-					</div>)}
+				<NextBlock className={styles.nextBlock} />
+				<ScoreBoard className={styles.scoreBoard} />
+				<div className={styles.buttonsBottom}>
+					<div className={styles.button}>
+						{mainStore.gameState === GameState.Active
+							? <Button fluid onClick={e => mainStore.endGame()}>End Game</Button>
+							: <Button fluid onClick={e => mainStore.newGame()}>New Game</Button>}
+					</div>
+					<div className={styles.button}>
+						<Button fluid onClick={e => mainStore.showHighScores()}>High Scores</Button>
+					</div>
+					<div className={styles.button}>
+						<Button fluid onClick={e => mainStore.showPrefs()}>Preferences</Button>
+					</div>
 				</div>
 			</div>
 		</div>

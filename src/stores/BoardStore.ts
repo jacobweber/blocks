@@ -2,10 +2,9 @@ import { observable, computed, action } from 'mobx';
 import { PointXY, PointSymbolID } from 'utils/blocks';
 import { debounce } from 'utils/helpers';
 
-const extraHeightHoriz = 50;
-const extraWidthHoriz = 200;
-const extraHeightVert = 200;
-const extraWidthVert = 50;
+const appPadding = 10;
+const touchSidebarWidth = 120;
+const touchSidebarHeight = 130;
 
 export interface FilledPoint {
 	id: PointSymbolID;
@@ -35,15 +34,15 @@ class BoardStore {
 	}
 
 	@computed get actualPointSizeHoriz(): number {
-		const minWidth = Math.floor((this.windowWidth - extraWidthHoriz) / this.width);
-		const minHeight = Math.floor((this.windowHeight - extraHeightHoriz) / this.height);
-		return Math.min(minHeight, minWidth);
+		const maxWidth = Math.floor((this.windowWidth - touchSidebarWidth - (appPadding * 2)) / this.width);
+		const maxHeight = Math.floor((this.windowHeight - (appPadding * 2)) / this.height);
+		return Math.min(maxHeight, maxWidth);
 	}
 
 	@computed get actualPointSizeVert(): number {
-		const minWidth = Math.floor((this.windowWidth - extraWidthVert) / this.width);
-		const minHeight = Math.floor((this.windowHeight - extraHeightVert) / this.height);
-		return Math.min(minHeight, minWidth);
+		const maxWidth = Math.floor((this.windowWidth - (appPadding * 2)) / this.width);
+		const maxHeight = Math.floor((this.windowHeight - touchSidebarHeight - (appPadding * 2)) / this.height);
+		return Math.min(maxHeight, maxWidth);
 	}
 
 	@computed get actualPointSize(): number {

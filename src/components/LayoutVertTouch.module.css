@@ -1,22 +1,25 @@
 .root {
 	width: 100%;
 	height: 100%;
-	padding: 10px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 .top {
+	height: 130px;
+	max-height: 130px;
 	width: 100%;
 	margin-bottom: 10px;
 	display: flex;
 	justify-content: space-between;
 }
 .nextBlock {
+	height: 100%;
+	width: 120px;
 }
 .scoreBoard {
-	width: 150px;
-	overflow: hidden;
+	height: 100%;
+	width: 120px;
 }
 .scoreBoard > table {
 	height: 100%;

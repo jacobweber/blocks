@@ -8,13 +8,15 @@ import { svgPointSize, GameState } from 'utils/helpers';
 
 type NextBlockProps = {
 	className?: string;
+	pointSize?: number | undefined;
 };
 
-const NextBlock = observer(({ className = '' }: NextBlockProps) => {
+const NextBlock = observer(({ className = '', pointSize }: NextBlockProps) => {
 	const mainStore = useStore();
 	const boardStore = mainStore.boardStore;
 	const { points, width, height } = mainStore.getNextBlockInfo();
- 	const prefsStyles = mainStore.preferencesStore.prefs.styles;
+	const prefsStyles = mainStore.preferencesStore.prefs.styles;
+	const actualPointSize = pointSize === undefined ? boardStore.actualPointSize : pointSize;
 
 	return (
 		<div className={styles.root + ' ' + className} style={{
@@ -24,14 +26,14 @@ const NextBlock = observer(({ className = '' }: NextBlockProps) => {
 		}}>
 			<p>Next Block</p>
 			<div style={{
-				height: boardStore.actualPointSize * mainStore.blockMaxInitialHeight,
-				width: boardStore.actualPointSize * mainStore.blockMaxInitialWidth
+				height: actualPointSize * mainStore.blockMaxInitialHeight,
+				width: actualPointSize * mainStore.blockMaxInitialWidth
 			}}>
 				<svg
 					version="1.1"
 					baseProfile="full"
-					width={boardStore.actualPointSize * width}
-					height={boardStore.actualPointSize * height}
+					width={actualPointSize * width}
+					height={actualPointSize * height}
 					viewBox={`0 0 ${svgPointSize * width} ${svgPointSize * height}`}
 					xmlns="http://www.w3.org/2000/svg"
 				>

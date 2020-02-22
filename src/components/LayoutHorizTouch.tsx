@@ -19,7 +19,7 @@ const LayoutHorizTouch = observer(() => {
 			<div className={styles.left}>
 				<Board />
 			</div>
-			<div className={styles.right} style={{ minWidth: mainStore.sidebarWidth }}>
+			<div className={styles.right}>
 				<div className={styles.buttons}>
 					{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
 						<Button icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
@@ -38,7 +38,7 @@ const LayoutHorizTouch = observer(() => {
 					))}
 					<Button icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
 				</div>
-				<NextBlock className={styles.nextBlock} />
+				<NextBlock pointSize={15} className={styles.nextBlock} />
 				<ScoreBoard className={styles.scoreBoard} />
 			</div>
 		</div>
