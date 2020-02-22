@@ -1,7 +1,6 @@
 .root {
-	border-width: 1px;
-	border-style: solid;
-	border-collapse: collapse;
+	background: rgb(97,117,135);
+	background: linear-gradient(135deg, rgba(97,117,135,1) 0%, rgba(0,0,0,1) 80%);
 	padding: 10px;
 	display: flex;
 	flex-direction: column;
