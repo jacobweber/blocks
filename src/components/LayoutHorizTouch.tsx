@@ -39,7 +39,7 @@ const LayoutHorizTouch = observer(() => {
 					) : (mainStore.gameState === GameState.Paused ? (
 						<CustomButton outlined icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
 					) : (
-						<CustomButton outlined icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+						<CustomButton outlined icon='puzzle piece' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
 					))}
 					<CustomButton outlined icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
 				</div>
