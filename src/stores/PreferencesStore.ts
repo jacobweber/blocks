@@ -91,7 +91,7 @@ const defaultPrefs: Preferences = {
 	leftRightAccelAfterMS: 250,
 	delayFinalDrop: true,
 	allowUndo: true,
-	showGrid: true,
+	showGrid: false,
 	startLevel: 1,
 	rowsJunk: 0,
 	width: 10,
