@@ -19,24 +19,24 @@ const LayoutVertTouch = observer(() => {
 			<div className={styles.top}>
 				{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
 					<div className={styles.buttons}>
-						<CustomButton icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
+						<CustomButton outlined icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
 						{mainStore.gameState === GameState.Active ? (
-							<CustomButton icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
+							<CustomButton outlined icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
 						) : (
-							<CustomButton icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
+							<CustomButton outlined icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
 						)}
 					</div>
 				) : (
 					<div className={styles.buttons}>
-						<CustomButton icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
-						<CustomButton icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+						<CustomButton outlined icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.newGame()} />
+						<CustomButton outlined icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
 					</div>
 				)}
 				<NextBlock pointSize={15} className={styles.nextBlock} />
 				<ScoreBoard className={styles.scoreBoard} />
 				<div className={styles.buttons}>
-					<CustomButton icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
-					<CustomButton icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
+					<CustomButton outlined icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
+					<CustomButton outlined icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
 				</div>
 			</div>
 			<div className={styles.bottom}>

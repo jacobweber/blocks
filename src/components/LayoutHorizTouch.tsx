@@ -27,21 +27,21 @@ const LayoutHorizTouch = observer(() => {
 			>
 				<div className={styles.buttons}>
 					{(mainStore.gameState === GameState.Active || mainStore.gameState === GameState.Paused) ? (
-						<CustomButton icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
+						<CustomButton outlined icon='stop' onTouchStart={cancelTouch} onClick={e => mainStore.endGame()} />
 					) : (
-						<CustomButton icon='play' onTouchStart={cancelTouch} onClick={e => {e.currentTarget.blur(); mainStore.newGame();}} />
+						<CustomButton outlined icon='play' onTouchStart={cancelTouch} onClick={e => {e.currentTarget.blur(); mainStore.newGame();}} />
 					)}
-					<CustomButton icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
+					<CustomButton outlined icon='trophy' onTouchStart={cancelTouch} onClick={e => mainStore.showHighScores()} />
 				</div>
 				<div className={styles.buttons}>
 					{mainStore.gameState === GameState.Active ? (
-						<CustomButton icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
+						<CustomButton outlined icon='pause' onTouchStart={cancelTouch} onClick={e => mainStore.pause()} />
 					) : (mainStore.gameState === GameState.Paused ? (
-						<CustomButton icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
+						<CustomButton outlined icon='play' onTouchStart={cancelTouch} onClick={e => mainStore.resume()} />
 					) : (
-						<CustomButton icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
+						<CustomButton outlined icon='plus' onTouchStart={cancelTouch} onClick={e => mainStore.newGameOptions()} />
 					))}
-					<CustomButton icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
+					<CustomButton outlined icon='setting' onTouchStart={cancelTouch} onClick={e => mainStore.showPrefs()} />
 				</div>
 				<NextBlock pointSize={15} className={styles.nextBlock} />
 				<ScoreBoard className={styles.scoreBoard} />

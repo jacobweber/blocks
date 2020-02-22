@@ -1,13 +1,24 @@
 /* similar to fomantic's inverted but without focus/hover, and without margin */
-.root:global(.ui.button) {
+.outlined:global(.ui.button) {
+	margin-right: unset;
+	background: transparent none;
+	color: #fff;
+	text-shadow: none! important;
+}
+.outlined:global(.ui.button):active {
+	background-color: rgba(255, 255, 255, .5);
+	color: rgba(0, 0, 0, .8) !important;
+}
+
+.plain:global(.ui.button) {
 	margin-right: unset;
 	border: 1px solid #fff;
 	background: transparent none;
 	color: #fff;
 	text-shadow: none! important;
 }
-.root:global(.ui.button):active {
+.plain:global(.ui.button):active {
 	border: 1px solid #fff;
 	background: #fff;
-	color: rgba(0, 0, 0, .8);
+	color: rgba(0, 0, 0, .8) !important;
 }

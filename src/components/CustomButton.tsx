@@ -6,12 +6,13 @@ import { useStore } from 'stores/MainStore';
 import styles from 'components/CustomButton.module.css';
 
 type CustomButtonProps = {
+	outlined?: boolean;
 };
 
-const CustomButton = observer(({ ...props }: ButtonProps & CustomButtonProps) => {
+const CustomButton = observer(({ outlined = false, ...props }: ButtonProps & CustomButtonProps) => {
 	const mainStore = useStore();
 	const prefsStyles = mainStore.preferencesStore.prefs.styles;
-	return <Button className={styles.root} style={{
+	return <Button className={outlined ? styles.outlined : styles.plain} style={{
 		borderColor: prefsStyles.outlineColor,
 		color: prefsStyles.textColor
 	}} {...props} />;
