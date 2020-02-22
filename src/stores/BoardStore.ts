@@ -3,8 +3,11 @@ import { PointXY, PointSymbolID } from 'utils/blocks';
 import { debounce } from 'utils/helpers';
 
 const appPadding = 10;
+const sidebarWidth = 170;
 const touchSidebarWidth = 120;
 const touchSidebarHeight = 130;
+const minPointSize = 10;
+const maxPointSize = 30;
 
 export interface FilledPoint {
 	id: PointSymbolID;
@@ -34,7 +37,8 @@ class BoardStore {
 	}
 
 	@computed get actualPointSizeHoriz(): number {
-		const maxWidth = Math.floor((this.windowWidth - touchSidebarWidth - (appPadding * 2)) / this.width);
+		const useTouch = 'ontouchstart' in window;
+		const maxWidth = Math.floor((this.windowWidth - (useTouch ? touchSidebarWidth : sidebarWidth) - (appPadding * 2)) / this.width);
 		const maxHeight = Math.floor((this.windowHeight - (appPadding * 2)) / this.height);
 		return Math.min(maxHeight, maxWidth);
 	}
@@ -46,7 +50,7 @@ class BoardStore {
 	}
 
 	@computed get actualPointSize(): number {
-		return Math.min(Math.max(this.vertical ? this.actualPointSizeVert : this.actualPointSizeHoriz, 10), 30);
+		return Math.min(Math.max(this.vertical ? this.actualPointSizeVert : this.actualPointSizeHoriz, minPointSize), maxPointSize);
 	}
 
 	@computed get vertical(): boolean {
