@@ -25,7 +25,7 @@
 	margin-right: unset; /* undo fomantic style */
 }
 .nextBlock {
-	height: 130px;
+	max-height: 130px;
 	width: 100%;
 }
 .scoreBoard {
