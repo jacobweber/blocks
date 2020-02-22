@@ -1,7 +1,6 @@
 .root {
 	min-width: 120px;
 	position: relative;
-	border: 1px solid white;
 }
 .root > svg {
 	display: block;
