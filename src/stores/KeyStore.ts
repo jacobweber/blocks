@@ -44,7 +44,7 @@ class KeyStore {
 			this.heldAction = null;
 			this.heldKey = null;
 			const accelAction = action === Actions.Left ? Actions.LeftAccel : Actions.RightAccel;
-			if (this.mainStore.pauseTimer) {
+			if (this.mainStore.ignoreInput) {
 				this.accelLastQueuedAction(accelAction);
 			} else {
 				this.handleAction(accelAction);
@@ -73,7 +73,7 @@ class KeyStore {
 	}
 
 	handleQueuedAction() {
-		if (this.mainStore.pauseTimer) return;
+		if (this.mainStore.ignoreInput) return;
 		const queuedAction = this.actionQueue.shift();
 		if (queuedAction) {
 			if (log) console.log('unqueue', logAction(queuedAction));
@@ -147,7 +147,7 @@ class KeyStore {
 
 		if (!action) return;		
 
-		if (this.mainStore.pauseTimer || this.heldAction) {
+		if (this.mainStore.ignoreInput || this.heldAction) {
 			if (log) console.log('queue', logAction(action));
 			this.actionQueue.push(action);
 		} else {
