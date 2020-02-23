@@ -1,2 +1,5 @@
 .root {
 }
+.buttons {
+	flex-wrap: wrap;
+}
