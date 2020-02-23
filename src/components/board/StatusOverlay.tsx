@@ -31,15 +31,15 @@ const StatusOverlay = observer(() => {
 					<h3><Logo /> Welcome to Blocks!</h3>
 					{useTouch ? (<>
 						<p><button className={styles.link} onClick={() => mainStore.showTouchDemo()}>Show Play Controls</button></p>
-						<p>Tap the left half of the screen to rotate, and the right half to move
+						<p className={styles.optional}>Tap the left half of the screen to rotate, and the right half to move
 						left/right.</p>
-						<p>Swipe left/right to move to the edges. Swipe down to drop, and up to undo.</p>
+						<p className={styles.optional}>Swipe left/right to move to the edges. Swipe down to drop, and up to undo.</p>
 					</>) : (<>
-						<p>Use {getShortKeyStr(keys.left)}/{getShortKeyStr(keys.right)}/{getShortKeyStr(keys.down)}/{getShortKeyStr(keys.drop)} to
+						<p className={styles.optional}>Use {getShortKeyStr(keys.left)}/{getShortKeyStr(keys.right)}/{getShortKeyStr(keys.down)}/{getShortKeyStr(keys.drop)} to
 						move/drop, {getShortKeyStr(keys.rotateCCW)}/{getShortKeyStr(keys.rotateCW)} to rotate, and {getShortKeyStr(keys.pauseResumeGame)} to pause.</p>
-						<p>You can customize these keys and more in Preferences.</p>
+						<p className={styles.optional}>You can customize these keys and more in Preferences.</p>
 					</>)}
-					<p>
+					<p className={styles.optional}>
 						<a className={styles.link} href="https://github.com/jacobweber/blocks" rel="noopener noreferrer" target="_blank">source</a>
 						<a className={styles.link} href="https://github.com/jacobweber/blocks/issues/new" rel="noopener noreferrer" target="_blank">report bug</a>
 					</p>

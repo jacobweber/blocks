@@ -47,6 +47,11 @@
 	display: inline-block;
 	margin-right: 20px;
 }
+@media (max-height: 400px) {
+	.optional {
+		display: none;
+	}
+}
 .link {
 	background-color: transparent;
 	border: none;
