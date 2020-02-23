@@ -17,6 +17,11 @@
 	justify-content: center;
 	align-items: center;
 	overflow: hidden;
+	position: relative;
+}
+.root .overlay > i {
+	position: absolute;
+	right: 10px;
 }
 .root .overlay.paused {
 	background-color: #e7dd83;

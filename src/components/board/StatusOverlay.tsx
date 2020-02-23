@@ -5,6 +5,7 @@ import styles from 'components/board/StatusOverlay.module.css';
 import { useStore } from 'stores/MainStore';
 import { GameState, getShortKeyStr } from 'utils/helpers';
 import { ReactComponent as Logo } from 'assets/logo.svg';
+import { Icon } from 'semantic-ui-react';
 
 const StatusOverlay = observer(() => {
 	const mainStore = useStore();
@@ -18,7 +19,10 @@ const StatusOverlay = observer(() => {
 			{mainStore.gameState === GameState.Paused ? (
 				<div className={styles.overlay + ' ' + styles.paused} style={{ borderColor: prefsStyles.gridColor }}>Paused</div>
 			) : (mainStore.gameState === GameState.Ended ? (
-				<div className={styles.overlay + ' ' + styles.ended} style={{ borderColor: prefsStyles.gridColor }}>Game Over</div>
+				<div className={styles.overlay + ' ' + styles.ended} style={{ borderColor: prefsStyles.gridColor }}>
+					Game Over
+					<Icon name='close' onClick={() => mainStore.endGame()} />
+				</div>
 			) : (mainStore.gameState === GameState.Reset ? (
 				<div className={styles.overlay + ' ' + styles.welcome} style={{ borderColor: prefsStyles.gridColor }}>
 					<h3><Logo /> Welcome to Blocks!</h3>
