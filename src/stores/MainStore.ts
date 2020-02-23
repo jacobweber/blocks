@@ -243,6 +243,7 @@ class MainStore {
 		const newPosition = this.highScoresStore.recordIfHighScore(entry);
 		if (newPosition !== null) {
 			window.setTimeout(() => {
+				if (this.gameState === GameState.Active) return;
 				this.highScoresStore.dialogShow();
 			}, 500);
 		}
