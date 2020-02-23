@@ -13,8 +13,7 @@ class InputStore {
 	heldAction: Actions | null = null;
 	heldKey: string | null = null;
 	heldTimeout: number | undefined = undefined;
-	xDown: number | null = null;
-	yDown: number | null = null;
+	startTouches: { [key: number]: [ number, number ]; } = {};
 
 	constructor(mainStore: MainStore, preferencesStore: PreferencesStore) {
 		this.mainStore = mainStore;
@@ -90,68 +89,73 @@ class InputStore {
 	}
 
 	touchStart = (e: React.TouchEvent) => {
-		this.xDown = e.changedTouches[0].clientX;
-		this.yDown = e.changedTouches[0].clientY; 
+		for (var i = 0; i < e.changedTouches.length; i++) {
+			this.startTouches[e.changedTouches[i].identifier] = [ e.changedTouches[i].clientX, e.changedTouches[i].clientY ];
+		}
 	}
 
 	touchEnd = (e: React.TouchEvent) => {
-		if (this.xDown === null || this.yDown === null) return;
-		const xUp = e.changedTouches[0].clientX;
-		const yUp = e.changedTouches[0].clientY;
+		for (var i = 0; i < e.changedTouches.length; i++) {
+			const endTouch = e.changedTouches[i];
+			const startTouch = this.startTouches[endTouch.identifier];
+			if (!startTouch) continue;
+			delete this.startTouches[endTouch.identifier];
 
-		const xDiff = this.xDown - xUp;
-		const yDiff = this.yDown - yUp;
-		const xDiffAbs = Math.abs(xDiff);
-		const yDiffAbs = Math.abs(yDiff);
+			const xUp = endTouch.clientX;
+			const yUp = endTouch.clientY;
 
-		let action = null;
-		let isTap = false;
-		if (xDiffAbs > yDiffAbs) {
-			if (xDiffAbs > moveMinPx) {
-				if (xDiff > 0) {
-					action = Actions.LeftAccel;
+			const xDiff = startTouch[0] - xUp;
+			const yDiff = startTouch[1] - yUp;
+			const xDiffAbs = Math.abs(xDiff);
+			const yDiffAbs = Math.abs(yDiff);
+
+			let action = null;
+			let isTap = false;
+			if (xDiffAbs > yDiffAbs) {
+				if (xDiffAbs > moveMinPx) {
+					if (xDiff > 0) {
+						action = Actions.LeftAccel;
+					} else {
+						action = Actions.RightAccel;
+					}
 				} else {
-					action = Actions.RightAccel;
+					isTap = true;
 				}
 			} else {
-				isTap = true;
-			}
-		} else {
-			if (yDiffAbs > moveMinPx) {
-				if (yDiff > 0) {
-					action = Actions.Undo;
-				} else if (yDiffAbs < dropMinPx) {
-					action = Actions.Down;
+				if (yDiffAbs > moveMinPx) {
+					if (yDiff > 0) {
+						action = Actions.Undo;
+					} else if (yDiffAbs < dropMinPx) {
+						action = Actions.Down;
+					} else {
+						action = Actions.Drop;
+					}
 				} else {
-					action = Actions.Drop;
+					isTap = true;
 				}
-			} else {
-				isTap = true;
 			}
-		}
-		this.xDown = null;
-		this.yDown = null;
 
-		if (isTap) {
-			const quarterWidth = document.body.clientWidth / 4;
-			if (xUp < quarterWidth) {
-				action = Actions.RotateCCW;
-			} else if (xUp < quarterWidth * 2) {
-				action = Actions.RotateCW;
-			} else if (xUp < quarterWidth * 3) {
-				action = Actions.Left;
-			} else {
-				action = Actions.Right;
+			if (isTap) {
+				const quarterWidth = document.body.clientWidth / 4;
+				if (xUp < quarterWidth) {
+					action = Actions.RotateCCW;
+				} else if (xUp < quarterWidth * 2) {
+					action = Actions.RotateCW;
+				} else if (xUp < quarterWidth * 3) {
+					action = Actions.Left;
+				} else {
+					action = Actions.Right;
+				}
 			}
-		}
 
-		if (!action) return;		
+			if (!action) return;		
 
-		if (this.mainStore.pauseInput || this.heldAction) {
-			if (log) console.log('queue', logAction(action));
-			this.actionQueue.push(action);
-		} else {
-			this.handleAction(action);
+			if (this.mainStore.pauseInput || this.heldAction) {
+				if (log) console.log('queue', logAction(action));
+				this.actionQueue.push(action);
+			} else {
+				this.handleAction(action);
+			}
 		}
 	}
 
