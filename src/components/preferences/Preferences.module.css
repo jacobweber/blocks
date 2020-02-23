@@ -47,3 +47,14 @@
 	width: 30px;
 	height: 30px;
 }
+.link {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline;
+	outline: none;
+	color: #1e70bf;
+	margin: 0;
+	padding: 0;
+}

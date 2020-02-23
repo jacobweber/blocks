@@ -15,7 +15,8 @@ import { ColorPicker } from './ColorPicker';
 import { svgPrefix } from 'utils/helpers';
 
 const Preferences = observer(() => {
-	const preferencesStore = useStore().preferencesStore;
+	const mainStore = useStore();
+	const preferencesStore = mainStore.preferencesStore;
 	const form = preferencesStore.form;
 	const prefsStyles = form.styles;
 	const cancel = () => preferencesStore.dialogCancel();
@@ -108,9 +109,9 @@ const Preferences = observer(() => {
 
 					{useTouch && (<>
 						<Header as='h3' dividing>Touch Controls</Header>
-						<p>Tap on the left half of the screen to rotate, and the right half to move
-						left/right. Swipe left/right to move to the edges.</p>
-						<p>Swipe down to drop, and up to undo.</p>
+						<p><button className={styles.link} onClick={() => mainStore.showTouchDemo()}>Show Controls</button></p>
+						<p>Tap the left half of the screen to rotate, and the right half to move left/right.</p>
+						<p>Swipe left/right to move to the edges. Swipe down to drop, and up to undo.</p>
 					</>)}
 
 					<Header as='h3' dividing>Keyboard Controls</Header>

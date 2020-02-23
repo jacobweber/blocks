@@ -31,8 +31,7 @@ const StatusOverlay = observer(() => {
 					<h3><Logo /> Welcome to Blocks!</h3>
 					{useTouch ? (<>
 						<p><button className={styles.link} onClick={() => mainStore.showTouchDemo()}>Show Play Controls</button></p>
-						<p className={styles.optional}>Tap the left half of the screen to rotate, and the right half to move
-						left/right.</p>
+						<p className={styles.optional}>Tap the left half of the screen to rotate, and the right half to move left/right.</p>
 						<p className={styles.optional}>Swipe left/right to move to the edges. Swipe down to drop, and up to undo.</p>
 					</>) : (<>
 						<p className={styles.optional}>Use {getShortKeyStr(keys.left)}/{getShortKeyStr(keys.right)}/{getShortKeyStr(keys.down)}/{getShortKeyStr(keys.drop)} to
