@@ -29,3 +29,5 @@ yarn-error.log*
 /cordova/plugins
 /cordova/www/*
 /cordova/build.json
+
+/cordova-remote
