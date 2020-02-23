@@ -11,6 +11,10 @@ import { App } from 'components/App';
 const startApp = () => {
 	configure({ enforceActions: "observed" });
 
+	if ((window as any).plugins && (window as any).plugins.insomnia) {
+		(window as any).plugins.insomnia.keepAwake();
+	}
+
 	const mainStore = new MainStore();
 	mainStore.initWindowEvents();
 	(window as any).mainStore = mainStore;
@@ -32,7 +36,7 @@ const startApp = () => {
 	serviceWorker.unregister();
 };
 
-if ((window as any).cordova) {
+if ((window as any).cordova || window.navigator.userAgent.indexOf('cordova-remote') > -1) {
 	document.addEventListener('deviceready', startApp, false);
 } else {
 	startApp();
