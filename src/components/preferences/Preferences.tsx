@@ -52,7 +52,7 @@ const Preferences = observer(() => {
 
 			{preferencesStore.blockEditStore.visible && <BlockEdit />}
 
-			<Header icon='setting' content='Preferences' />
+			<Header icon='setting' content='Preferences' subheader='* indicates settings that will take effect on the next game.' />
 			<Modal.Content scrolling>
 				<Form>
 					<Form.Group widths='equal'>
@@ -97,11 +97,11 @@ const Preferences = observer(() => {
 							/>
 						</Form.Field>
 						<Form.Field>
-							<label htmlFor='prefsWidth'>Board Width</label>
+							<label htmlFor='prefsWidth'>Board Width*</label>
 							<Input id='prefsWidth' onChange={e => preferencesStore.handleChangeInteger(e, 'width')} value={form.width} />
 						</Form.Field>
 						<Form.Field>
-							<label htmlFor='prefsHeight'>Board Height</label>
+							<label htmlFor='prefsHeight'>Board Height*</label>
 							<Input id='prefsHeight' onChange={e => preferencesStore.handleChangeInteger(e, 'height')} value={form.height} />
 						</Form.Field>
 					</Form.Group>
@@ -116,7 +116,7 @@ const Preferences = observer(() => {
 					<Header as='h3' dividing>Keyboard Controls</Header>
 					<Keys />
 
-					<Header as='h3' dividing>Board Colors</Header>
+					<Header as='h3' dividing>Game Colors</Header>
 					<Form.Group widths='equal'>
 						<Form.Field className={styles.color}>
 							<label>Background</label>
@@ -141,8 +141,8 @@ const Preferences = observer(() => {
 					</Form.Group>
 
 					<Header as='h3' dividing>
-						Block Colors
-						<Header.Subheader>Will replace any customized colors. Changes will apply to next game.</Header.Subheader>
+						Block Colors*
+						<Header.Subheader>Will replace any customized colors.</Header.Subheader>
 					</Header>
 					<div className={styles.blocks + ' ' + styles.colors}>
 						{palettes.map((palette, idx) => (
@@ -189,8 +189,7 @@ const Preferences = observer(() => {
 					</div>
 
 					<Header as='h3' dividing>
-						Block Shapes
-						<Header.Subheader>Changes will apply to next game.</Header.Subheader>
+						Block Shapes*
 					</Header>
 					<div className={styles.blocks}>
 						{form.blockDefs.map((def, idx) => (
