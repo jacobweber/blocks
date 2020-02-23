@@ -103,7 +103,7 @@ class BoardStore {
 		return true;
 	}
 
-	@action fillRow(row: number, point: FilledPoint): void {
+	@action fillRow(row: number, point: FilledPoint | null): void {
 		this.filledPoints[row] = Array.from({ length: this.width }, () => point);
 	}
 

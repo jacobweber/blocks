@@ -94,7 +94,6 @@ class MainStore {
 
 	@computed get blockColors(): Array<BlockColor> {
 		return [
-			{ id: 'cleared', color: '#000000' },
 			...this.gameBlockDefs
 		];
 	}
@@ -391,14 +390,12 @@ class MainStore {
 		return rows;
 	}
 
-	async clearRowsDisplay(rows: number[]): Promise<void> {
+	async displayClearedRows(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
 		this.setPauseTimer(true);
 		this.setIgnoreInput(true);
 		for (let row = 0; row < rows.length; row++) {
-			this.boardStore.fillRow(rows[row], {
-				id: 'cleared'
-			});
+			this.boardStore.fillRow(rows[row], null);
 		}
 		await this.delay(100);
 		this.setPauseTimer(false);
@@ -412,7 +409,7 @@ class MainStore {
 		this.positionedBlock = null;
 		this.scoreDrop(scorePoints);
 		this.scoreClearedRows(clearedRows.length);
-		await this.clearRowsDisplay(clearedRows);
+		await this.displayClearedRows(clearedRows);
 		runInAction(() => {
 			this.boardStore.clearRows(clearedRows);
 			this.newBlock();
