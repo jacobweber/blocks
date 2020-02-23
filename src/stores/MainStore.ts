@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react';
 import { PreferencesStore, Preferences } from 'stores/PreferencesStore';
 import { NewGameStore } from 'stores/NewGameStore';
 import { HighScoresStore, HighScore } from 'stores/HighScoresStore';
-import { GameState, getDownDelayMS, getLevel, Actions, getClearRowsScore } from 'utils/helpers';
+import { GameState, getDownDelayMS, getLevel, Actions, getClearRowsScore, delay } from 'utils/helpers';
 import { BlockType, BlockDef, PointXY, BlockRotations, BlockColor, calculateBlockRotations, calculateBlockWeights } from 'utils/blocks';
 import { BoardStore, PositionedPoint } from './BoardStore';
 import { InputStore } from './InputStore';
@@ -403,7 +403,7 @@ class MainStore {
 		for (let row = 0; row < rows.length; row++) {
 			this.boardStore.fillRow(rows[row], null);
 		}
-		await this.delay(100);
+		await delay(100);
 		this.setPauseTimer(false);
 		this.setPauseInput(false);
 	}
@@ -517,7 +517,7 @@ class MainStore {
 		let done = false;
 		while (!done) {
 			done = !this.left();
-			await this.delay(animDelayMS);
+			await delay(animDelayMS);
 		}
 		this.setPauseInput(false);
 	}
@@ -527,7 +527,7 @@ class MainStore {
 		let done = false;
 		while (!done) {
 			done = !this.right();
-			await this.delay(animDelayMS);
+			await delay(animDelayMS);
 		}
 		this.setPauseInput(false);
 	}
@@ -572,7 +572,7 @@ class MainStore {
 		this.setPauseInput(true);
 		while (!done) {
 			runInAction(nextDrop);
-			await this.delay(animDelayMS);
+			await delay(animDelayMS);
 		}
 
 		if (this.prefs.allowUndo) {
@@ -617,16 +617,10 @@ class MainStore {
 		this.setPauseInput(true);
 		while (!done) {
 			runInAction(nextLift);
-			await this.delay(animDelayMS);
+			await delay(animDelayMS);
 		}
 		this.setPauseTimer(false);
 		this.setPauseInput(false);
-	}
-
-	delay(ms: number): Promise<void> {
-		return new Promise(function (resolve, reject) {
-			setTimeout(resolve, ms);
-		});
 	}
 
 	async handleAction(action: Actions) {

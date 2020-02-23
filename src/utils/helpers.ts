@@ -144,3 +144,9 @@ export function debounce(fn: Function, wait: number, immediate: boolean = false)
 		if (callNow) fn(...args);
 	};
 };
+
+export function delay(ms: number): Promise<void> {
+	return new Promise(function (resolve, reject) {
+		setTimeout(resolve, ms);
+	});
+};
