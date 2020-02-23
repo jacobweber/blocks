@@ -30,7 +30,7 @@ const StatusOverlay = observer(() => {
 				<div className={styles.overlay + ' ' + styles.welcome} style={{ borderColor: prefsStyles.gridColor }}>
 					<h3><Logo /> Welcome to Blocks!</h3>
 					{useTouch ? (<>
-						<p>Tap on the left half of the screen to rotate, and the right half to move
+						<p>Tap the left half of the screen to rotate, and the right half to move
 						left/right.</p>
 						<p>Swipe left/right to move to the edges. Swipe down to drop, and up to undo.</p>
 					</>) : (<>
