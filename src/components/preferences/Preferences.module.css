@@ -5,8 +5,9 @@
 	height: 0;
 	overflow: hidden;
 }
-.cell {
-	width: 200px;
+.color {
+}
+.key {
 }
 .blocks {
 	overflow-x: auto;

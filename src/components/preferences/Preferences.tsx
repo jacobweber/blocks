@@ -55,14 +55,14 @@ const Preferences = observer(() => {
 			<Header icon='setting' content='Preferences' />
 			<Modal.Content scrolling>
 				<Form>
-					<Form.Group>
+					<Form.Group widths='equal'>
 						<Form.Field>
 							<label htmlFor='prefsName'>Your Name</label>
 							<Input id='prefsName' onChange={e => preferencesStore.handleChangeText(e, 'name')} value={form.name} />
 						</Form.Field>
 					</Form.Group>
 
-					<Form.Group inline>
+					<Form.Group inline widths='equal'>
 						<Form.Field>
 							<Checkbox
 								label='Allow Undo Drop'
@@ -85,7 +85,7 @@ const Preferences = observer(() => {
 						</Form.Field>
 					</Form.Group>
 
-					<Form.Group>
+					<Form.Group widths='equal'>
 						<Form.Field>
 							<label htmlFor='prefsLeftRightAccelAfterMS'>Accelerate Left/Right After Holding</label>
 							<Input
@@ -117,24 +117,24 @@ const Preferences = observer(() => {
 					<Keys />
 
 					<Header as='h3' dividing>Board Colors</Header>
-					<Form.Group>
-						<Form.Field className={styles.cell}>
+					<Form.Group widths='equal'>
+						<Form.Field className={styles.color}>
 							<label>Background</label>
 							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'backgroundColor')} value={prefsStyles.backgroundColor} />
 						</Form.Field>
-						<Form.Field className={styles.cell}>
+						<Form.Field className={styles.color}>
 							<label>Text</label>
 							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'textColor')} value={prefsStyles.textColor} />
 						</Form.Field>
-						<Form.Field className={styles.cell}>
+						<Form.Field className={styles.color}>
 							<label>Grid</label>
 							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'gridColor')} value={prefsStyles.gridColor} />
 						</Form.Field>
-						<Form.Field className={styles.cell}>
+						<Form.Field className={styles.color}>
 							<label>Outline</label>
 							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'outlineColor')} value={prefsStyles.outlineColor} />
 						</Form.Field>
-						<Form.Field className={styles.cell}>
+						<Form.Field className={styles.color}>
 							<label>Board</label>
 							<ColorPicker onChange={(color: string) => preferencesStore.handleChangeColor(color, 'boardColor')} value={prefsStyles.boardColor} />
 						</Form.Field>
