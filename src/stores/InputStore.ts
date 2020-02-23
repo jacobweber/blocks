@@ -26,6 +26,7 @@ class InputStore {
 		this.actionQueue = [];
 		this.heldAction = null;
 		this.heldKey = null;
+		this.startTouches = {};
 	}
 
 	initWindowEvents() {
