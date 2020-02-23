@@ -8,7 +8,7 @@
 	flex-direction: column;
 	justify-content: center;
 }
-.root .overlay {
+.overlay {
 	padding: 15px;
 	border: 1px solid black;
 	color: black;
@@ -19,14 +19,14 @@
 	overflow: hidden;
 	position: relative;
 }
-.root .overlay > i {
+.overlay > i {
 	position: absolute;
 	right: 10px;
 }
-.root .overlay.paused {
+.overlay.paused {
 	background-color: #e7dd83;
 }
-.root .overlay.ended {
+.overlay.ended {
 	background-color: #e37373;
 }
 .overlay.welcome {
