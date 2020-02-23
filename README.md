@@ -1,5 +1,7 @@
 # Blocks
 
+A falling blocks game, inspired by Tetris. Intended only as a demonstration of ReactJS and Cordova development.
+
 https://jacobweber.com/blocks/
 
 To run the web app:
