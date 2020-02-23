@@ -32,6 +32,7 @@ class MainStore {
 	@observable.ref positionedBlock: PositionedBlock | null = null;
 	undoStack: Array<UndoFrame> = [];
 	@observable.ref nextBlockTypes: Array<BlockType> = [];
+	@observable touchDemoVisible: boolean = false;
 
 	@observable gameState: GameState = GameState.Reset;
 	@observable pauseTimer = false;
@@ -70,6 +71,10 @@ class MainStore {
 
 	@computed get prefs(): Preferences {
 		return this.preferencesStore.prefs;
+	}
+
+	@action showTouchDemo(): void {
+		this.touchDemoVisible = !this.touchDemoVisible;
 	}
 
 	showPrefs(): void {

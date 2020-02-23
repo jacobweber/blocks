@@ -9,6 +9,7 @@ import { NewGame } from 'components/NewGame';
 import { LayoutHoriz } from 'components/LayoutHoriz';
 import { LayoutVertTouch } from 'components/LayoutVertTouch';
 import { LayoutHorizTouch } from './LayoutHorizTouch';
+import { TouchDemo } from './TouchDemo';
 
 const App = observer(() => {
 	const mainStore = useStore();
@@ -30,6 +31,7 @@ const App = observer(() => {
 			{newGameStore.visible && <NewGame />}
 			{highScoresStore.visible && <HighScores />}
 			{preferencesStore.visible && <Preferences />}
+			{mainStore.touchDemoVisible && <TouchDemo />}
 		</div>
 	);
 });

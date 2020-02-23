@@ -1,0 +1,55 @@
+.root {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(1, 1, 1, .8);
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+}
+@supports(padding: max(0px)) {
+    .root {
+		padding:
+			max(10px, env(safe-area-inset-top))
+			max(10px, env(safe-area-inset-right))
+			max(10px, env(safe-area-inset-bottom))
+			max(10px, env(safe-area-inset-left));
+    }
+}
+.tapAreasInfo {
+	max-width: 350px;
+}
+.tapAreas {
+	width: 100%;
+	height: 30%;
+	display: flex;
+}
+.tapArea {
+	width: 25%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.tapArea + .tapArea {
+	border-left: 1px solid white;
+}
+.swipe {
+	width: 280px;
+	max-width: 100%;
+	margin-top: 20px;
+	display: flex;
+	align-items: center;
+}
+.swipe > * {
+	display: block;
+}
+.swipe > i {
+	margin-left: 30px;
+}

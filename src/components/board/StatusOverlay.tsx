@@ -30,6 +30,7 @@ const StatusOverlay = observer(() => {
 				<div className={styles.overlay + ' ' + styles.welcome} style={{ borderColor: prefsStyles.gridColor }}>
 					<h3><Logo /> Welcome to Blocks!</h3>
 					{useTouch ? (<>
+						<p><button className={styles.link} onClick={() => mainStore.showTouchDemo()}>Show Play Controls</button></p>
 						<p>Tap the left half of the screen to rotate, and the right half to move
 						left/right.</p>
 						<p>Swipe left/right to move to the edges. Swipe down to drop, and up to undo.</p>
@@ -39,8 +40,8 @@ const StatusOverlay = observer(() => {
 						<p>You can customize these keys and more in Preferences.</p>
 					</>)}
 					<p>
-						<a href="https://github.com/jacobweber/blocks" rel="noopener noreferrer" target="_blank">source</a>
-						<a href="https://github.com/jacobweber/blocks/issues/new" rel="noopener noreferrer" target="_blank">report bug</a>
+						<a className={styles.link} href="https://github.com/jacobweber/blocks" rel="noopener noreferrer" target="_blank">source</a>
+						<a className={styles.link} href="https://github.com/jacobweber/blocks/issues/new" rel="noopener noreferrer" target="_blank">report bug</a>
 					</p>
 				</div>
 			) : null))}
