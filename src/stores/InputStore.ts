@@ -44,7 +44,7 @@ class InputStore {
 			this.heldAction = null;
 			this.heldKey = null;
 			const accelAction = action === Actions.Left ? Actions.LeftAccel : Actions.RightAccel;
-			if (this.mainStore.ignoreInput) {
+			if (this.mainStore.pauseInput) {
 				this.accelLastQueuedAction(accelAction);
 			} else {
 				this.handleAction(accelAction);
@@ -73,7 +73,7 @@ class InputStore {
 	}
 
 	handleQueuedAction() {
-		if (this.mainStore.ignoreInput) return;
+		if (this.mainStore.pauseInput) return;
 		const queuedAction = this.actionQueue.shift();
 		if (queuedAction) {
 			if (log) console.log('unqueue', logAction(queuedAction));
@@ -147,7 +147,7 @@ class InputStore {
 
 		if (!action) return;		
 
-		if (this.mainStore.ignoreInput || this.heldAction) {
+		if (this.mainStore.pauseInput || this.heldAction) {
 			if (log) console.log('queue', logAction(action));
 			this.actionQueue.push(action);
 		} else {
@@ -179,7 +179,7 @@ class InputStore {
 		// ignore repeated left/right keys; use tracking instead
 		if (canHoldKey && e.repeat) return;
 
-		if (this.mainStore.ignoreInput || this.heldAction) {
+		if (this.mainStore.pauseInput || this.heldAction) {
 			if (log) console.log('queue', logAction(action));
 			this.actionQueue.push(action);
 		} else {
