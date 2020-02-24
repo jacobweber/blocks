@@ -27,7 +27,8 @@
 }
 .tapAreas {
 	width: 100%;
-	height: 30%;
+	max-height: 200px;
+	flex: 1;
 	display: flex;
 }
 .tapArea {
