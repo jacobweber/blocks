@@ -24,26 +24,28 @@ const TouchDemo = () => {
 					</div>
 					<div className={styles.tapArea}>
 						<Icon name='arrow left' size='large' />
-						Move Left
+						Move
 					</div>
 					<div className={styles.tapArea}>
 						<Icon name='arrow right' size='large' />
-						Move Right
+						Move
 					</div>
 				</div>
-				<div className={styles.swipe}>
-					To move all the way to the left or right,
-					swipe left or right anywhere.
-					<Icon name='hand point left outline' size='large' />
-					<Icon name='hand point right outline' size='large' />
-				</div>
-				<div className={styles.swipe}>
-					To drop the block all the way down,<br />swipe down anywhere.
-					<Icon name='hand point down outline' size='large' />
-				</div>
-				<div className={styles.swipe}>
-					To undo a drop, swipe up anywhere.
-					<Icon name='hand point up outline' size='large' />
+				<div className={styles.swipes}>
+					<div className={styles.swipe}>
+						To move all the way to the left or right,
+						swipe left or right anywhere.
+						<Icon name='hand point left outline' size='large' />
+						<Icon name='hand point right outline' size='large' />
+					</div>
+					<div className={styles.swipe}>
+						To drop the block all the way down,<br />swipe down anywhere.
+						<Icon name='hand point down outline' size='large' />
+					</div>
+					<div className={styles.swipe}>
+						To undo a drop, swipe up anywhere.
+						<Icon name='hand point up outline' size='large' />
+					</div>
 				</div>
 			</div>
 		</Portal>

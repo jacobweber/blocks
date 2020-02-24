@@ -11,19 +11,19 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 10px;
-}
-@supports(padding: max(0px)) {
-    .root {
-		padding:
-			max(10px, env(safe-area-inset-top))
-			max(10px, env(safe-area-inset-right))
-			max(10px, env(safe-area-inset-bottom))
-			max(10px, env(safe-area-inset-left));
-    }
 }
 .tapAreasInfo {
 	max-width: 350px;
+	padding: 10px 10px 0 10px;
+}
+@supports(padding: max(0px)) {
+	.tapAreasInfo {
+		padding:
+			max(10px, env(safe-area-inset-top))
+			max(10px, env(safe-area-inset-right))
+			0
+			max(10px, env(safe-area-inset-left));
+	}
 }
 .tapAreas {
 	width: 100%;
@@ -41,12 +41,25 @@
 .tapArea + .tapArea {
 	border-left: 1px solid white;
 }
+.swipes {
+	padding: 0 10px 10px 10px;
+}
+@supports(padding: max(0px)) {
+	.swipes {
+		padding:
+			0
+			max(10px, env(safe-area-inset-right))
+			max(10px, env(safe-area-inset-bottom))
+			max(10px, env(safe-area-inset-left));
+	}
+}
 .swipe {
 	width: 280px;
 	max-width: 100%;
 	margin-top: 20px;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 }
 .swipe > * {
 	display: block;
