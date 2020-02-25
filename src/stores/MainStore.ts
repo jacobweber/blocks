@@ -398,14 +398,10 @@ class MainStore {
 
 	async displayClearedRows(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
-		this.setPauseTimer(true);
-		this.setPauseInput(true);
 		for (let row = 0; row < rows.length; row++) {
 			this.boardStore.fillRow(rows[row], null);
 		}
 		await delay(100);
-		this.setPauseTimer(false);
-		this.setPauseInput(false);
 	}
 
 	@action async freezeBlock(scorePoints: number = 0): Promise<void> {
@@ -415,10 +411,14 @@ class MainStore {
 		this.positionedBlock = null;
 		this.scoreDrop(scorePoints);
 		this.scoreClearedRows(clearedRows.length);
+		this.setPauseTimer(true);
+		this.setPauseInput(true);
 		await this.displayClearedRows(clearedRows);
 		runInAction(() => {
 			this.boardStore.clearRows(clearedRows);
 			this.newBlock();
+			this.setPauseTimer(false);
+			this.setPauseInput(false);
 		});
 	}
 
