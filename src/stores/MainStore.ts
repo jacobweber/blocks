@@ -57,13 +57,27 @@ class MainStore {
 	initWindowEvents() {
 		this.boardStore.initWindowEvents();
 		this.inputStore.initWindowEvents();
-		let wasActive = false;
+		let wasActiveOnPause = false;
+		window.addEventListener('pause', e => {
+			wasActiveOnPause = this.gameState === GameState.Active;
+			if (wasActiveOnPause) {
+				this.pause();
+			}
+		});
+		window.addEventListener('resume', e => {
+			if (wasActiveOnPause) {
+				this.resume();
+			}
+		});
+		let wasActiveOnBlur = false;
 		window.addEventListener('blur', e => {
-			wasActive = this.gameState === GameState.Active;
-			this.pause();
+			wasActiveOnBlur = this.gameState === GameState.Active;
+			if (wasActiveOnBlur) {
+				this.pause();
+			}
 		});
 		window.addEventListener('focus', e => {
-			if (wasActive) {
+			if (wasActiveOnBlur) {
 				this.resume();
 			}
 		});
