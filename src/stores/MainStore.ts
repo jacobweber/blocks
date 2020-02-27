@@ -58,13 +58,13 @@ class MainStore {
 		this.boardStore.initWindowEvents();
 		this.inputStore.initWindowEvents();
 		let wasActiveOnPause = false;
-		window.addEventListener('pause', e => {
+		window.document.addEventListener('pause', e => {
 			wasActiveOnPause = this.gameState === GameState.Active;
 			if (wasActiveOnPause) {
 				this.pause();
 			}
 		});
-		window.addEventListener('resume', e => {
+		window.document.addEventListener('resume', e => {
 			if (wasActiveOnPause) {
 				this.resume();
 			}
