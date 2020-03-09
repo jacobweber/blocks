@@ -35,8 +35,8 @@ class MainStore {
 	@observable touchDemoVisible: boolean = false;
 
 	@observable gameState: GameState = GameState.Reset;
-	@observable pauseTimer = false;
-	@observable pauseInput = false;
+	@observable pauseTimer = 0;
+	@observable pauseInput = 0;
 	downTimeout: number | undefined = undefined;
 	lastMoveAboveBlockedSpace: Date | null = null;
 	@observable score = 0;
@@ -162,8 +162,8 @@ class MainStore {
 		window.clearTimeout(this.downTimeout);
 		this.downTimeout = undefined;
 		this.inputStore.reset();
-		this.pauseTimer = false;
-		this.pauseInput = false;
+		this.pauseTimer = 0;
+		this.pauseInput = 0;
 		this.positionedBlock = null;
 		this.undoStack = [];
 		this.nextBlockTypes = [];
@@ -277,12 +277,12 @@ class MainStore {
 	}
 
 	setPauseTimer(pauseTimer: boolean): void {
-		this.pauseTimer = pauseTimer;
+		this.pauseTimer += pauseTimer ? 1 : -1;
 		this.updateDownTimer();
 	}
 
 	setPauseInput(pauseInput: boolean): void {
-		this.pauseInput = pauseInput;
+		this.pauseInput += pauseInput ? 1 : -1;
 		if (!pauseInput) {
 			this.inputStore.handleQueuedAction();
 		}
