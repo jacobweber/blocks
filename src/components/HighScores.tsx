@@ -22,7 +22,7 @@ const HighScores = observer(() => {
 			const dom = ReactDOM.findDOMNode(inputRef.current); // TODO: remove hack
 			if (dom instanceof HTMLElement) {
 				const input = dom.querySelector('input');
-				if (input) input.scrollIntoView();
+				if (input) input.scrollIntoView(false);
 			}
 		}
 	}, []);
