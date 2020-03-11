@@ -419,8 +419,10 @@ class MainStore {
 		runInAction(() => {
 			this.boardStore.clearRows(clearedRows);
 			this.newBlock();
-			this.setPauseTimer(false);
-			this.setPauseInput(false);
+			if (this.gameState === GameState.Active) {
+				this.setPauseTimer(false);
+				this.setPauseInput(false);
+			}
 		});
 	}
 
@@ -584,8 +586,10 @@ class MainStore {
 			});
 		}
 		await this.freezeBlock(scorePoints);
-		this.setPauseTimer(false);
-		this.setPauseInput(false);
+		if (this.gameState === GameState.Active) {
+			this.setPauseTimer(false);
+			this.setPauseInput(false);
+		}
 	}
 
 	@action async undo(): Promise<void> {
