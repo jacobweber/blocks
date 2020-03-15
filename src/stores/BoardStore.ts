@@ -3,9 +3,9 @@ import { PointXY, PointSymbolID } from 'utils/blocks';
 import { debounce } from 'utils/helpers';
 
 const appPadding = 10;
-const sidebarWidth = 170;
-const touchSidebarWidth = 120;
-const touchSidebarHeight = 130;
+const sidebarWidth = 200;
+const touchSidebarWidth = 150;
+const touchSidebarHeight = 140;
 const minPointSize = 10;
 const maxPointSize = 30;
 
