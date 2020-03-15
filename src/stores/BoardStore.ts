@@ -54,7 +54,8 @@ class BoardStore {
 	}
 
 	@computed get vertical(): boolean {
-		return this.windowHeight > this.windowWidth;
+		const useTouch = 'ontouchstart' in window;
+		return useTouch && this.windowHeight > this.windowWidth;
 	}
 
 	@action lockSize(width: number, height: number) {
