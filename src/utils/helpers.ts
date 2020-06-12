@@ -29,7 +29,7 @@ export function getClearRowsScore(rows: number, level: number): number {
 	const mult = (rows === 1 ? 40
 		: (rows === 2 ? 100
 			: (rows === 3 ? 300
-				: (rows > 4 ? 1200 : 0))));
+				: (rows >= 4 ? 1200 : 0))));
 	return level * mult;
 }
 
