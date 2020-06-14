@@ -104,6 +104,17 @@ class BoardStore {
 		return true;
 	}
 
+	isRowEmpty(row: number): boolean {
+		if (row < 0 || row >= this.height) return false;
+		const rowPoints = this.filledPoints[row];
+		for (let x = 0; x < this.width; x++) {
+			if (rowPoints[x]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@action fillRow(row: number, point: FilledPoint | null): void {
 		this.filledPoints[row] = Array.from({ length: this.width }, () => point);
 	}

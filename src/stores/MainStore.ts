@@ -12,6 +12,7 @@ import { InputStore } from './InputStore';
 const animDelayMS = 5;
 const junkOdds = 3;
 const downTimerPauseWhenMovingMS = 500;
+const clearedAllRowsBonus = 10000;
 
 export interface PositionedBlock {
 	type: BlockType;
@@ -398,6 +399,17 @@ class MainStore {
 		return rows;
 	}
 
+	didClearAllRows(clearedRows: number[]): boolean {
+		if (clearedRows.length === 0) return false;
+		for (let y = this.boardStore.height - 1; y >= 0; y--) {
+			if (clearedRows.includes(y)) {
+			} else if (!this.boardStore.isRowEmpty(y)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	async displayClearedRows(rows: number[]): Promise<void> {
 		if (rows.length === 0) return;
 		for (let row = 0; row < rows.length; row++) {
@@ -410,9 +422,13 @@ class MainStore {
 		if (!this.positionedBlock) return;
 		this.markPositionFilled(this.positionedBlock);
 		const clearedRows = this.getClearedRows();
+		const clearedAllRows = this.didClearAllRows(clearedRows);
 		this.positionedBlock = null;
 		this.scoreDrop(scorePoints);
 		this.scoreClearedRows(clearedRows.length);
+		if (clearedAllRows) {
+			this.scoreClearedAllRows();
+		}
 		this.setPauseTimer(true);
 		this.setPauseInput(true);
 		await this.displayClearedRows(clearedRows);
@@ -438,6 +454,10 @@ class MainStore {
 		this.undoStack = [];
 		this.stopDownTimer();
 		this.startDownTimer();
+	}
+
+	@action scoreClearedAllRows(): void {
+		this.score += clearedAllRowsBonus;
 	}
 
 	@computed get level(): number {
