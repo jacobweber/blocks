@@ -4,6 +4,8 @@ A falling blocks game, inspired by Tetris. Intended only as a demonstration of R
 
 https://jacobweber.com/blocks/
 
+![logo](https://raw.githubusercontent.com/jacobweber/blocks/master/sample.png)
+
 To run the web app:
 ```
 yarn
