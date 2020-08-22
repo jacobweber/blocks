@@ -10,7 +10,9 @@ yarn
 yarn run start
 ```
 
-To build the iOS or Android apps, first create a file `cordova/build.json` with the appropriate [iOS](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#using-buildjson) or [Android](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#using-buildjson) settings.
+Can be played on iOS or Android by loading the URL above, and adding it to the home screen.
+
+To build native iOS or Android apps, first create a file `cordova/build.json` with the appropriate [iOS](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#using-buildjson) or [Android](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#using-buildjson) settings.
 
 Then run either:
 ```
