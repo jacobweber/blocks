@@ -12,7 +12,7 @@ import { InputStore } from './InputStore';
 const animDelayMS = 5;
 const junkOdds = 3;
 const downTimerPauseWhenMovingMS = 500;
-const clearedAllRowsBonus = 10000;
+const clearedAllRowsBonus = 4444;
 
 export interface PositionedBlock {
 	type: BlockType;
@@ -425,10 +425,7 @@ class MainStore {
 		const clearedAllRows = this.didClearAllRows(clearedRows);
 		this.positionedBlock = null;
 		this.scoreDrop(scorePoints);
-		this.scoreClearedRows(clearedRows.length);
-		if (clearedAllRows) {
-			this.scoreClearedAllRows();
-		}
+		this.scoreClearedRows(clearedRows.length, clearedAllRows);
 		this.setPauseTimer(true);
 		this.setPauseInput(true);
 		await this.displayClearedRows(clearedRows);
@@ -446,18 +443,17 @@ class MainStore {
 		this.score += scorePoints;
 	}
 
-	@action scoreClearedRows(rows: number): void {
+	@action scoreClearedRows(rows: number, clearedAllRows: boolean): void {
 		if (rows === 0) return;
 		this.score += getClearRowsScore(rows, this.level);
+		if (clearedAllRows) {
+			this.score += clearedAllRowsBonus * this.level;
+		}
 		// score based on level before adding rows
 		this.rows += rows;
 		this.undoStack = [];
 		this.stopDownTimer();
 		this.startDownTimer();
-	}
-
-	@action scoreClearedAllRows(): void {
-		this.score += clearedAllRowsBonus;
 	}
 
 	@computed get level(): number {
